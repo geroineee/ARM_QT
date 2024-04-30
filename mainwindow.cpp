@@ -22,7 +22,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_upload_user_code_button_clicked()
 {
-    QString user_code = ui->user_code_text_edit->toPlainText(); // код из тектового поля
+    QString user_code = ui->user_code_text_edit->toPlainText(); // код из тектового поля ввода
+
     QString file_cpp_path = QDir::currentPath(); // путь до каталога сборки "bin"
     file_cpp_path.remove(file_cpp_path.size()-3, 3).append("workspace/main_code.cpp"); // путь до файла main_code.cpp
     QFile file(file_cpp_path);
@@ -31,7 +32,7 @@ void MainWindow::on_upload_user_code_button_clicked()
     if (!file.open(QIODevice::WriteOnly))
     {
         qDebug() << "Ошибка при открытии файла";
-        QMessageBox::critical(this, "Ошибка", "Ошибка при открытии\nфайла main.cpp");
+        QMessageBox::critical(this, "Ошибка", "Ошибка при открытии\nфайла main_code.cpp");
         return;
     }
 
@@ -49,11 +50,12 @@ void MainWindow::on_upload_user_code_button_clicked()
     }
 
     writeStream << "@echo off\n"
-                << "chcp 65001 > null\n"
+                << "chcp 65001 > null.txt\n"
                 << "cd /D " << file_cpp_path.remove(file_cpp_path.size()- 14, 14) << "\n"
                 << "g++ main_code.cpp -o main_code.exe\n"
                 << "main_code.exe < input.txt\n"
                 << "del main_code.exe\n"
+                << "del null.txt\n"
                 << "exit";
     file.close();
 
@@ -67,8 +69,9 @@ void MainWindow::on_upload_user_code_button_clicked()
     }
     else
     {
-        qDebug() << errors;
+        qDebug() << QMessageBox::information(this, "Ошибка компиляции", errors);
     }
     process.waitForFinished();
-    QMessageBox::information(this, "Успех!", "Успешное выполнение кода!");
+
+    ui->statusbar->showMessage("Успешное выполнение кода!");
 }
