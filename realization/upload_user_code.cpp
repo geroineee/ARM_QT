@@ -9,72 +9,70 @@
 #include <QMessageBox>
 
 
-QFile* tryToOpen(QString file_cpp_path)
+QFile* tryToOpen(QString file_path)
 {
     QFile *file = new QFile;
-    file->setFileName(file_cpp_path);
+    file->setFileName(file_path);
     if (!file->open(QIODevice::WriteOnly))
     {
         qDebug() << "Ошибка при открытии файла";
-        QMessageBox::critical(nullptr, "Ошибка", "Ошибка при открытии\nфайла main_code.cpp");
+        QMessageBox::critical(nullptr, "Ошибка", "Ошибка при открытии файла по пути:\n" + file_path);
         return nullptr;
     }
     return file;
 }
 
 
+void writeToFile(QString current_path, QString user_input_data)
+{
+    QTextStream writeStream;
+    QFile *file;
+    file = tryToOpen(current_path);
+    if (file == nullptr)
+        return;
+    writeStream.setDevice(file);
+    writeStream << user_input_data;
+    file->close();
+}
+
+
 void MainWindow::on_upload_user_code_button_clicked()
 {
-    QFile file; // обьект QFile для открытия файлов
     QString file_bat_path; // путь до файла .bat
     QString file_cpp_path; // путь до файла .cpp
     QString current_path; // путь до рабочей папки "workspace"
-    QTextStream writeStream(&file); // поток для записи в файл
+    QTextStream writeStream; // поток для записи в файл
 
     QString user_code = ui->user_code_text_edit->toPlainText(); // код из тектового поля ввода
+    QString user_input_data = ui->user_input_data->toPlainText(); // входыне данные из поля ввода
 
     current_path = QDir::currentPath().remove(QDir::currentPath().size()-3, 3) + "workspace/";
     file_bat_path = QDir::currentPath().remove(QDir::currentPath().size()-3, 3) + "workspace/start_compile.bat"; // путь до файла start_compile.bat
     file_cpp_path = QDir::currentPath().remove(QDir::currentPath().size()-3, 3).append("workspace/main_code.cpp"); // путь до файла main_code.cpp
 
+    // очистка статус-бара | вывода пользователю | файла output.txt
+    ui->statusbar->showMessage("");
+    ui->to_user_output_data->setText("");
+    writeToFile(current_path + "output.txt", "");
 
-    // запись в input.txt
-//    file.setFileName(current_path + "input.txt");
-
-
+    // запись в input.txt из пользова
+    writeToFile(current_path + "input.txt", user_input_data);
 
     // открытие main_code.cpp и запись в него код из пользовательского окна
-//    file = tryToOpen(file_cpp_path);
-
-    file.setFileName(file_cpp_path);
-    if (!file.open(QIODevice::WriteOnly))
-        {
-            qDebug() << "Ошибка при открытии файла";
-            QMessageBox::critical(this, "Ошибка", "Ошибка при открытии\nфайла main_code.cpp");
-            return;
-        }
-
-    writeStream << user_code;
-    file.close();
+    writeToFile(file_cpp_path, user_code);
 
     // открытие и запись в start_compile.bat
-    file.setFileName(file_bat_path);
-    if (!file.open(QIODevice::WriteOnly))
-    {
-        qDebug() << "Ошибка при открытии файла";
-        QMessageBox::critical(this, "Ошибка", "Ошибка при открытии\nфайла start_compile.bat");
-        return;
-    }
-
-    writeStream << "@echo off\n"
-                << "chcp 65001 > null.txt\n"
-                << "cd /D " << current_path << "\n"
-                << "g++ main_code.cpp -o main_code.exe\n"
-                << "main_code.exe < input.txt\n"
-                << "del main_code.exe\n"
-                << "del null.txt\n"
-                << "exit";
-    file.close();
+    QString *temp = new QString;
+    *temp = "@echo off\n"
+            "chcp 65001 > null.txt\n"
+            "cd /D " + current_path + "\n"
+            "g++ main_code.cpp -o main_code.exe\n"
+            "main_code.exe < input.txt\n"
+            "del main_code.exe\n"
+            "del null.txt\n"
+            "exit";
+    writeToFile(file_bat_path, *temp);
+    delete temp;
 
     // запуск start_compule.bat
     QProcess process;
@@ -85,12 +83,18 @@ void MainWindow::on_upload_user_code_button_clicked()
     QByteArray errors = process.readAllStandardError();
     if (errors.size() == 0)
     {
-        qDebug() << QString::fromLocal8Bit(process.readAll());
+        QString output_data = QString::fromLocal8Bit(process.readAll());
+        writeToFile(current_path + "output.txt", output_data);
+        ui->to_user_output_data->setText(output_data);
         ui->statusbar->showMessage("Успешное выполнение кода!");
     }
     else
     {
+        ui->statusbar->showMessage("Ошибка компиляции");
         QMessageBox::information(this, "Ошибка компиляции", errors);
     }
     process.waitForFinished();
+
+    // очистка файла main_code.cpp
+    writeToFile(file_cpp_path, "");
 }
