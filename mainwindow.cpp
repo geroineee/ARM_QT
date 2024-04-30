@@ -6,6 +6,7 @@
 #include <QString>
 #include <QDebug>
 #include <QProcess>
+#include <QMessageBox>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -30,7 +31,8 @@ void MainWindow::on_upload_user_code_button_clicked()
     if (!file.open(QIODevice::WriteOnly))
     {
         qDebug() << "Ошибка при открытии файла";
-        return; // допилить месседж бокс
+        QMessageBox::critical(this, "Ошибка", "Ошибка при открытии\nфайла main.cpp");
+        return;
     }
 
     writeStream << user_code;
@@ -42,7 +44,8 @@ void MainWindow::on_upload_user_code_button_clicked()
     if (!file.open(QIODevice::WriteOnly))
     {
         qDebug() << "Ошибка при открытии файла";
-        return; // допилить месседж бокс
+        QMessageBox::critical(this, "Ошибка", "Ошибка при открытии\nфайла start_compile.bat");
+        return;
     }
 
     writeStream << "@echo off\n"
@@ -50,11 +53,15 @@ void MainWindow::on_upload_user_code_button_clicked()
                 << "cd /D " << file_cpp_path.remove(file_cpp_path.size()- 14, 14) << "\n"
                 << "g++ main_code.cpp -o main_code.exe\n"
                 << "main_code.exe <input.txt> output.txt\n"
+                << "del main_code.exe\n"
                 << "exit";
     file.close();
 
     QProcess process;
     process.start(file_bat_path);
     process.waitForFinished();
+
+
+    QMessageBox::information(this, "Успех!", "Успешное выполнение кода!");
 }
 

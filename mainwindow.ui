@@ -17,8 +17,8 @@
    <widget class="QTextEdit" name="user_code_text_edit">
     <property name="geometry">
      <rect>
-      <x>180</x>
-      <y>100</y>
+      <x>40</x>
+      <y>90</y>
       <width>441</width>
       <height>321</height>
      </rect>
@@ -27,8 +27,8 @@
    <widget class="QPushButton" name="upload_user_code_button">
     <property name="geometry">
      <rect>
-      <x>490</x>
-      <y>460</y>
+      <x>40</x>
+      <y>440</y>
       <width>131</width>
       <height>31</height>
      </rect>
@@ -40,9 +40,9 @@
    <widget class="QLabel" name="label_insert_code">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>40</x>
       <y>50</y>
-      <width>271</width>
+      <width>111</width>
       <height>41</height>
      </rect>
     </property>
@@ -52,7 +52,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Вставьте сюда свой код:</string>
+     <string>Ваш код:</string>
     </property>
    </widget>
   </widget>
@@ -62,7 +62,7 @@
      <x>0</x>
      <y>0</y>
      <width>800</width>
-     <height>20</height>
+     <height>25</height>
     </rect>
    </property>
   </widget>
