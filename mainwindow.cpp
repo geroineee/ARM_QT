@@ -49,19 +49,26 @@ void MainWindow::on_upload_user_code_button_clicked()
     }
 
     writeStream << "@echo off\n"
-                << "chcp 65001\n"
+                << "chcp 65001 > null\n"
                 << "cd /D " << file_cpp_path.remove(file_cpp_path.size()- 14, 14) << "\n"
                 << "g++ main_code.cpp -o main_code.exe\n"
-                << "main_code.exe <input.txt> output.txt\n"
+                << "main_code.exe < input.txt\n"
                 << "del main_code.exe\n"
                 << "exit";
     file.close();
 
     QProcess process;
     process.start(file_bat_path);
+    process.waitForReadyRead();
+    QByteArray errors = process.readAllStandardError();
+    if (errors.size() == 0)
+    {
+        qDebug() << QString::fromLocal8Bit(process.readAll());
+    }
+    else
+    {
+        qDebug() << errors;
+    }
     process.waitForFinished();
-
-
     QMessageBox::information(this, "Успех!", "Успешное выполнение кода!");
 }
-
