@@ -1,5 +1,13 @@
-#infifdg 
-sifhjsdopijfsd 
-sgopjspodgj 
-sopidgjsdpo jg
-sopdjgspdojg
+#include <iostream>
+#include <functional>
+
+
+
+using namespace std;
+
+
+int main()
+{
+    int a = 5, b = 3;
+    cout << a+b;
+}

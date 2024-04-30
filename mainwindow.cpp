@@ -21,20 +21,40 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_upload_user_code_button_clicked()
 {
-    QString user_code = ui->user_code_text_edit->toPlainText();
-    QString file_path = QDir::currentPath();
-    file_path.remove(file_path.size()-3, 3).append("workspace/main_code.cpp");
-    QFile output_file(file_path);
-    if(!output_file.exists())
-    {
-        qDebug() << "Файл не существует";
-    }
-    else if (!output_file.open(QIODevice::WriteOnly))
+    QString user_code = ui->user_code_text_edit->toPlainText(); // код из тектового поля
+    QString file_cpp_path = QDir::currentPath(); // путь до каталога сборки "bin"
+    file_cpp_path.remove(file_cpp_path.size()-3, 3).append("workspace/main_code.cpp"); // путь до файла main_code.cpp
+    QFile file(file_cpp_path);
+    QTextStream writeStream(&file); // поток для записи в файл
+
+    if (!file.open(QIODevice::WriteOnly))
     {
         qDebug() << "Ошибка при открытии файла";
+        return; // допилить месседж бокс
     }
-    QTextStream writeStream(&output_file);
+
     writeStream << user_code;
-    output_file.close();
+    file.close();
+
+    QString file_bat_path = QDir::currentPath().remove(QDir::currentPath().size()-3, 3) + "workspace/start_compile.bat"; // меняем файл на start_compile.bat
+    file.setFileName(file_bat_path);
+
+    if (!file.open(QIODevice::WriteOnly))
+    {
+        qDebug() << "Ошибка при открытии файла";
+        return; // допилить месседж бокс
+    }
+
+    writeStream << "@echo off\n"
+                << "chcp 65001\n"
+                << "cd /D " << file_cpp_path.remove(file_cpp_path.size()- 14, 14) << "\n"
+                << "g++ main_code.cpp -o main_code.exe\n"
+                << "main_code.exe <input.txt> output.txt\n"
+                << "exit";
+    file.close();
+
+    QProcess process;
+    process.start(file_bat_path);
+    process.waitForFinished();
 }
 
