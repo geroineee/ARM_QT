@@ -14,35 +14,45 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
+   <widget class="QTextEdit" name="user_code_text_edit">
     <property name="geometry">
      <rect>
-      <x>220</x>
-      <y>170</y>
-      <width>351</width>
-      <height>171</height>
+      <x>180</x>
+      <y>100</y>
+      <width>441</width>
+      <height>321</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="upload_user_code_button">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>460</y>
+      <width>131</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Отправить</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_insert_code">
+    <property name="geometry">
+     <rect>
+      <x>180</x>
+      <y>50</y>
+      <width>221</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>60</pointsize>
+      <pointsize>14</pointsize>
      </font>
     </property>
     <property name="text">
-     <string>Привет</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="pushButton">
-    <property name="geometry">
-     <rect>
-      <x>230</x>
-      <y>370</y>
-      <width>261</width>
-      <height>81</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>кнопка</string>
+     <string>Вставьте сюда свой код:</string>
     </property>
    </widget>
   </widget>
