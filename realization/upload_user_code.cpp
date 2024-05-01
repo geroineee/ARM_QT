@@ -24,7 +24,6 @@ QFile* tryToOpen(QString file_path)
     return file;
 }
 
-
 void writeToFile(QString current_path, QString user_input_data)
 {
     QTextStream writeStream;
@@ -81,6 +80,7 @@ void MainWindow::on_upload_user_code_button_clicked()
     process.start(file_bat_path);
 
     // проверка на ошибки и вывод
+    process.waitForReadyRead();
     QByteArray errors = process.readAllStandardError();
     if (errors.size() != 0)
     {
@@ -88,7 +88,6 @@ void MainWindow::on_upload_user_code_button_clicked()
         QMessageBox::information(this, "Ошибка компиляции", errors);
         return;
     }
-
     else if (!process.waitForFinished(15000))
     {
         WinExec("taskkill /im main_code.exe /f", SW_HIDE);

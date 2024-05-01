@@ -12,13 +12,16 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     realization/get_path_files.cpp \
-    realization/upload_user_code.cpp
+    realization/upload_user_code.cpp \
+    usercodewindow.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    usercodewindow.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    usercodewindow.ui
 
 win32:RC_FILE = icon.rc
 
@@ -27,4 +30,5 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
-RESOURCES +=
+RESOURCES += \
+    resources.qrc

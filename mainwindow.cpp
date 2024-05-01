@@ -17,5 +17,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_tabWidget_currentChanged()
 {
     ui->statusbar->showMessage("");
+    ui->to_user_output_data->setText("");
+    ui->user_input_data->clear();
 }
 
