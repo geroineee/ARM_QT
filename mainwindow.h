@@ -18,6 +18,8 @@ public:
 private slots:
     void on_upload_user_code_button_clicked();
 
+    void on_tabWidget_currentChanged();
+
 private:
     Ui::MainWindow *ui;
 };
