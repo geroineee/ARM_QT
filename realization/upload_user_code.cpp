@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
+#include <Windows.h>
+
 #include <QFileDialog>
 #include <QFile>
 #include <QString>
@@ -81,19 +83,25 @@ void MainWindow::on_upload_user_code_button_clicked()
     // проверка на ошибки и вывод
     process.waitForReadyRead();
     QByteArray errors = process.readAllStandardError();
-    if (errors.size() == 0)
-    {
-        QString output_data = QString::fromLocal8Bit(process.readAll());
-        writeToFile(current_path + "output.txt", output_data);
-        ui->to_user_output_data->setText(output_data);
-        ui->statusbar->showMessage("Успешное выполнение кода!");
-    }
-    else
+    if (errors.size() != 0)
     {
         ui->statusbar->showMessage("Ошибка компиляции");
         QMessageBox::information(this, "Ошибка компиляции", errors);
+        return;
     }
-    process.waitForFinished();
+
+    else if (!process.waitForFinished(1000))
+    {
+        WinExec("taskkill /im main_code.exe /f", SW_HIDE);
+        ui->statusbar->showMessage("Runtime Error");
+        QMessageBox::critical(this, "Runtime Error", "Превышено время ожидания выполнения программы.");
+        return;
+    }
+
+    QString output_data = QString::fromLocal8Bit(process.readAll());
+    writeToFile(current_path + "output.txt", output_data);
+    ui->to_user_output_data->setText(output_data);
+    ui->statusbar->showMessage("Успешное выполнение кода!");
 
     // очистка файла main_code.cpp
     writeToFile(file_cpp_path, "");
