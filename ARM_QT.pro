@@ -11,6 +11,7 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    realization/get_path_files.cpp \
     realization/upload_user_code.cpp
 
 HEADERS += \
