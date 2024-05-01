@@ -26,137 +26,182 @@
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QTextEdit" name="user_code_text_edit">
+   <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>100</y>
-      <width>411</width>
-      <height>311</height>
+      <x>0</x>
+      <y>0</y>
+      <width>801</width>
+      <height>571</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <weight>50</weight>
-      <bold>false</bold>
-      <strikeout>false</strikeout>
-     </font>
+    <property name="minimumSize">
+     <size>
+      <width>0</width>
+      <height>0</height>
+     </size>
     </property>
-    <property name="html">
-     <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <widget class="QWidget" name="tab_only_code">
+     <property name="enabled">
+      <bool>true</bool>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>0</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="font">
+      <font>
+       <pointsize>10</pointsize>
+      </font>
+     </property>
+     <attribute name="title">
+      <string>Тестирование кода</string>
+     </attribute>
+     <widget class="QLabel" name="label_input_data">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>50</y>
+        <width>161</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Входные данные:</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_output_data">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>260</y>
+        <width>171</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Выходные данные:</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="upload_user_code_button">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>410</y>
+        <width>131</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Отправить</string>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="user_code_text_edit">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>80</y>
+        <width>411</width>
+        <height>311</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="html">
+       <string>&lt;!DOCTYPE HTML PUBLIC &quot;-//W3C//DTD HTML 4.0//EN&quot; &quot;http://www.w3.org/TR/REC-html40/strict.dtd&quot;&gt;
 &lt;html&gt;&lt;head&gt;&lt;meta name=&quot;qrichtext&quot; content=&quot;1&quot; /&gt;&lt;style type=&quot;text/css&quot;&gt;
 p, li { white-space: pre-wrap; }
-&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'Titillium Web'; font-size:8pt; font-weight:400; font-style:normal;&quot;&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'MS Shell Dlg 2'; font-size:7.8pt; color:#000000;&quot;&gt;#include &amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-family:'MS Shell Dlg 2'; font-size:7.8pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; color:#000000;&quot;&gt;using namespace std;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; color:#000000;&quot;&gt;int main()&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; color:#000000;&quot;&gt;{&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; color:#000000;&quot;&gt;    string str;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; color:#000000;&quot;&gt;    cin &amp;gt;&amp;gt; str;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; color:#000000;&quot;&gt;    int a, b;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; color:#000000;&quot;&gt;    cin &amp;gt;&amp;gt; a &amp;gt;&amp;gt; b;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; color:#000000;&quot;&gt;    cout &amp;lt;&amp;lt; a + b &amp;lt;&amp;lt; endl;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; color:#000000;&quot;&gt;    cout &amp;lt;&amp;lt; str;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; color:#000000;&quot;&gt;    cout &amp;lt;&amp;lt; &amp;quot;шалала ицукакитэ&amp;quot;;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; color:#000000;&quot;&gt;    return 0;&lt;/span&gt;&lt;/p&gt;
-&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; color:#000000;&quot;&gt;}&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
-   <widget class="QPushButton" name="upload_user_code_button">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>430</y>
-      <width>131</width>
-      <height>31</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Отправить</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_insert_code">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>60</y>
-      <width>121</width>
-      <height>41</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>12</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Ваш код:</string>
-    </property>
-   </widget>
-   <widget class="QTextEdit" name="user_input_data">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>100</y>
-      <width>250</width>
-      <height>150</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QTextBrowser" name="to_user_output_data">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>310</y>
-      <width>250</width>
-      <height>150</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_input_data">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>70</y>
-      <width>161</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Входные данные:</string>
-    </property>
-   </widget>
-   <widget class="QLabel" name="label_output_data">
-    <property name="geometry">
-     <rect>
-      <x>520</x>
-      <y>280</y>
-      <width>171</width>
-      <height>21</height>
-     </rect>
-    </property>
-    <property name="font">
-     <font>
-      <pointsize>10</pointsize>
-     </font>
-    </property>
-    <property name="text">
-     <string>Выходные данные:</string>
-    </property>
+&lt;/style&gt;&lt;/head&gt;&lt;body style=&quot; font-family:'MS Shell Dlg 2'; font-size:10pt; font-weight:400; font-style:normal;&quot;&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-size:7.8pt; color:#000000;&quot;&gt;#include &amp;lt;iostream&amp;gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot;-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:7.8pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; font-size:8pt; color:#000000;&quot;&gt;using namespace std;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; font-size:8pt; color:#000000;&quot;&gt;&lt;br /&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; font-size:8pt; color:#000000;&quot;&gt;int main()&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; font-size:8pt; color:#000000;&quot;&gt;{&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; font-size:8pt; color:#000000;&quot;&gt;    string str;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; font-size:8pt; color:#000000;&quot;&gt;    cin &amp;gt;&amp;gt; str;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; font-size:8pt; color:#000000;&quot;&gt;    int a, b;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; font-size:8pt; color:#000000;&quot;&gt;    cin &amp;gt;&amp;gt; a &amp;gt;&amp;gt; b;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; font-size:8pt; color:#000000;&quot;&gt;    cout &amp;lt;&amp;lt; a + b &amp;lt;&amp;lt; endl;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; font-size:8pt; color:#000000;&quot;&gt;    cout &amp;lt;&amp;lt; str;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; font-size:8pt; color:#000000;&quot;&gt;    cout &amp;lt;&amp;lt; &amp;quot;шалала ицукакитэ&amp;quot;;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; font-size:8pt; color:#000000;&quot;&gt;    return 0;&lt;/span&gt;&lt;/p&gt;
+&lt;p style=&quot; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px;&quot;&gt;&lt;span style=&quot; font-family:'Consolas','Courier New','monospace'; font-size:8pt; color:#000000;&quot;&gt;}&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QTextBrowser" name="to_user_output_data">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>290</y>
+        <width>250</width>
+        <height>150</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QTextEdit" name="user_input_data">
+      <property name="geometry">
+       <rect>
+        <x>500</x>
+        <y>80</y>
+        <width>250</width>
+        <height>150</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_insert_code">
+      <property name="geometry">
+       <rect>
+        <x>20</x>
+        <y>40</y>
+        <width>121</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Ваш код:</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_files">
+     <attribute name="title">
+      <string>Тестировочная система</string>
+     </attribute>
+    </widget>
    </widget>
   </widget>
+  <widget class="QStatusBar" name="statusbar"/>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -166,8 +211,13 @@ p, li { white-space: pre-wrap; }
      <height>25</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Меню</string>
+    </property>
+   </widget>
+   <addaction name="menu"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
  <connections/>

@@ -57,7 +57,7 @@ void MainWindow::on_upload_user_code_button_clicked()
     ui->to_user_output_data->setText("");
     writeToFile(current_path + "output.txt", "");
 
-    // запись в input.txt из пользова
+    // запись в input.txt из пользовательского окна ввода
     writeToFile(current_path + "input.txt", user_input_data);
 
     // открытие main_code.cpp и запись в него код из пользовательского окна
@@ -81,7 +81,6 @@ void MainWindow::on_upload_user_code_button_clicked()
     process.start(file_bat_path);
 
     // проверка на ошибки и вывод
-    process.waitForReadyRead();
     QByteArray errors = process.readAllStandardError();
     if (errors.size() != 0)
     {
@@ -90,7 +89,7 @@ void MainWindow::on_upload_user_code_button_clicked()
         return;
     }
 
-    else if (!process.waitForFinished(1000))
+    else if (!process.waitForFinished(15000))
     {
         WinExec("taskkill /im main_code.exe /f", SW_HIDE);
         ui->statusbar->showMessage("Runtime Error");
