@@ -9,11 +9,12 @@
 #include <QDebug>
 #include <QMessageBox>
 
+// попытка отрыть файл, если такого нет, то он создается по пути file_path
 QFile* tryToOpenFile(QString file_path)
 {
     QFile *file = new QFile;
     file->setFileName(file_path);
-    if (!file->open(QIODevice::ReadWrite))
+    if (!file->open(QIODevice::ReadOnly))
     {
         QMessageBox::critical(nullptr, "Ошибка", "Ошибка при открытии файла по пути:\n" + file_path);
         return nullptr;
@@ -22,16 +23,15 @@ QFile* tryToOpenFile(QString file_path)
 }
 
 // считывание данных из файла, находящегося по пути path_to_file, и запись их в where_to_read
-void readFromFile(QString path_to_file, QString& where_to_read)
+void readFromFile(QString current_path, QString& text_code)
 {
     QFile *file;
-    file = tryToOpenFile(path_to_file);
+    file = tryToOpenFile(current_path);
     if (file == nullptr)
         return;
-    where_to_read = QString::fromLocal8Bit(file->readAll());
+    text_code = QString::fromLocal8Bit(file->readAll());
     file->close();
 }
-
 
 // проверка расширения файла: 1 - .cpp \ 2 - .h \ 0 - другое
 int isCppOrHeader(QString fileName)
@@ -81,25 +81,33 @@ void fillSelecteFilesTable(QStringList& paths, Ui::MainWindow* ui)
                 image_path = ":/img/image/h_file.png";
             }
             QListWidgetItem *item = new QListWidgetItem(QIcon(image_path), file_name);
-            ui->list_selected_files->addItem(item);
+            QListWidgetItem *item2 = new QListWidgetItem(QIcon(image_path), file_name);
+            ui->list_files->addItem(item);
+            ui->list_selected_files->addItem(item2);
         }
     }
     paths = temp_list_path; // чтобы не было лишних путей
 }
 
-void MainWindow::on_button_get_path_files_clicked()
-{  
-    // получения пути до файлов
+void MainWindow::choose_files()
+{
+    // выбор файла
     files_path = QFileDialog::getOpenFileNames(this, "Выберите файл", QDir::currentPath(), "Cpp and Header Files (*.*)");
 
     // очистка списка
     ui->list_selected_files->clear();
+    ui->list_files->clear();
 
     // проверка на пустую директорию
     if (files_path.size() == 0)
         return;
 
     fillSelecteFilesTable(files_path, ui);
+}
+
+void MainWindow::on_button_get_path_files_clicked()
+{  
+    choose_files();
 }
 
 // вывод текста выбранного файла в новом окне
@@ -113,6 +121,17 @@ void MainWindow::on_list_selected_files_itemDoubleClicked(QListWidgetItem *item)
     code_window->show();
 }
 
+void MainWindow::on_button_get_files_clicked()
+{
+    choose_files();
+}
 
-
-
+void MainWindow::on_list_files_itemDoubleClicked(QListWidgetItem *item)
+{
+    QString text_code;
+    int item_index = ui->list_files->currentRow();
+    readFromFile(files_path[item_index], text_code);
+    code_window = new usercodewindow(this, text_code);
+    code_window->setWindowTitle(item->text());
+    code_window->show();
+}

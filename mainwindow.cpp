@@ -30,3 +30,17 @@ void MainWindow::on_button_add_test_clicked()
     window->exec();
 }
 
+void MainWindow::on_button_switch_mode_clicked()
+{
+    ui->statusbar->showMessage("");
+    ui->to_user_output_data->setPlainText("");
+    ui->user_input_data->setPlainText("");
+    if (ui->stacked_widget_modes->currentIndex())
+    {
+        ui->stacked_widget_modes->setCurrentWidget(ui->page_code_mode);
+    }
+    else
+    {
+        ui->stacked_widget_modes->setCurrentWidget(ui->page_file_mode);
+    }
+}

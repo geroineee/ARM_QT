@@ -74,113 +74,55 @@
          <pointsize>10</pointsize>
         </font>
        </property>
+       <property name="layoutDirection">
+        <enum>Qt::LeftToRight</enum>
+       </property>
        <attribute name="title">
         <string>Тестирование кода</string>
        </attribute>
-       <layout class="QGridLayout" name="gridLayout" columnstretch="70,30">
-        <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
-        </property>
-        <property name="leftMargin">
-         <number>11</number>
-        </property>
-        <property name="topMargin">
-         <number>11</number>
-        </property>
-        <property name="rightMargin">
-         <number>11</number>
-        </property>
-        <property name="horizontalSpacing">
-         <number>11</number>
-        </property>
-        <property name="verticalSpacing">
-         <number>7</number>
-        </property>
-        <item row="0" column="1">
-         <widget class="QLabel" name="label_input_data">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Входные данные:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLabel" name="label_output_data">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Выходные данные:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="4" column="0">
-         <widget class="QPushButton" name="upload_user_code_button">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Отправить</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QTextBrowser" name="to_user_output_data">
-          <property name="frameShape">
-           <enum>QFrame::Box</enum>
-          </property>
-          <property name="frameShadow">
-           <enum>QFrame::Sunken</enum>
-          </property>
-          <property name="lineWidth">
-           <number>1</number>
-          </property>
-          <property name="midLineWidth">
+       <layout class="QGridLayout" name="gridLayout_5">
+        <item row="0" column="0">
+         <layout class="QGridLayout" name="gridLayout_4" columnstretch="70,30">
+          <property name="bottomMargin">
            <number>0</number>
           </property>
-          <property name="lineWrapMode">
-           <enum>QTextEdit::NoWrap</enum>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_insert_code">
-          <property name="font">
-           <font>
-            <pointsize>10</pointsize>
-           </font>
-          </property>
-          <property name="text">
-           <string>Ваш код:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0" rowspan="3">
-         <widget class="QPlainTextEdit" name="user_code_text_edit">
-          <property name="font">
-           <font>
-            <pointsize>9</pointsize>
-            <weight>50</weight>
-            <bold>false</bold>
-            <strikeout>false</strikeout>
-           </font>
-          </property>
-          <property name="frameShape">
-           <enum>QFrame::Box</enum>
-          </property>
-          <property name="lineWrapMode">
-           <enum>QPlainTextEdit::NoWrap</enum>
-          </property>
-          <property name="plainText">
-           <string>#include &lt;iostream&gt;
+          <item row="0" column="0">
+           <widget class="QStackedWidget" name="stacked_widget_modes">
+            <property name="currentIndex">
+             <number>1</number>
+            </property>
+            <widget class="QWidget" name="page_code_mode">
+             <layout class="QGridLayout" name="gridLayout_3">
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_insert_code">
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Ваш код:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0" colspan="2">
+               <widget class="QPlainTextEdit" name="user_code_text_edit">
+                <property name="font">
+                 <font>
+                  <pointsize>9</pointsize>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                  <strikeout>false</strikeout>
+                 </font>
+                </property>
+                <property name="frameShape">
+                 <enum>QFrame::Box</enum>
+                </property>
+                <property name="lineWrapMode">
+                 <enum>QPlainTextEdit::NoWrap</enum>
+                </property>
+                <property name="plainText">
+                 <string>#include &lt;iostream&gt;
 
 using namespace std;
 
@@ -196,21 +138,132 @@ int main()
     cout &lt;&lt; &quot;шалала ицукакитэ&quot;;
     return 0;
 }</string>
-          </property>
-          <property name="tabStopWidth">
-           <number>10000</number>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QPlainTextEdit" name="user_input_data">
-          <property name="frameShape">
-           <enum>QFrame::Box</enum>
-          </property>
-          <property name="lineWrapMode">
-           <enum>QPlainTextEdit::NoWrap</enum>
-          </property>
-         </widget>
+                </property>
+                <property name="tabStopWidth">
+                 <number>10000</number>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0" colspan="2">
+               <widget class="QPushButton" name="upload_user_code_button">
+                <property name="font">
+                 <font>
+                  <pointsize>10</pointsize>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Отправить</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+            <widget class="QWidget" name="page_file_mode">
+             <layout class="QGridLayout" name="gridLayout_6">
+              <property name="topMargin">
+               <number>39</number>
+              </property>
+              <item row="0" column="0">
+               <widget class="QListWidget" name="list_files">
+                <property name="font">
+                 <font>
+                  <pointsize>13</pointsize>
+                 </font>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QPushButton" name="button_get_files">
+                <property name="text">
+                 <string>Загрузить файлы</string>
+                </property>
+               </widget>
+              </item>
+              <item row="2" column="0">
+               <widget class="QPushButton" name="button_compile_file">
+                <property name="text">
+                 <string>Отправить</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <layout class="QGridLayout" name="gridLayout">
+            <property name="topMargin">
+             <number>11</number>
+            </property>
+            <property name="bottomMargin">
+             <number>11</number>
+            </property>
+            <property name="spacing">
+             <number>7</number>
+            </property>
+            <item row="4" column="0">
+             <widget class="QPushButton" name="button_switch_mode">
+              <property name="text">
+               <string>Смена режима</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_output_data">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Выходные данные:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_input_data">
+              <property name="font">
+               <font>
+                <pointsize>10</pointsize>
+               </font>
+              </property>
+              <property name="text">
+               <string>Входные данные:</string>
+              </property>
+             </widget>
+            </item>
+            <item row="3" column="0">
+             <widget class="QTextBrowser" name="to_user_output_data">
+              <property name="frameShape">
+               <enum>QFrame::Box</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Sunken</enum>
+              </property>
+              <property name="lineWidth">
+               <number>1</number>
+              </property>
+              <property name="midLineWidth">
+               <number>0</number>
+              </property>
+              <property name="lineWrapMode">
+               <enum>QTextEdit::NoWrap</enum>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QPlainTextEdit" name="user_input_data">
+              <property name="frameShape">
+               <enum>QFrame::Box</enum>
+              </property>
+              <property name="lineWrapMode">
+               <enum>QPlainTextEdit::NoWrap</enum>
+              </property>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
         </item>
        </layout>
       </widget>
