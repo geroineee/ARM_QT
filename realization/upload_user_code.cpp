@@ -105,16 +105,16 @@ void MainWindow::on_upload_user_code_button_clicked()
     if (errors.size() != 0)
     {
         ui->statusbar->showMessage("Ошибка компиляции");
-        QMessageBox::information(this, "Ошибка компиляции", errors);
         delete_file(current_path, list_del_names);
+        QMessageBox::information(this, "Ошибка компиляции", errors);
         return;
     }
-    else if (!process.waitForFinished(1000))
+    else if (!process.waitForFinished(15000))
     {
         WinExec("taskkill /im user_main_code.exe /f", SW_HIDE);
         ui->statusbar->showMessage("Runtime Error");
-        QMessageBox::critical(this, "Runtime Error", "Превышено время ожидания выполнения программы.");
         delete_file(current_path, list_del_names);
+        QMessageBox::critical(this, "Runtime Error", "Превышено время ожидания выполнения программы.");
         return;
     }
 
