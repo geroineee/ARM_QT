@@ -8,7 +8,6 @@
 #include <QDebug>
 #include <QMessageBox>
 
-QStringList files_path;
 
 QFile* tryToOpenFile(QString file_path)
 {
@@ -24,13 +23,11 @@ QFile* tryToOpenFile(QString file_path)
 
 void readFromFile(QString current_path, QString& text_code)
 {
-    //QString data;
     QFile *file;
     file = tryToOpenFile(current_path);
     if (file == nullptr)
         return;
     text_code = QString::fromLocal8Bit(file->readAll());
-    //text_code = QString(data);
     file->close();
 }
 
@@ -62,14 +59,16 @@ QString getFIleName(QString path)
     return path.remove(0, ++pos);
 }
 
-void fillSelecteFilesTable(QStringList paths, Ui::MainWindow* ui)
+void fillSelecteFilesTable(QStringList& paths, Ui::MainWindow* ui)
 {
-    for (QString file_path : paths)
+    QStringList temp_list_path;
+    for (const QString& file_path : qAsConst(paths))
     {
         QString file_name = getFIleName(file_path);
         int extension = isCppOrHeader(file_name);
         if (extension)
         {
+            temp_list_path.append(file_path);
             QString image_path;
             if (extension == 1)
             {
@@ -83,10 +82,11 @@ void fillSelecteFilesTable(QStringList paths, Ui::MainWindow* ui)
             ui->list_selected_files->addItem(item);
         }
     }
+    paths = temp_list_path; // чтобы не было лишних путей
 }
 
 void MainWindow::on_button_get_path_files_clicked()
-{
+{  
     // получения пути до файлов
     files_path = QFileDialog::getOpenFileNames(this, "Выберите файл", QDir::currentPath(), "Cpp and Header Files (*.*)");
 
@@ -98,16 +98,14 @@ void MainWindow::on_button_get_path_files_clicked()
         return;
 
     fillSelecteFilesTable(files_path, ui);
-
 }
 
+// вывод текста выбранного файла в новом окне
 void MainWindow::on_list_selected_files_itemDoubleClicked(QListWidgetItem *item)
 {
-    QString text_code, path = files_path[0];
-    int index;
-    for (index = path.size()-1; index > 0 && path[index] != "/"; index--);
-    path.remove(index+1, path.size()-index).append(item->text());
-    readFromFile(path, text_code);
+    QString text_code;
+    int item_index = ui->list_selected_files->currentRow();
+    readFromFile(files_path[item_index], text_code);
     code_window = new usercodewindow(this, text_code);
     code_window->setWindowTitle(item->text());
     code_window->show();

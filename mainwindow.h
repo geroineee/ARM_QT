@@ -24,6 +24,7 @@ private slots:
     void on_list_selected_files_itemDoubleClicked(QListWidgetItem *item);
 
 private:
+    QStringList files_path;
     Ui::MainWindow *ui;
     usercodewindow *code_window;
 };
