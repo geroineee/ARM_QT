@@ -11,16 +11,20 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
-    realization/get_path_files.cpp \
-    realization/upload_user_code.cpp \
+    realization/tab_files.cpp \
+    realization/tab_only_code.cpp \
+    realization/workWithFiles.cpp \
+    testwindow.cpp \
     usercodewindow.cpp
 
 HEADERS += \
     mainwindow.h \
+    testwindow.h \
     usercodewindow.h
 
 FORMS += \
     mainwindow.ui \
+    testwindow.ui \
     usercodewindow.ui
 
 win32:RC_FILE = icon.rc

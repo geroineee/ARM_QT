@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "realization/workWithFiles.cpp"
 
 #include <Windows.h>
 
@@ -10,29 +11,28 @@
 #include <QProcess>
 #include <QMessageBox>
 
-
 QFile* tryToOpen(QString file_path)
 {
     QFile *file = new QFile;
     file->setFileName(file_path);
-    if (!file->open(QIODevice::WriteOnly))
+    if (!file->open(QIODevice::ReadWrite))
     {
-        qDebug() << "Ошибка при открытии файла";
         QMessageBox::critical(nullptr, "Ошибка", "Ошибка при открытии файла по пути:\n" + file_path);
         return nullptr;
     }
     return file;
 }
 
-void writeToFile(QString current_path, QString user_input_data)
+// запись в файл, находящегося по пути path_to_file, данных data_to_write
+void writeToFile(QString path_to_file, QString data_to_write)
 {
     QTextStream writeStream;
     QFile *file;
-    file = tryToOpen(current_path);
+    file = tryToOpen(path_to_file);
     if (file == nullptr)
         return;
     writeStream.setDevice(file);
-    writeStream << user_input_data;
+    writeStream << data_to_write;
     file->close();
 }
 
@@ -53,6 +53,30 @@ void delete_file(QString current_path, QStringList file_names)
     process_del.waitForFinished();
 }
 
+// Компилирует код и возвращает указатель на QProcess | directory_path передается без "/" |
+void compile_code(QProcess& process, QString directory_path, QStringList file_names)
+{
+    QString compiled_files = "";
+    for (const QString& file : qAsConst(file_names))
+    {
+        compiled_files.append(file + " ");
+    }
+    // открытие и запись в start_compile.bat
+    QString command = "@echo off\n"
+                      "chcp 65001 > null.txt\n"
+                      "cd /D " + directory_path + "\n"
+                      "g++ " + compiled_files + "-o user_main_code.exe\n"
+                      "user_main_code.exe < user_input.txt\n"
+                      "del user_main_code.exe\n"
+                      "del null.txt\n"
+                      "del start_compile.bat\n"
+                      "exit";
+    writeToFile(directory_path + "start_compile.bat", command);
+
+    // запуск start_compile.bat
+    process.start(directory_path + "start_compile.bat");
+}
+
 void MainWindow::on_upload_user_code_button_clicked()
 {
     QString file_bat_path; // путь до файла .bat
@@ -70,7 +94,7 @@ void MainWindow::on_upload_user_code_button_clicked()
     file_cpp_path = current_path + "user_main_code.cpp"; // путь до файла user_main_code.cpp
     file_input_path = current_path + "user_input.txt"; // путь до файла user_input.txt
     file_output_path = current_path + "user_output.txt"; // путь до файла user_output.txt
-    QStringList list_del_names = { "user_main_code.cpp", "start_compile.bat", "user_input.txt", "user_output.txt" }; // список для удаления файлов
+    QStringList list_del_names = { "user_main_code.cpp", "user_input.txt", "user_output.txt" }; // список для удаления файлов
 
     // очистка статус-бара | вывода пользователю
     ui->statusbar->showMessage("");
@@ -82,22 +106,8 @@ void MainWindow::on_upload_user_code_button_clicked()
     // открытие user_main_code.cpp и запись в него код из пользовательского окна
     writeToFile(file_cpp_path, user_code);
 
-    // открытие и запись в start_compile.bat
-    QString *temp = new QString;
-    *temp = "@echo off\n"
-            "chcp 65001 > null.txt\n"
-            "cd /D " + current_path + "\n"
-            "g++ user_main_code.cpp -o user_main_code.exe\n"
-            "user_main_code.exe < user_input.txt\n"
-            "del user_main_code.exe\n"
-            "del null.txt\n"
-            "exit";
-    writeToFile(file_bat_path, *temp);
-    delete temp;
-
-    // запуск start_compшle.bat
     QProcess process;
-    process.start(file_bat_path);
+    compile_code(process, current_path, { "user_main_code.cpp" });
 
     // проверка на ошибки и вывод
     process.waitForReadyRead();

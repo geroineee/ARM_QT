@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "realization/workWithFiles.cpp"
 
 #include <QFileDialog>
 #include <QFile>
@@ -8,12 +9,11 @@
 #include <QDebug>
 #include <QMessageBox>
 
-
 QFile* tryToOpenFile(QString file_path)
 {
     QFile *file = new QFile;
     file->setFileName(file_path);
-    if (!file->open(QIODevice::ReadOnly))
+    if (!file->open(QIODevice::ReadWrite))
     {
         QMessageBox::critical(nullptr, "Ошибка", "Ошибка при открытии файла по пути:\n" + file_path);
         return nullptr;
@@ -21,15 +21,17 @@ QFile* tryToOpenFile(QString file_path)
     return file;
 }
 
-void readFromFile(QString current_path, QString& text_code)
+// считывание данных из файла, находящегося по пути path_to_file, и запись их в where_to_read
+void readFromFile(QString path_to_file, QString& where_to_read)
 {
     QFile *file;
-    file = tryToOpenFile(current_path);
+    file = tryToOpenFile(path_to_file);
     if (file == nullptr)
         return;
-    text_code = QString::fromLocal8Bit(file->readAll());
+    where_to_read = QString::fromLocal8Bit(file->readAll());
     file->close();
 }
+
 
 // проверка расширения файла: 1 - .cpp \ 2 - .h \ 0 - другое
 int isCppOrHeader(QString fileName)

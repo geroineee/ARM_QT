@@ -24,6 +24,8 @@ private slots:
     void on_button_get_path_files_clicked();
     void on_list_selected_files_itemDoubleClicked(QListWidgetItem *item);
 
+    void on_button_add_test_clicked();
+
 private:
     QStringList files_path;
     Ui::MainWindow *ui;
