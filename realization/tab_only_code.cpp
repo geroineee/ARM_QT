@@ -41,12 +41,13 @@ void writeToFile(QString path_to_file, QString data_to_write)
 void delete_file(QString current_path, QStringList file_names)
 {
     QString del_command = "@echo off\n"
+                          "chcp 1251 > null.txt\n"
                           "cd /D " + current_path + "\n";
     for (const QString& file_name : qAsConst(file_names))
     {
         del_command.append("del " + file_name + "\n");
     }
-    del_command.append("del delete_bat.bat\nexit");
+    del_command.append("del null.txt\ndel delete_bat.bat\nexit");
 
     writeToFile(current_path + "delete_bat.bat", del_command);
     QProcess process_del;
@@ -54,7 +55,7 @@ void delete_file(QString current_path, QStringList file_names)
     process_del.waitForFinished();
 }
 
-// Компилирует код и возвращает указатель на QProcess | directory_path передается без "/" |
+// Компилирует код | directory_path передается с "/" |
 void compile_code(QProcess& process, QString directory_path, QStringList file_names)
 {
     QString compiled_files = "";
@@ -62,11 +63,12 @@ void compile_code(QProcess& process, QString directory_path, QStringList file_na
     {
         compiled_files.append(file + " ");
     }
+
     // открытие и запись в start_compile.bat
     QString command = "@echo off\n"
-                      "chcp 1251 > null.txt\n"
+                      "chcp 65001 > null.txt\n"
                       "cd /D " + directory_path + "\n"
-                      "g++ " + compiled_files + "-o user_main_code.exe\n"
+                      "g++ -g -Wall " + compiled_files + "-o user_main_code.exe\n"
                       "user_main_code.exe < user_input.txt\n"
                       "del user_main_code.exe\n"
                       "del null.txt\n"
@@ -105,6 +107,11 @@ void MainWindow::for_but_compile(bool isWorkWithFile)
     QStringList list_del_names = { "user_input.txt" }; // список для удаления файлов
     if (isWorkWithFile)
     {
+        if (files_path.size() == 0)
+        {
+            ui->statusbar->showMessage("Файлы не выбраны!");
+            return;
+        }
         names = get_name_from_path(files_path);
         QString path = files_path[0];
         int index;
@@ -149,6 +156,7 @@ void MainWindow::for_but_compile(bool isWorkWithFile)
         QMessageBox::information(this, "Ошибка компиляции", errors);
         return;
     }
+
     if (!process.waitForFinished(15000))
     {
         WinExec("taskkill /im user_main_code.exe /f", SW_HIDE);
@@ -169,7 +177,6 @@ void MainWindow::on_upload_user_code_button_clicked()
 {
     for_but_compile(0);
 }
-
 
 void MainWindow::on_button_compile_file_clicked()
 {

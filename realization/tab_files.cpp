@@ -91,17 +91,29 @@ void fillSelecteFilesTable(QStringList& paths, Ui::MainWindow* ui)
 
 void MainWindow::choose_files()
 {
-    // выбор файла
-    files_path = QFileDialog::getOpenFileNames(this, "Выберите файл", QDir::currentPath(), "Cpp and Header Files (*.*)");
+    QStringList temp_paths; // нужен, если пользователь случайно нажал (не хотел выбирать файлы), чтобы список не очищался
+    QString current_path; // для запоминания последней директории
 
-    // очистка списка
+    if (files_path.isEmpty())
+        current_path = QDir::currentPath();
+
+    // выбор файла
+    temp_paths = QFileDialog::getOpenFileNames(this, "Выберите файл", current_path, "Cpp and Header Files (*.*)");
+
+    // проверка на пустую директорию
+    if (temp_paths.isEmpty())
+    {
+        return;
+    }
+    files_path = temp_paths;
+
+    current_path = files_path[0];
+
+    // очистка listWidget
     ui->list_selected_files->clear();
     ui->list_files->clear();
 
-    // проверка на пустую директорию
-    if (files_path.size() == 0)
-        return;
-
+    // заполнение списка
     fillSelecteFilesTable(files_path, ui);
 }
 
@@ -114,9 +126,10 @@ void MainWindow::on_button_get_path_files_clicked()
 void MainWindow::on_list_selected_files_itemDoubleClicked(QListWidgetItem *item)
 {
     QString text_code;
+    // item_index - индекс элемента списка (и пути этого элемента в files_path), на который нажал пользователь
     int item_index = ui->list_selected_files->currentRow();
     readFromFile(files_path[item_index], text_code);
-    code_window = new usercodewindow(this, text_code);
+    code_window = new usercodewindow(this, text_code); // создание окна, где написан код выбранного файла
     code_window->setWindowTitle(item->text());
     code_window->show();
 }

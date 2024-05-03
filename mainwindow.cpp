@@ -20,6 +20,8 @@ void MainWindow::on_tabWidget_currentChanged()
     ui->statusbar->showMessage("");
     ui->to_user_output_data->setText("");
     ui->user_input_data->clear();
+    if (ui->stacked_widget_modes->currentIndex() && !ui->tabWidget->currentIndex())
+        ui->statusbar->showMessage("Обратите внимание, что путь к файлам и сами файлы должны быть на английском языке!!!");
 }
 
 // добавление теста по нажатию кнопки
@@ -42,5 +44,6 @@ void MainWindow::on_button_switch_mode_clicked()
     else
     {
         ui->stacked_widget_modes->setCurrentWidget(ui->page_file_mode);
+        ui->statusbar->showMessage("Обратите внимание, что путь к файлам и сами файлы должны быть на английском языке!!!");
     }
 }
