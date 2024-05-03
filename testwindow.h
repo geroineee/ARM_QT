@@ -1,11 +1,11 @@
 #ifndef TESTWINDOW_H
 #define TESTWINDOW_H
 
+#include "mainwindow.h"
 #include <QDialog>
+#include <QCloseEvent>
 
-namespace Ui {
-class testwindow;
-}
+namespace Ui {class testwindow;}
 
 class testwindow : public QDialog
 {
@@ -18,8 +18,13 @@ public:
 private slots:
     void on_button_cancel_clicked();
 
+    void on_button_apply_clicked();
+
 private:
     Ui::testwindow *ui;
+
+protected:
+    void closeEvent(QCloseEvent *evnt);
 };
 
 #endif // TESTWINDOW_H

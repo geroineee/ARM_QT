@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "realization/workWithFiles.cpp"
+
+#include "realization/workWithDB.h"
 
 #include <QFileDialog>
 #include <QFile>
@@ -117,34 +118,37 @@ void MainWindow::choose_files()
     fillSelecteFilesTable(files_path, ui);
 }
 
-void MainWindow::on_button_get_path_files_clicked()
-{  
-    choose_files();
+// вывод текста выбранного файла в новом окне
+// item_index - индекс элемента списка (и пути этого элемента в files_path), на который нажал пользователь
+void MainWindow::showUserCode(QListWidget* widget, QListWidgetItem *item)
+{
+    QString text_code;
+    int item_index = widget->currentRow();
+    readFromFile(files_path[item_index], text_code);
+    code_window = new usercodewindow(this, text_code);
+    code_window->setWindowTitle(item->text());
+    code_window->show();
+    code_window->setSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);
+}
+
+// вывод текста выбранного файла в новом окне, вызванное из вкладки ""
+void MainWindow::on_list_selected_files_itemDoubleClicked(QListWidgetItem *item)
+{
+    showUserCode(ui->list_selected_files,item);
 }
 
 // вывод текста выбранного файла в новом окне
-void MainWindow::on_list_selected_files_itemDoubleClicked(QListWidgetItem *item)
+void MainWindow::on_list_files_itemDoubleClicked(QListWidgetItem *item)
 {
-    QString text_code;
-    // item_index - индекс элемента списка (и пути этого элемента в files_path), на который нажал пользователь
-    int item_index = ui->list_selected_files->currentRow();
-    readFromFile(files_path[item_index], text_code);
-    code_window = new usercodewindow(this, text_code); // создание окна, где написан код выбранного файла
-    code_window->setWindowTitle(item->text());
-    code_window->show();
+    showUserCode(ui->list_files,item);
+}
+
+void MainWindow::on_button_get_path_files_clicked()
+{
+    choose_files();
 }
 
 void MainWindow::on_button_get_files_clicked()
 {
     choose_files();
-}
-
-void MainWindow::on_list_files_itemDoubleClicked(QListWidgetItem *item)
-{
-    QString text_code;
-    int item_index = ui->list_files->currentRow();
-    readFromFile(files_path[item_index], text_code);
-    code_window = new usercodewindow(this, text_code);
-    code_window->setWindowTitle(item->text());
-    code_window->show();
 }

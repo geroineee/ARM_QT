@@ -1,9 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
-#include <QListWidgetItem>
 #include <QMainWindow>
-#include "usercodewindow.h"
+#include <QListWidgetItem>
+#include "textwindow.h"
+#include "testwindow.h"
+
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlTableModel>
 
 
 QT_BEGIN_NAMESPACE
@@ -30,10 +35,17 @@ private slots:
     void on_button_compile_file_clicked();
 
 private:
+    QSqlDatabase database;
+    QSqlTableModel *db_model;
+
     QStringList files_path;
-    Ui::MainWindow *ui;
-    usercodewindow *code_window;
     void choose_files();
-    void for_but_compile(bool isWorkWithFile);
+    void for_button_compile(bool isWorkWithFile);
+    void showUserCode(QListWidget*, QListWidgetItem*);
+
+    usercodewindow *code_window;
+    Ui::MainWindow *ui;
+
+//    friend testwindow;
 };
 #endif // MAINWINDOW_H

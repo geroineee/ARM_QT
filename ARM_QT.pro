@@ -1,4 +1,4 @@
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,19 +13,20 @@ SOURCES += \
     mainwindow.cpp \
     realization/tab_files.cpp \
     realization/tab_only_code.cpp \
-    realization/workWithFiles.cpp \
+    realization/workWithDB.cpp \
     testwindow.cpp \
-    usercodewindow.cpp
+    textwindow.cpp
 
 HEADERS += \
     mainwindow.h \
+    realization/workWithDB.h \
     testwindow.h \
-    usercodewindow.h
+    textwindow.h
 
 FORMS += \
     mainwindow.ui \
     testwindow.ui \
-    usercodewindow.ui
+    textwindow.ui
 
 win32:RC_FILE = icon.rc
 

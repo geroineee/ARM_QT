@@ -1,7 +1,8 @@
-#ifndef USERCODEWINDOW_H
-#define USERCODEWINDOW_H
+#ifndef TEXTWINDOW_H
+#define TEXTWINDOW_H
 
 #include <QDialog>
+#include <QResizeEvent>
 
 namespace Ui {
 class usercodewindow;
@@ -17,6 +18,11 @@ public:
 
 private:
     Ui::usercodewindow *ui;
+
+protected:
+    void resizeEvent(QResizeEvent *event);
 };
 
-#endif // USERCODEWINDOW_H
+
+
+#endif // TEXTWINDOW_H

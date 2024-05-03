@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "realization/workWithFiles.cpp"
+
+#include "realization/workWithDB.h"
 
 #include <Windows.h>
 
@@ -80,6 +81,7 @@ void compile_code(QProcess& process, QString directory_path, QStringList file_na
     process.start(directory_path + "start_compile.bat");
 }
 
+// получает список путей до файлов, и возвращает список имен файлов .cpp по этим путям
 QStringList get_name_from_path(QStringList paths)
 {
     QStringList temp_name;
@@ -96,7 +98,8 @@ QStringList get_name_from_path(QStringList paths)
     return temp_name;
 }
 
-void MainWindow::for_but_compile(bool isWorkWithFile)
+// запускает компиляцию и выводит на пользовательские окна
+void MainWindow::for_button_compile(bool isWorkWithFile)
 {
     QString file_bat_path; // путь до файла .bat
     QString file_cpp_path; // путь до файла .cpp
@@ -173,72 +176,15 @@ void MainWindow::for_but_compile(bool isWorkWithFile)
     delete_file(current_path, list_del_names);
 }
 
+// запуск компиляции c кодом в соответствующем поле
 void MainWindow::on_upload_user_code_button_clicked()
 {
-    for_but_compile(0);
+    for_button_compile(0);
+    qDebug() << QDir::currentPath();
 }
 
+// запуск компиляции c кодом из файлов
 void MainWindow::on_button_compile_file_clicked()
 {
-    for_but_compile(1);
+    for_button_compile(1);
 }
-
-
-//void MainWindow::test(bool isWorkWithFile)
-//{
-//    QString file_bat_path; // путь до файла .bat
-//    QString file_cpp_path; // путь до файла .cpp
-//    QString file_input_path; // путь до файла .txt
-//    QString file_output_path; // путь до файла .txt
-//    QString current_path; // путь до рабочей папки
-//    QTextStream writeStream; // поток для записи в файл
-
-//    QString user_code = ui->user_code_text_edit->toPlainText(); // код из тектового поля ввода
-//    QString user_input_data = ui->user_input_data->toPlainText(); // входыне данные из поля ввода
-
-//    current_path = QDir::currentPath().remove(QDir::currentPath().size()-3, 3);
-//    file_bat_path = current_path + "start_compile.bat"; // путь до файла start_compile.bat
-//    file_cpp_path = current_path + "user_main_code.cpp"; // путь до файла user_main_code.cpp
-//    file_input_path = current_path + "user_input.txt"; // путь до файла user_input.txt
-//    file_output_path = current_path + "user_output.txt"; // путь до файла user_output.txt
-//    QStringList list_del_names = { "user_main_code.cpp", "user_input.txt", "user_output.txt" }; // список для удаления файлов
-
-//    // очистка статус-бара | вывода пользователю
-//    ui->statusbar->showMessage("");
-//    ui->to_user_output_data->setText("");
-
-//    // запись в user_input.txt из пользовательского окна ввода
-//    writeToFile(file_input_path, user_input_data);
-
-//    // открытие user_main_code.cpp и запись в него код из пользовательского окна
-//    writeToFile(file_cpp_path, user_code);
-
-//    QProcess process;
-//    compile_code(process, current_path, { "user_main_code.cpp" });
-
-//    // проверка на ошибки и вывод
-//    process.waitForReadyRead();
-//    QByteArray errors = process.readAllStandardError();
-//    if (errors.size() != 0)
-//    {
-//        ui->statusbar->showMessage("Ошибка компиляции");
-//        delete_file(current_path, list_del_names);
-//        QMessageBox::information(this, "Ошибка компиляции", errors);
-//        return;
-//    }
-//    else if (!process.waitForFinished(15000))
-//    {
-//        WinExec("taskkill /im user_main_code.exe /f", SW_HIDE);
-//        ui->statusbar->showMessage("Runtime Error");
-//        delete_file(current_path, list_del_names);
-//        QMessageBox::critical(this, "Runtime Error", "Превышено время ожидания выполнения программы.");
-//        return;
-//    }
-
-//    QString output_data = QString::fromLocal8Bit(process.readAll());
-//    writeToFile(file_output_path, output_data);
-//    ui->to_user_output_data->setText(output_data);
-//    ui->statusbar->showMessage("Успешное выполнение кода!");
-
-//    delete_file(current_path, list_del_names);
-//}
