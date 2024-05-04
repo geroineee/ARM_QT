@@ -11,15 +11,17 @@ CONFIG += c++11
 SOURCES += \
     main.cpp \
     mainwindow.cpp \
+    realization/database_operations.cpp \
     realization/tab_files.cpp \
     realization/tab_only_code.cpp \
-    realization/workWithDB.cpp \
+    realization/utils.cpp \
     testwindow.cpp \
     textwindow.cpp
 
 HEADERS += \
     mainwindow.h \
-    realization/workWithDB.h \
+    realization/database_operations.h \
+    realization/utils.h \
     testwindow.h \
     textwindow.h
 

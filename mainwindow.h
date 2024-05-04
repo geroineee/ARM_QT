@@ -10,9 +10,11 @@
 
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QFileDialog>
 #include <QSqlTableModel>
 #include <QDebug>
 
+#include "realization/database_operations.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -41,7 +43,6 @@ private slots:
     void on_button_compile_file_clicked();
 
 private:
-    QStringList files_path;
     void choose_files();
     void for_button_compile(bool isWorkWithFile);
     void showUserCode(QListWidget*, QListWidgetItem*);
@@ -50,7 +51,10 @@ private:
     usercodewindow *code_window;
     Ui::MainWindow *ui;
 
-public:
+    // пути до выбранных файлов
+    QStringList files_path;
+
+    // для работы с базой данных
     QSqlDatabase database;
     QSqlTableModel *db_model;
 };

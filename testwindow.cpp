@@ -5,7 +5,7 @@
 #include <QMessageBox>
 #include <QDebug>
 
-#include "realization/workWithDB.h"
+#include "realization/database_operations.h"
 
 testwindow::testwindow(QWidget *parent) : QDialog(parent), ui(new Ui::testwindow)
 {

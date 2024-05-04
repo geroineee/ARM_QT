@@ -1,4 +1,6 @@
-#include "realization/workWithDB.h"
+#include "realization/database_operations.h"
+
+#include "mainwindow.h"
 
 
 // открытие базы данных

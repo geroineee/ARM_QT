@@ -1,78 +1,6 @@
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include "realization/database_operations.h"
+#include "realization/utils.h"
 
-#include "realization/workWithDB.h"
-
-#include <Windows.h>
-
-#include <QFileDialog>
-#include <QFile>
-#include <QString>
-#include <QDebug>
-#include <QProcess>
-#include <QMessageBox>
-
-// проверка наличие кириллицы в путях
-bool isCyrillic (QStringList files_path)
-{
-    QString alphabets = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнпорстуфхцчшщъыьэюя";
-    for (const QString& file_path : qAsConst(files_path))
-    {
-        for (int index_alph = file_path.size()-1; index_alph > 0; index_alph--)
-        {
-            for (const QChar& alphs : qAsConst(alphabets))
-            {
-                if (file_path[index_alph] == alphs)
-                    return 1;
-            }
-        }
-    }
-    return 0;
-}
-
-// попытка отрыть файл, если такого нет, то он создается по пути file_path
-QFile* tryToOpen(QString file_path)
-{
-    QFile *file = new QFile;
-    file->setFileName(file_path);
-    if (!file->open(QIODevice::ReadWrite))
-    {
-        QMessageBox::critical(nullptr, "Ошибка", "Ошибка при открытии файла по пути:\n" + file_path);
-        return nullptr;
-    }
-    return file;
-}
-
-// запись в файл, находящегося по пути path_to_file, данных data_to_write
-void writeToFile(QString path_to_file, QString data_to_write)
-{
-    QTextStream writeStream;
-    QFile *file;
-    file = tryToOpen(path_to_file);
-    if (file == nullptr)
-        return;
-    writeStream.setDevice(file);
-    writeStream << data_to_write;
-    file->close();
-}
-
-// удаление всех файлов с именами file_names, которые лежат по пути current_path
-void delete_file(QString current_path, QStringList file_names)
-{
-    QString del_command = "@echo off\n"
-                          "chcp 1251 > null.txt\n"
-                          "cd /D " + current_path + "\n";
-    for (const QString& file_name : qAsConst(file_names))
-    {
-        del_command.append("del " + file_name + "\n");
-    }
-    del_command.append("del null.txt\ndel delete_bat.bat\nexit");
-
-    writeToFile(current_path + "delete_bat.bat", del_command);
-    QProcess process_del;
-    process_del.start(current_path + "delete_bat.bat");
-    process_del.waitForFinished();
-}
 
 // Компилирует код | directory_path передается с "/" |
 void compile_code(QProcess& process, QString directory_path, QStringList file_names)
@@ -87,7 +15,7 @@ void compile_code(QProcess& process, QString directory_path, QStringList file_na
     QString command = "@echo off\n"
                       "chcp 65001 > null.txt\n"
                       "cd /D " + directory_path + "\n"
-                      "g++ -g -Wall " + compiled_files + "-o user_main_code.exe\n"
+                      "g++ -g -Wall -g3 " + compiled_files + "-o user_main_code.exe\n"
                       "user_main_code.exe < user_input.txt\n"
                       "del user_main_code.exe\n"
                       "del null.txt\n"
@@ -97,23 +25,6 @@ void compile_code(QProcess& process, QString directory_path, QStringList file_na
 
     // запуск start_compile.bat
     process.start(directory_path + "start_compile.bat");
-}
-
-// получает список путей до файлов, и возвращает список имен файлов .cpp по этим путям
-QStringList get_name_from_path(QStringList paths)
-{
-    QStringList temp_name;
-    for (QString path : paths)
-    {
-        if (path[path.size()-1] == "p")
-        {
-            int index;
-            for (index = path.size()-1; index > 0 && path[index] != "/"; index--);
-            path.remove(0, index+1);
-            temp_name.append(path);
-        }
-    }
-    return temp_name;
 }
 
 // запускает компиляцию и выводит на пользовательские окна
