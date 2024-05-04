@@ -24,13 +24,47 @@ QFile* tryToOpenFile(QString file_path)
 }
 
 // считывание данных из файла, находящегося по пути path_to_file, и запись их в where_to_read
+// проверка на установленную кодировку файла
+bool is_ANSI(QByteArray data)
+{
+    if (data[0] == '\xEF') // utf-8 со спецефикацией (цифровая подпись)
+    {
+        return 0;
+    }
+
+    QByteArray alphs;
+    alphs.append(QString("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнпорстуфхцчшщъыьэюя").toLocal8Bit());
+
+    for (QChar alph : data)
+    {
+        for (QChar alph_alph : alphs)
+        {
+            if (alph == alph_alph)
+            {
+                return 1;
+            }
+        }
+    }
+    return 0;
+}
+
+// считывание данных из файла, находящегося по пути path_to_file, и запись их в where_to_read
 void readFromFile(QString current_path, QString& text_code)
 {
     QFile *file;
     file = tryToOpenFile(current_path);
     if (file == nullptr)
         return;
-    text_code = QString::fromLocal8Bit(file->readAll());
+
+    QByteArray data = file->readAll();
+    if (is_ANSI(data))
+    {
+        text_code = QString::fromLocal8Bit(data); // ANSI (1251)
+    }
+    else
+    {
+        text_code = QString::fromUtf8(data); // utf-8 и utf-8 со спецификацией
+    }
     file->close();
 }
 

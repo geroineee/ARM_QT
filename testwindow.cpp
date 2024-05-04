@@ -37,6 +37,6 @@ void testwindow::closeEvent(QCloseEvent *evnt)
 
 void testwindow::on_button_apply_clicked()
 {
-
+    QString data = "Some data";
+    emit dataEntered(data);
 }
-

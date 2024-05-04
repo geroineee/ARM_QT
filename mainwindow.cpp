@@ -1,6 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "testwindow.h"
+
+//#include "testwindow.h"
+//#include "ui_testwindow.h"
 
 #include "realization//tab_only_code.cpp"
 
@@ -36,9 +38,12 @@ void MainWindow::on_tabWidget_currentChanged()
 // добавление теста по нажатию кнопки
 void MainWindow::on_button_add_test_clicked()
 {
-    testwindow *window = new testwindow(this);
-    window->setModal(true);
-    window->exec();
+    testwindow *testWindow = new testwindow(this);
+
+    connect(testWindow, &testwindow::dataEntered, this, &MainWindow::receiveData);
+
+    testWindow->setModal(true);
+    testWindow->exec();
 }
 
 void MainWindow::on_button_switch_mode_clicked()
@@ -63,4 +68,9 @@ void MainWindow::on_button_switch_mode_clicked()
         ui->button_switch_mode->setText("Работа с кодом");
         ui->statusbar->showMessage("Обратите внимание, что путь к файлам и их название не должны содержать кириллицу!");
     }
+}
+
+void MainWindow::receiveData(QString data)
+{
+    qDebug() << "Строка: " << data;
 }

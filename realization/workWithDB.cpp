@@ -18,7 +18,7 @@ bool tryToOpenDB(QSqlDatabase database, QString db_name)
 
     QSqlQuery query;
 
-    qDebug() << database.tables();
+//    qDebug() << database.tables();
 
     // проверка на наличие нужных таблиц
     if (db_name == "Lab_works.db")

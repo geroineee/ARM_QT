@@ -1,7 +1,6 @@
 #ifndef TESTWINDOW_H
 #define TESTWINDOW_H
 
-#include "mainwindow.h"
 #include <QDialog>
 #include <QCloseEvent>
 
@@ -17,8 +16,10 @@ public:
 
 private slots:
     void on_button_cancel_clicked();
-
     void on_button_apply_clicked();
+
+signals:
+    void dataEntered(QString data);
 
 private:
     Ui::testwindow *ui;
