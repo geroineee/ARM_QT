@@ -13,8 +13,8 @@
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QLineEdit>
+#include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
-#include <QtWidgets/QTextEdit>
 
 QT_BEGIN_NAMESPACE
 
@@ -23,8 +23,8 @@ class Ui_testwindow
 public:
     QPushButton *button_cancel;
     QPushButton *button_apply;
-    QTextEdit *textEdit;
-    QLineEdit *lineEdit;
+    QPlainTextEdit *TextEdit_lab_desc;
+    QLineEdit *lineEdit_lab_name;
 
     void setupUi(QDialog *testwindow)
     {
@@ -37,12 +37,12 @@ public:
         button_apply = new QPushButton(testwindow);
         button_apply->setObjectName(QString::fromUtf8("button_apply"));
         button_apply->setGeometry(QRect(560, 540, 100, 40));
-        textEdit = new QTextEdit(testwindow);
-        textEdit->setObjectName(QString::fromUtf8("textEdit"));
-        textEdit->setGeometry(QRect(50, 90, 691, 191));
-        lineEdit = new QLineEdit(testwindow);
-        lineEdit->setObjectName(QString::fromUtf8("lineEdit"));
-        lineEdit->setGeometry(QRect(50, 30, 331, 31));
+        TextEdit_lab_desc = new QPlainTextEdit(testwindow);
+        TextEdit_lab_desc->setObjectName(QString::fromUtf8("TextEdit_lab_desc"));
+        TextEdit_lab_desc->setGeometry(QRect(50, 90, 691, 191));
+        lineEdit_lab_name = new QLineEdit(testwindow);
+        lineEdit_lab_name->setObjectName(QString::fromUtf8("lineEdit_lab_name"));
+        lineEdit_lab_name->setGeometry(QRect(50, 30, 331, 31));
 
         retranslateUi(testwindow);
 

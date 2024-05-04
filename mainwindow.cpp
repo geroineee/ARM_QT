@@ -40,7 +40,7 @@ void MainWindow::on_button_add_test_clicked()
 {
     testwindow *testWindow = new testwindow(this);
 
-    connect(testWindow, &testwindow::dataEntered, this, &MainWindow::receiveData);
+    connect(testWindow, &testwindow::sendQuery, this, &MainWindow::receiveQuery);
 
     testWindow->setModal(true);
     testWindow->exec();
@@ -70,7 +70,8 @@ void MainWindow::on_button_switch_mode_clicked()
     }
 }
 
-void MainWindow::receiveData(QString data)
+void MainWindow::receiveQuery(QString text_query)
 {
-    qDebug() << "Строка: " << data;
+    qDebug() << "Запрос: " << text_query;
+    database.exec(text_query);
 }

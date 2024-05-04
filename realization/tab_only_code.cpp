@@ -12,6 +12,24 @@
 #include <QProcess>
 #include <QMessageBox>
 
+// проверка наличие кириллицы в путях
+bool isCyrillic (QStringList files_path)
+{
+    QString alphabets = "АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнпорстуфхцчшщъыьэюя";
+    for (const QString& file_path : qAsConst(files_path))
+    {
+        for (int index_alph = file_path.size()-1; index_alph > 0; index_alph--)
+        {
+            for (const QChar& alphs : qAsConst(alphabets))
+            {
+                if (file_path[index_alph] == alphs)
+                    return 1;
+            }
+        }
+    }
+    return 0;
+}
+
 // попытка отрыть файл, если такого нет, то он создается по пути file_path
 QFile* tryToOpen(QString file_path)
 {
@@ -133,6 +151,7 @@ void MainWindow::for_button_compile(bool isWorkWithFile)
         // открытие user_main_code.cpp и запись в него код из пользовательского окна
         writeToFile(file_cpp_path, user_code);
     }
+
     QString user_input_data = ui->user_input_data->toPlainText(); // входные данные из поля ввода
 
     file_bat_path = current_path + "start_compile.bat"; // путь до файла start_compile.bat
@@ -180,11 +199,15 @@ void MainWindow::for_button_compile(bool isWorkWithFile)
 void MainWindow::on_upload_user_code_button_clicked()
 {
     for_button_compile(0);
-    qDebug() << QDir::currentPath();
 }
 
 // запуск компиляции c кодом из файлов
 void MainWindow::on_button_compile_file_clicked()
 {
+    if (isCyrillic(files_path))
+    {
+        ui->statusbar->showMessage("Ошибка! В имени файла или в пути к директории файла присутствует кириллица");
+        return;
+    }
     for_button_compile(1);
 }

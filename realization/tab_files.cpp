@@ -23,7 +23,6 @@ QFile* tryToOpenFile(QString file_path)
     return file;
 }
 
-// считывание данных из файла, находящегося по пути path_to_file, и запись их в where_to_read
 // проверка на установленную кодировку файла
 bool is_ANSI(QByteArray data)
 {

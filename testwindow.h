@@ -19,7 +19,7 @@ private slots:
     void on_button_apply_clicked();
 
 signals:
-    void dataEntered(QString data);
+    void sendQuery(QString);
 
 private:
     Ui::testwindow *ui;
