@@ -7,15 +7,17 @@ void compile_code(QProcess& process, QString directory_path, QStringList file_na
 {
     QString compiled_files = "";
     for (const QString& file : qAsConst(file_names))
-    {
-        compiled_files.append(file + " ");
-    }
+        {
+            compiled_files.append('"' + file + '"');
+            compiled_files.append(' ');
+        }
+        compiled_files.chop(1);
 
     // открытие и запись в start_compile.bat
     QString command = "@echo off\n"
                       "chcp 65001 > null.txt\n"
                       "cd /D " + directory_path + "\n"
-                      "g++ -g -Wall -g3 " + compiled_files + "-o user_main_code.exe\n"
+                      "g++ -Wall " + compiled_files + " -o user_main_code.exe\n"
                       "user_main_code.exe < user_input.txt\n"
                       "del user_main_code.exe\n"
                       "del null.txt\n"
@@ -35,8 +37,9 @@ void MainWindow::for_button_compile(bool isWorkWithFile)
     QString file_input_path; // путь до файла .txt
     QString current_path; // путь до рабочей папки
     QTextStream writeStream; // поток для записи в файл
-    QStringList names = {""};
+    QStringList names;
     QStringList list_del_names = { "user_input.txt" }; // список для удаления файлов
+
     if (isWorkWithFile)
     {
         if (files_path.size() == 0)
@@ -50,6 +53,7 @@ void MainWindow::for_button_compile(bool isWorkWithFile)
         for (index = path.size()-1; index > 0 && path[index] != "/"; index--);
         current_path = path.remove(index+1, path.size()-index);
     }
+
     else
     {
         names.append("user_main_code.cpp");

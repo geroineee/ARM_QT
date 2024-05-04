@@ -42,6 +42,8 @@ private slots:
     void on_list_files_itemDoubleClicked(QListWidgetItem *item);
     void on_button_compile_file_clicked();
 
+    void on_button_delete_test_clicked();
+
 private:
     void choose_files();
     void for_button_compile(bool isWorkWithFile);

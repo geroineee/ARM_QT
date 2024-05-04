@@ -14,6 +14,8 @@
 
 #include <Windows.h>
 
+// сравнение строковых списков на равенство
+bool areListsEqual(const QStringList& list1, const QStringList& list2);
 
 // попытка отрыть файл, если такого нет, то он создается по пути file_path
 QFile* tryToOpenFile(QString file_path);
@@ -44,5 +46,8 @@ void writeToFile(QString path_to_file, QString data_to_write);
 
 // получает список путей до файлов, и возвращает список имен файлов .cpp по этим путям
 QStringList get_name_from_path(QStringList paths);
+
+// заключение в одинарные кавычки всех элементов списка
+void setToQuote(QStringList& data);
 
 #endif // UTILS_H

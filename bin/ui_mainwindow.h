@@ -72,9 +72,9 @@ public:
     QTableWidget *table_result_test;
     QWidget *tab_edit_task;
     QGridLayout *gridLayout_2;
-    QPushButton *button_delete_test;
     QPushButton *button_add_test;
     QPushButton *button_edit_test;
+    QPushButton *button_delete_test;
     QSpacerItem *verticalSpacer;
     QTableView *list_tests;
     QStatusBar *statusbar;
@@ -264,12 +264,6 @@ public:
         tab_edit_task->setObjectName(QString::fromUtf8("tab_edit_task"));
         gridLayout_2 = new QGridLayout(tab_edit_task);
         gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
-        button_delete_test = new QPushButton(tab_edit_task);
-        button_delete_test->setObjectName(QString::fromUtf8("button_delete_test"));
-        button_delete_test->setMinimumSize(QSize(180, 40));
-
-        gridLayout_2->addWidget(button_delete_test, 1, 1, 1, 1);
-
         button_add_test = new QPushButton(tab_edit_task);
         button_add_test->setObjectName(QString::fromUtf8("button_add_test"));
         button_add_test->setMinimumSize(QSize(180, 40));
@@ -282,17 +276,24 @@ public:
 
         gridLayout_2->addWidget(button_edit_test, 0, 1, 1, 1);
 
+        button_delete_test = new QPushButton(tab_edit_task);
+        button_delete_test->setObjectName(QString::fromUtf8("button_delete_test"));
+        button_delete_test->setMinimumSize(QSize(180, 40));
+
+        gridLayout_2->addWidget(button_delete_test, 1, 1, 1, 1);
+
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         gridLayout_2->addItem(verticalSpacer, 2, 1, 1, 1);
 
         list_tests = new QTableView(tab_edit_task);
         list_tests->setObjectName(QString::fromUtf8("list_tests"));
+        list_tests->setShowGrid(true);
+        list_tests->horizontalHeader()->setCascadingSectionResizes(false);
 
         gridLayout_2->addWidget(list_tests, 0, 0, 4, 1);
 
         gridLayout_2->setColumnStretch(0, 70);
-        gridLayout_2->setColumnStretch(1, 30);
         tabWidget->addTab(tab_edit_task, QString());
 
         verticalLayout->addWidget(tabWidget);
@@ -355,9 +356,9 @@ public:
 #ifndef QT_NO_ACCESSIBILITY
         tab_edit_task->setAccessibleName(QString());
 #endif // QT_NO_ACCESSIBILITY
-        button_delete_test->setText(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", nullptr));
         button_add_test->setText(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\202\320\265\321\201\321\202", nullptr));
         button_edit_test->setText(QApplication::translate("MainWindow", "\320\240\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\321\202\321\214", nullptr));
+        button_delete_test->setText(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_edit_task), QApplication::translate("MainWindow", "\320\240\320\265\320\266\320\270\320\274 \321\200\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\320\275\320\270\321\217", nullptr));
         menu->setTitle(QApplication::translate("MainWindow", "\320\234\320\265\320\275\321\216", nullptr));
     } // retranslateUi

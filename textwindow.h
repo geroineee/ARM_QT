@@ -4,9 +4,7 @@
 #include <QDialog>
 #include <QResizeEvent>
 
-namespace Ui {
-class usercodewindow;
-}
+namespace Ui {class usercodewindow;}
 
 class usercodewindow : public QDialog
 {

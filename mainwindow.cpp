@@ -11,7 +11,12 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     {
         db_model = new QSqlTableModel(this, database);
         db_model->setTable("LabWork");
+
+        ui->list_tests->resizeColumnsToContents();
+
         db_model->select();
+
+        db_model->setHeaderData(1, Qt::Horizontal, tr("Название работы"));
 
         ui->list_tests->setModel(db_model);
     }
@@ -35,12 +40,14 @@ void MainWindow::on_tabWidget_currentChanged()
 // добавление теста по нажатию кнопки
 void MainWindow::on_button_add_test_clicked()
 {
-    testwindow *testWindow = new testwindow(this);
+    testWindow = new testwindow(this);
 
     connect(testWindow, &testwindow::sendQuery, this, &MainWindow::receiveQuery);
 
     testWindow->setModal(true);
     testWindow->exec();
+
+    db_model->select();
 }
 
 void MainWindow::on_button_switch_mode_clicked()
@@ -72,3 +79,12 @@ void MainWindow::receiveQuery(QString text_query)
     qDebug() << "Запрос: " << text_query;
     database.exec(text_query);
 }
+
+// удаление записи из списка с тестами и базы данных
+void MainWindow::on_button_delete_test_clicked()
+{
+    int current_row = ui->list_tests->currentIndex().row();
+    db_model->removeRow(current_row);
+    db_model->select();
+}
+

@@ -182,3 +182,17 @@ QStringList get_name_from_path(QStringList paths)
     }
     return temp_name;
 }
+
+bool areListsEqual(const QStringList& list1, const QStringList& list2)
+{
+    return list1.size() == list2.size() && std::includes(list1.begin(), list1.end(), list2.begin(), list2.end());
+}
+
+// заключение в одинарные кавычки всех элементов списка
+void setToQuote(QStringList& data)
+{
+    for (int i = 0; i < data.size(); i++)
+    {
+       data[i] = "'" + data[i] + "'";
+    }
+}
