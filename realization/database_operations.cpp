@@ -31,7 +31,6 @@ bool tryToOpenDB(QSqlDatabase database, QString db_name)
             qDebug() << "Таблицы созданы.";
         }
     }
-
     return true;
 }
 

@@ -15,8 +15,8 @@ public:
     ~testwindow();
 
 private slots:
-    void on_button_cancel_clicked();
     void on_button_apply_clicked();
+    void on_button_cancel_clicked();
 
 signals:
     void sendQuery(QString);

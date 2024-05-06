@@ -24,32 +24,40 @@ void testwindow::on_button_cancel_clicked()
 
 void testwindow::closeEvent(QCloseEvent *evnt)
 {
-    if (evnt->spontaneous()) { // Если закрытие происходит через "крестик"
-           QMessageBox messageBox(QMessageBox::Question,
-                                  tr("Вы уверены?"),
-                                  tr("Совершенные изменения не сохранятся."),
-                                  QMessageBox::Yes | QMessageBox::No,
-                                  this);
-           messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
-           messageBox.setButtonText(QMessageBox::No, tr("Нет"));
+    if (ui->lineEdit_lab_name->text() != "" || ui->TextEdit_lab_desc->toPlainText() != "")
+    {
+        if (evnt->spontaneous()) { // Если закрытие происходит через "крестик"
+            QMessageBox messageBox(QMessageBox::Question,
+                                   tr("Вы уверены?"),
+                                   tr("Совершенные изменения не сохранятся."),
+                                   QMessageBox::Yes | QMessageBox::No,
+                                   this);
+            messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
+            messageBox.setButtonText(QMessageBox::No, tr("Нет"));
 
-           if (messageBox.exec() == QMessageBox::Yes) {
-               evnt->accept(); // Закрыть окно
-           } else {
-               evnt->ignore(); // Отменить закрытие окна
-           }
-       } else { // В противном случае, закрытие происходит по кнопке "Принять"
-           evnt->accept(); // Закрыть окно без вызова messagebox
-       }
+            if (messageBox.exec() == QMessageBox::Yes) {
+                evnt->accept(); // Закрыть окно
+            } else {
+                evnt->ignore(); // Отменить закрытие окна
+            }
+        } else { // В противном случае, закрытие происходит по кнопке "Принять"
+            evnt->accept(); // Закрыть окно без вызова messagebox
+        }
+    }
+    else
+        evnt->accept();
 }
 
 void testwindow::on_button_apply_clicked()
 {
-    QStringList tables = {"name", "description"};
-    QStringList data;
-    data.append(ui->lineEdit_lab_name->text());
-    data.append(ui->TextEdit_lab_desc->toPlainText());
-    QString query = makeInsertQuery("LabWork", tables, data);
-    emit sendQuery(query);
+    if (ui->lineEdit_lab_name->text() != "" && ui->TextEdit_lab_desc->toPlainText() != "")
+    {
+        QStringList tables = {"name", "description"};
+        QStringList data;
+        data.append(ui->lineEdit_lab_name->text());
+        data.append(ui->TextEdit_lab_desc->toPlainText());
+        QString query = makeInsertQuery("LabWork", tables, data);
+        emit sendQuery(query);
+    }
     this->close();
 }

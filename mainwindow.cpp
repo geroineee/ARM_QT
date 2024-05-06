@@ -18,7 +18,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
         db_model->setHeaderData(1, Qt::Horizontal, tr("Название работы"));
 
+
         ui->list_tests->setModel(db_model);
+        ui->list_tests->setColumnHidden(0, true);
+        ui->list_tests->setColumnHidden(2, true);
     }
 }
 
@@ -30,6 +33,7 @@ MainWindow::~MainWindow()
 // очистка интерфейса при смене вкладки
 void MainWindow::on_tabWidget_currentChanged()
 {
+    ui->list_tests->setColumnWidth(1, ui->list_tests->width() + 138);
     ui->statusbar->showMessage("");
     ui->to_user_output_data->setText("");
     ui->user_input_data->clear();
@@ -88,3 +92,8 @@ void MainWindow::on_button_delete_test_clicked()
     db_model->select();
 }
 
+void MainWindow::resizeEvent(QResizeEvent *event)
+{
+    ui->list_tests->setColumnWidth(1, ui->list_tests->width() + 138);
+    event->accept();
+}

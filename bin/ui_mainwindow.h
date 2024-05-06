@@ -288,6 +288,7 @@ public:
 
         list_tests = new QTableView(tab_edit_task);
         list_tests->setObjectName(QString::fromUtf8("list_tests"));
+        list_tests->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
         list_tests->setShowGrid(true);
         list_tests->horizontalHeader()->setCascadingSectionResizes(false);
 
@@ -304,7 +305,7 @@ public:
         MainWindow->setStatusBar(statusbar);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
-        menubar->setGeometry(QRect(0, 0, 800, 25));
+        menubar->setGeometry(QRect(0, 0, 800, 20));
         menu = new QMenu(menubar);
         menu->setObjectName(QString::fromUtf8("menu"));
         MainWindow->setMenuBar(menubar);
@@ -313,7 +314,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(2);
+        tabWidget->setCurrentIndex(0);
         stacked_widget_modes->setCurrentIndex(0);
 
 
