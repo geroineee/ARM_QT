@@ -59,6 +59,180 @@
       <property name="tabBarAutoHide">
        <bool>false</bool>
       </property>
+      <widget class="QWidget" name="tab_files">
+       <attribute name="title">
+        <string>Тестировочная система</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_7" columnstretch="70,0">
+        <property name="spacing">
+         <number>9</number>
+        </property>
+        <item row="1" column="1">
+         <widget class="QTextBrowser" name="text_input_example">
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="0">
+         <widget class="QTableWidget" name="table_result_test">
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0" rowspan="3">
+         <widget class="QTextBrowser" name="text_info_task">
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <widget class="QTextBrowser" name="text_output_example">
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="button_get_task">
+          <property name="minimumSize">
+           <size>
+            <width>180</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Выбрать задание</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
+         <widget class="QListWidget" name="list_selected_files">
+          <property name="frameShape">
+           <enum>QFrame::Box</enum>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QPushButton" name="button_start_test">
+          <property name="minimumSize">
+           <size>
+            <width>180</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Запустить тест</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QPushButton" name="button_get_path_files">
+          <property name="minimumSize">
+           <size>
+            <width>180</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Загрузить файлы</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QComboBox" name="combo_box_example">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>30</height>
+           </size>
+          </property>
+          <item>
+           <property name="text">
+            <string>Выбрать пример</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_edit_task">
+       <property name="accessibleName">
+        <string/>
+       </property>
+       <attribute name="title">
+        <string>Режим редактирования</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2" columnstretch="70,0">
+        <item row="3" column="1">
+         <widget class="QPushButton" name="button_add_test">
+          <property name="minimumSize">
+           <size>
+            <width>180</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Добавить тест</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="button_edit_test">
+          <property name="minimumSize">
+           <size>
+            <width>180</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Редактировать</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1">
+         <widget class="QPushButton" name="button_delete_test">
+          <property name="minimumSize">
+           <size>
+            <width>180</width>
+            <height>40</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Удалить</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1">
+         <spacer name="verticalSpacer">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="0" rowspan="4">
+         <widget class="QTableView" name="list_tests">
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAsNeeded</enum>
+          </property>
+          <property name="showGrid">
+           <bool>true</bool>
+          </property>
+          <attribute name="horizontalHeaderCascadingSectionResizes">
+           <bool>false</bool>
+          </attribute>
+         </widget>
+        </item>
+       </layout>
+      </widget>
       <widget class="QWidget" name="tab_only_code">
        <property name="enabled">
         <bool>true</bool>
@@ -264,205 +438,6 @@ int main()
            </layout>
           </item>
          </layout>
-        </item>
-       </layout>
-      </widget>
-      <widget class="QWidget" name="tab_files">
-       <attribute name="title">
-        <string>Тестировочная система</string>
-       </attribute>
-       <widget class="QPushButton" name="button_get_path_files">
-        <property name="geometry">
-         <rect>
-          <x>580</x>
-          <y>430</y>
-          <width>180</width>
-          <height>40</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Загрузить файлы</string>
-        </property>
-       </widget>
-       <widget class="QListWidget" name="list_selected_files">
-        <property name="geometry">
-         <rect>
-          <x>580</x>
-          <y>310</y>
-          <width>180</width>
-          <height>100</height>
-         </rect>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="button_get_task">
-        <property name="geometry">
-         <rect>
-          <x>580</x>
-          <y>20</y>
-          <width>180</width>
-          <height>40</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Выбрать задание</string>
-        </property>
-       </widget>
-       <widget class="QTextBrowser" name="text_info_task">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>20</y>
-          <width>541</width>
-          <height>231</height>
-         </rect>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-       </widget>
-       <widget class="QTextBrowser" name="text_input_example">
-        <property name="geometry">
-         <rect>
-          <x>580</x>
-          <y>80</y>
-          <width>180</width>
-          <height>70</height>
-         </rect>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-       </widget>
-       <widget class="QTextBrowser" name="text_output_example">
-        <property name="geometry">
-         <rect>
-          <x>580</x>
-          <y>160</y>
-          <width>180</width>
-          <height>70</height>
-         </rect>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-       </widget>
-       <widget class="QComboBox" name="combo_box_example">
-        <property name="geometry">
-         <rect>
-          <x>580</x>
-          <y>250</y>
-          <width>180</width>
-          <height>25</height>
-         </rect>
-        </property>
-        <item>
-         <property name="text">
-          <string>Выбрать пример</string>
-         </property>
-        </item>
-       </widget>
-       <widget class="QPushButton" name="button_start_test">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>430</y>
-          <width>180</width>
-          <height>40</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Запустить тест</string>
-        </property>
-       </widget>
-       <widget class="QTableWidget" name="table_result_test">
-        <property name="geometry">
-         <rect>
-          <x>20</x>
-          <y>310</y>
-          <width>541</width>
-          <height>101</height>
-         </rect>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-       </widget>
-      </widget>
-      <widget class="QWidget" name="tab_edit_task">
-       <property name="accessibleName">
-        <string/>
-       </property>
-       <attribute name="title">
-        <string>Режим редактирования</string>
-       </attribute>
-       <layout class="QGridLayout" name="gridLayout_2" columnstretch="70,0">
-        <item row="3" column="1">
-         <widget class="QPushButton" name="button_add_test">
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Добавить тест</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QPushButton" name="button_edit_test">
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Редактировать</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QPushButton" name="button_delete_test">
-          <property name="minimumSize">
-           <size>
-            <width>180</width>
-            <height>40</height>
-           </size>
-          </property>
-          <property name="text">
-           <string>Удалить</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="0" column="0" rowspan="4">
-         <widget class="QTableView" name="list_tests">
-          <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAsNeeded</enum>
-          </property>
-          <property name="showGrid">
-           <bool>true</bool>
-          </property>
-          <attribute name="horizontalHeaderCascadingSectionResizes">
-           <bool>false</bool>
-          </attribute>
-         </widget>
         </item>
        </layout>
       </widget>

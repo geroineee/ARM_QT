@@ -40,6 +40,24 @@ public:
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
     QTabWidget *tabWidget;
+    QWidget *tab_files;
+    QGridLayout *gridLayout_7;
+    QTextBrowser *text_input_example;
+    QTableWidget *table_result_test;
+    QTextBrowser *text_info_task;
+    QTextBrowser *text_output_example;
+    QPushButton *button_get_task;
+    QListWidget *list_selected_files;
+    QPushButton *button_start_test;
+    QPushButton *button_get_path_files;
+    QComboBox *combo_box_example;
+    QWidget *tab_edit_task;
+    QGridLayout *gridLayout_2;
+    QPushButton *button_add_test;
+    QPushButton *button_edit_test;
+    QPushButton *button_delete_test;
+    QSpacerItem *verticalSpacer;
+    QTableView *list_tests;
     QWidget *tab_only_code;
     QGridLayout *gridLayout_5;
     QGridLayout *gridLayout_4;
@@ -60,23 +78,6 @@ public:
     QLabel *label_input_data;
     QTextBrowser *to_user_output_data;
     QPlainTextEdit *user_input_data;
-    QWidget *tab_files;
-    QPushButton *button_get_path_files;
-    QListWidget *list_selected_files;
-    QPushButton *button_get_task;
-    QTextBrowser *text_info_task;
-    QTextBrowser *text_input_example;
-    QTextBrowser *text_output_example;
-    QComboBox *combo_box_example;
-    QPushButton *button_start_test;
-    QTableWidget *table_result_test;
-    QWidget *tab_edit_task;
-    QGridLayout *gridLayout_2;
-    QPushButton *button_add_test;
-    QPushButton *button_edit_test;
-    QPushButton *button_delete_test;
-    QSpacerItem *verticalSpacer;
-    QTableView *list_tests;
     QStatusBar *statusbar;
     QMenuBar *menubar;
     QMenu *menu;
@@ -104,6 +105,104 @@ public:
         tabWidget->setTabsClosable(false);
         tabWidget->setMovable(false);
         tabWidget->setTabBarAutoHide(false);
+        tab_files = new QWidget();
+        tab_files->setObjectName(QString::fromUtf8("tab_files"));
+        gridLayout_7 = new QGridLayout(tab_files);
+        gridLayout_7->setSpacing(9);
+        gridLayout_7->setObjectName(QString::fromUtf8("gridLayout_7"));
+        text_input_example = new QTextBrowser(tab_files);
+        text_input_example->setObjectName(QString::fromUtf8("text_input_example"));
+        text_input_example->setFrameShape(QFrame::Box);
+
+        gridLayout_7->addWidget(text_input_example, 1, 1, 1, 1);
+
+        table_result_test = new QTableWidget(tab_files);
+        table_result_test->setObjectName(QString::fromUtf8("table_result_test"));
+        table_result_test->setFrameShape(QFrame::Box);
+
+        gridLayout_7->addWidget(table_result_test, 4, 0, 1, 1);
+
+        text_info_task = new QTextBrowser(tab_files);
+        text_info_task->setObjectName(QString::fromUtf8("text_info_task"));
+        text_info_task->setFrameShape(QFrame::Box);
+
+        gridLayout_7->addWidget(text_info_task, 0, 0, 3, 1);
+
+        text_output_example = new QTextBrowser(tab_files);
+        text_output_example->setObjectName(QString::fromUtf8("text_output_example"));
+        text_output_example->setFrameShape(QFrame::Box);
+
+        gridLayout_7->addWidget(text_output_example, 2, 1, 1, 1);
+
+        button_get_task = new QPushButton(tab_files);
+        button_get_task->setObjectName(QString::fromUtf8("button_get_task"));
+        button_get_task->setMinimumSize(QSize(180, 40));
+
+        gridLayout_7->addWidget(button_get_task, 0, 1, 1, 1);
+
+        list_selected_files = new QListWidget(tab_files);
+        list_selected_files->setObjectName(QString::fromUtf8("list_selected_files"));
+        list_selected_files->setFrameShape(QFrame::Box);
+
+        gridLayout_7->addWidget(list_selected_files, 4, 1, 1, 1);
+
+        button_start_test = new QPushButton(tab_files);
+        button_start_test->setObjectName(QString::fromUtf8("button_start_test"));
+        button_start_test->setMinimumSize(QSize(180, 40));
+
+        gridLayout_7->addWidget(button_start_test, 5, 0, 1, 1);
+
+        button_get_path_files = new QPushButton(tab_files);
+        button_get_path_files->setObjectName(QString::fromUtf8("button_get_path_files"));
+        button_get_path_files->setMinimumSize(QSize(180, 40));
+
+        gridLayout_7->addWidget(button_get_path_files, 5, 1, 1, 1);
+
+        combo_box_example = new QComboBox(tab_files);
+        combo_box_example->addItem(QString());
+        combo_box_example->setObjectName(QString::fromUtf8("combo_box_example"));
+        combo_box_example->setMinimumSize(QSize(0, 30));
+
+        gridLayout_7->addWidget(combo_box_example, 3, 1, 1, 1);
+
+        gridLayout_7->setColumnStretch(0, 70);
+        tabWidget->addTab(tab_files, QString());
+        tab_edit_task = new QWidget();
+        tab_edit_task->setObjectName(QString::fromUtf8("tab_edit_task"));
+        gridLayout_2 = new QGridLayout(tab_edit_task);
+        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
+        button_add_test = new QPushButton(tab_edit_task);
+        button_add_test->setObjectName(QString::fromUtf8("button_add_test"));
+        button_add_test->setMinimumSize(QSize(180, 40));
+
+        gridLayout_2->addWidget(button_add_test, 3, 1, 1, 1);
+
+        button_edit_test = new QPushButton(tab_edit_task);
+        button_edit_test->setObjectName(QString::fromUtf8("button_edit_test"));
+        button_edit_test->setMinimumSize(QSize(180, 40));
+
+        gridLayout_2->addWidget(button_edit_test, 0, 1, 1, 1);
+
+        button_delete_test = new QPushButton(tab_edit_task);
+        button_delete_test->setObjectName(QString::fromUtf8("button_delete_test"));
+        button_delete_test->setMinimumSize(QSize(180, 40));
+
+        gridLayout_2->addWidget(button_delete_test, 1, 1, 1, 1);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout_2->addItem(verticalSpacer, 2, 1, 1, 1);
+
+        list_tests = new QTableView(tab_edit_task);
+        list_tests->setObjectName(QString::fromUtf8("list_tests"));
+        list_tests->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        list_tests->setShowGrid(true);
+        list_tests->horizontalHeader()->setCascadingSectionResizes(false);
+
+        gridLayout_2->addWidget(list_tests, 0, 0, 4, 1);
+
+        gridLayout_2->setColumnStretch(0, 70);
+        tabWidget->addTab(tab_edit_task, QString());
         tab_only_code = new QWidget();
         tab_only_code->setObjectName(QString::fromUtf8("tab_only_code"));
         tab_only_code->setEnabled(true);
@@ -224,78 +323,6 @@ public:
         gridLayout_5->addLayout(gridLayout_4, 0, 0, 1, 1);
 
         tabWidget->addTab(tab_only_code, QString());
-        tab_files = new QWidget();
-        tab_files->setObjectName(QString::fromUtf8("tab_files"));
-        button_get_path_files = new QPushButton(tab_files);
-        button_get_path_files->setObjectName(QString::fromUtf8("button_get_path_files"));
-        button_get_path_files->setGeometry(QRect(580, 430, 180, 40));
-        list_selected_files = new QListWidget(tab_files);
-        list_selected_files->setObjectName(QString::fromUtf8("list_selected_files"));
-        list_selected_files->setGeometry(QRect(580, 310, 180, 100));
-        list_selected_files->setFrameShape(QFrame::Box);
-        button_get_task = new QPushButton(tab_files);
-        button_get_task->setObjectName(QString::fromUtf8("button_get_task"));
-        button_get_task->setGeometry(QRect(580, 20, 180, 40));
-        text_info_task = new QTextBrowser(tab_files);
-        text_info_task->setObjectName(QString::fromUtf8("text_info_task"));
-        text_info_task->setGeometry(QRect(20, 20, 541, 231));
-        text_info_task->setFrameShape(QFrame::Box);
-        text_input_example = new QTextBrowser(tab_files);
-        text_input_example->setObjectName(QString::fromUtf8("text_input_example"));
-        text_input_example->setGeometry(QRect(580, 80, 180, 70));
-        text_input_example->setFrameShape(QFrame::Box);
-        text_output_example = new QTextBrowser(tab_files);
-        text_output_example->setObjectName(QString::fromUtf8("text_output_example"));
-        text_output_example->setGeometry(QRect(580, 160, 180, 70));
-        text_output_example->setFrameShape(QFrame::Box);
-        combo_box_example = new QComboBox(tab_files);
-        combo_box_example->addItem(QString());
-        combo_box_example->setObjectName(QString::fromUtf8("combo_box_example"));
-        combo_box_example->setGeometry(QRect(580, 250, 180, 25));
-        button_start_test = new QPushButton(tab_files);
-        button_start_test->setObjectName(QString::fromUtf8("button_start_test"));
-        button_start_test->setGeometry(QRect(20, 430, 180, 40));
-        table_result_test = new QTableWidget(tab_files);
-        table_result_test->setObjectName(QString::fromUtf8("table_result_test"));
-        table_result_test->setGeometry(QRect(20, 310, 541, 101));
-        table_result_test->setFrameShape(QFrame::Box);
-        tabWidget->addTab(tab_files, QString());
-        tab_edit_task = new QWidget();
-        tab_edit_task->setObjectName(QString::fromUtf8("tab_edit_task"));
-        gridLayout_2 = new QGridLayout(tab_edit_task);
-        gridLayout_2->setObjectName(QString::fromUtf8("gridLayout_2"));
-        button_add_test = new QPushButton(tab_edit_task);
-        button_add_test->setObjectName(QString::fromUtf8("button_add_test"));
-        button_add_test->setMinimumSize(QSize(180, 40));
-
-        gridLayout_2->addWidget(button_add_test, 3, 1, 1, 1);
-
-        button_edit_test = new QPushButton(tab_edit_task);
-        button_edit_test->setObjectName(QString::fromUtf8("button_edit_test"));
-        button_edit_test->setMinimumSize(QSize(180, 40));
-
-        gridLayout_2->addWidget(button_edit_test, 0, 1, 1, 1);
-
-        button_delete_test = new QPushButton(tab_edit_task);
-        button_delete_test->setObjectName(QString::fromUtf8("button_delete_test"));
-        button_delete_test->setMinimumSize(QSize(180, 40));
-
-        gridLayout_2->addWidget(button_delete_test, 1, 1, 1, 1);
-
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        gridLayout_2->addItem(verticalSpacer, 2, 1, 1, 1);
-
-        list_tests = new QTableView(tab_edit_task);
-        list_tests->setObjectName(QString::fromUtf8("list_tests"));
-        list_tests->setHorizontalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        list_tests->setShowGrid(true);
-        list_tests->horizontalHeader()->setCascadingSectionResizes(false);
-
-        gridLayout_2->addWidget(list_tests, 0, 0, 4, 1);
-
-        gridLayout_2->setColumnStretch(0, 70);
-        tabWidget->addTab(tab_edit_task, QString());
 
         verticalLayout->addWidget(tabWidget);
 
@@ -324,6 +351,19 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QApplication::translate("MainWindow", "MainWindow", nullptr));
+        button_get_task->setText(QApplication::translate("MainWindow", "\320\222\321\213\320\261\321\200\320\260\321\202\321\214 \320\267\320\260\320\264\320\260\320\275\320\270\320\265", nullptr));
+        button_start_test->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\277\321\203\321\201\321\202\320\270\321\202\321\214 \321\202\320\265\321\201\321\202", nullptr));
+        button_get_path_files->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\204\320\260\320\271\320\273\321\213", nullptr));
+        combo_box_example->setItemText(0, QApplication::translate("MainWindow", "\320\222\321\213\320\261\321\200\320\260\321\202\321\214 \320\277\321\200\320\270\320\274\320\265\321\200", nullptr));
+
+        tabWidget->setTabText(tabWidget->indexOf(tab_files), QApplication::translate("MainWindow", "\320\242\320\265\321\201\321\202\320\270\321\200\320\276\320\262\320\276\321\207\320\275\320\260\321\217 \321\201\320\270\321\201\321\202\320\265\320\274\320\260", nullptr));
+#ifndef QT_NO_ACCESSIBILITY
+        tab_edit_task->setAccessibleName(QString());
+#endif // QT_NO_ACCESSIBILITY
+        button_add_test->setText(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\202\320\265\321\201\321\202", nullptr));
+        button_edit_test->setText(QApplication::translate("MainWindow", "\320\240\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\321\202\321\214", nullptr));
+        button_delete_test->setText(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_edit_task), QApplication::translate("MainWindow", "\320\240\320\265\320\266\320\270\320\274 \321\200\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\320\275\320\270\321\217", nullptr));
         user_code_text_edit->setPlainText(QApplication::translate("MainWindow", "#include <iostream>\n"
 "\n"
 "using namespace std;\n"
@@ -348,19 +388,6 @@ public:
         label_output_data->setText(QApplication::translate("MainWindow", "\320\222\321\213\321\205\320\276\320\264\320\275\321\213\320\265 \320\264\320\260\320\275\320\275\321\213\320\265:", nullptr));
         label_input_data->setText(QApplication::translate("MainWindow", "\320\222\321\205\320\276\320\264\320\275\321\213\320\265 \320\264\320\260\320\275\320\275\321\213\320\265:", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_only_code), QApplication::translate("MainWindow", "\320\242\320\265\321\201\321\202\320\270\321\200\320\276\320\262\320\260\320\275\320\270\320\265 \320\272\320\276\320\264\320\260", nullptr));
-        button_get_path_files->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\204\320\260\320\271\320\273\321\213", nullptr));
-        button_get_task->setText(QApplication::translate("MainWindow", "\320\222\321\213\320\261\321\200\320\260\321\202\321\214 \320\267\320\260\320\264\320\260\320\275\320\270\320\265", nullptr));
-        combo_box_example->setItemText(0, QApplication::translate("MainWindow", "\320\222\321\213\320\261\321\200\320\260\321\202\321\214 \320\277\321\200\320\270\320\274\320\265\321\200", nullptr));
-
-        button_start_test->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\277\321\203\321\201\321\202\320\270\321\202\321\214 \321\202\320\265\321\201\321\202", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab_files), QApplication::translate("MainWindow", "\320\242\320\265\321\201\321\202\320\270\321\200\320\276\320\262\320\276\321\207\320\275\320\260\321\217 \321\201\320\270\321\201\321\202\320\265\320\274\320\260", nullptr));
-#ifndef QT_NO_ACCESSIBILITY
-        tab_edit_task->setAccessibleName(QString());
-#endif // QT_NO_ACCESSIBILITY
-        button_add_test->setText(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\202\320\265\321\201\321\202", nullptr));
-        button_edit_test->setText(QApplication::translate("MainWindow", "\320\240\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\321\202\321\214", nullptr));
-        button_delete_test->setText(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab_edit_task), QApplication::translate("MainWindow", "\320\240\320\265\320\266\320\270\320\274 \321\200\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\320\275\320\270\321\217", nullptr));
         menu->setTitle(QApplication::translate("MainWindow", "\320\234\320\265\320\275\321\216", nullptr));
     } // retranslateUi
 

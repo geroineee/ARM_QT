@@ -28,7 +28,7 @@ bool is_ANSI(QByteArray data)
     QByteArray alphs;
     alphs.append(QString("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнпорстуфхцчшщъыьэюя").toLocal8Bit());
 
-    for (QChar alph : data)
+    for (QChar alph : qAsConst(data))
     {
         for (QChar alph_alph : alphs)
         {

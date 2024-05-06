@@ -15,8 +15,9 @@ public:
     ~testwindow();
 
 private slots:
-    void on_button_apply_clicked();
     void on_button_cancel_clicked();
+    void on_button_add_variant_clicked();
+    void on_button_back_to_edie_test_clicked();
 
 signals:
     void sendQuery(QString);

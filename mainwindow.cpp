@@ -6,6 +6,7 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->statusbar->showMessage("Обратите внимание, что путь к файлам и их название не должны содержать кириллицу!");
     database = QSqlDatabase::addDatabase("QSQLITE");
     if (tryToOpenDB(database, "Lab_works"))
     {
@@ -17,7 +18,6 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         db_model->select();
 
         db_model->setHeaderData(1, Qt::Horizontal, tr("Название работы"));
-
 
         ui->list_tests->setModel(db_model);
         ui->list_tests->setColumnHidden(0, true);
@@ -37,7 +37,7 @@ void MainWindow::on_tabWidget_currentChanged()
     ui->statusbar->showMessage("");
     ui->to_user_output_data->setText("");
     ui->user_input_data->clear();
-    if (ui->stacked_widget_modes->currentIndex() && !ui->tabWidget->currentIndex())
+    if ((ui->stacked_widget_modes->currentIndex() && ui->tabWidget->currentIndex() == 2) or ui->tabWidget->currentIndex() == 0)
         ui->statusbar->showMessage("Обратите внимание, что путь к файлам и их название не должны содержать кириллицу!");
 }
 

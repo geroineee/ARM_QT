@@ -24,40 +24,58 @@ void testwindow::on_button_cancel_clicked()
 
 void testwindow::closeEvent(QCloseEvent *evnt)
 {
-    if (ui->lineEdit_lab_name->text() != "" || ui->TextEdit_lab_desc->toPlainText() != "")
-    {
-        if (evnt->spontaneous()) { // Если закрытие происходит через "крестик"
-            QMessageBox messageBox(QMessageBox::Question,
-                                   tr("Вы уверены?"),
-                                   tr("Совершенные изменения не сохранятся."),
-                                   QMessageBox::Yes | QMessageBox::No,
-                                   this);
-            messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
-            messageBox.setButtonText(QMessageBox::No, tr("Нет"));
+        QMessageBox messageBox(QMessageBox::Question,
+                               tr("Вы уверены?"),
+                               tr("Совершенные изменения не сохранятся."),
+                               QMessageBox::Yes | QMessageBox::No,
+                               this);
+        messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
+        messageBox.setButtonText(QMessageBox::No, tr("Нет"));
 
-            if (messageBox.exec() == QMessageBox::Yes) {
-                evnt->accept(); // Закрыть окно
-            } else {
-                evnt->ignore(); // Отменить закрытие окна
-            }
-        } else { // В противном случае, закрытие происходит по кнопке "Принять"
-            evnt->accept(); // Закрыть окно без вызова messagebox
-        }
+    if (messageBox.exec() == QMessageBox::Yes)
+    {
+        evnt->accept(); // Закрыть окно
     }
     else
-        evnt->accept();
+    {
+        evnt->ignore(); // Отменить закрытие окна
+    }
 }
 
-void testwindow::on_button_apply_clicked()
+void testwindow::on_button_add_variant_clicked()
 {
     if (ui->lineEdit_lab_name->text() != "" && ui->TextEdit_lab_desc->toPlainText() != "")
     {
+        QMessageBox messageBox(QMessageBox::Question,
+                               tr("Вы уверены?"),
+                               tr("Изменить формулировку можно будет только в режиме редактирования."),
+                               QMessageBox::Yes | QMessageBox::No,
+                               this);
+        messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
+        messageBox.setButtonText(QMessageBox::No, tr("Нет"));
+
+        if (messageBox.exec() == QMessageBox::No)
+        {
+            return;
+        }
+
         QStringList tables = {"name", "description"};
         QStringList data;
         data.append(ui->lineEdit_lab_name->text());
         data.append(ui->TextEdit_lab_desc->toPlainText());
         QString query = makeInsertQuery("LabWork", tables, data);
         emit sendQuery(query);
+        ui->stackedWidget->setCurrentIndex(1);
     }
-    this->close();
+    else
+    {
+        QMessageBox::warning(this, "Куда торопимся?", "Не все поля заполнены.");
+    }
 }
+
+
+void testwindow::on_button_back_to_edie_test_clicked()
+{
+    ui->stackedWidget->setCurrentIndex(0);
+}
+
