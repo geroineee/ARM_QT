@@ -11,6 +11,8 @@ class testwindow : public QDialog
     Q_OBJECT
 
 public:
+    void setRedactorMode(bool);
+
     explicit testwindow(QWidget *parent = nullptr);
     ~testwindow();
 
@@ -23,6 +25,8 @@ signals:
     void sendQuery(QString);
 
 private:
+    bool isRedactor; //  определяет, является ли окно редактором, либо окном добавления
+
     Ui::testwindow *ui;
 
 protected:

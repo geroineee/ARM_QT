@@ -46,9 +46,12 @@ void MainWindow::on_button_add_test_clicked()
 {
     testWindow = new testwindow(this);
 
+
     connect(testWindow, &testwindow::sendQuery, this, &MainWindow::receiveQuery);
 
-    testWindow->setModal(true);
+//    testWindow->setModal(true);
+
+    testWindow->setRedactorMode(false); // окно открывается как окно добавления
     testWindow->exec();
 
     db_model->select();

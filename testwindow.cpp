@@ -47,7 +47,7 @@ void testwindow::on_button_add_variant_clicked()
     if (ui->lineEdit_lab_name->text() != "" && ui->TextEdit_lab_desc->toPlainText() != "")
     {
         QMessageBox messageBox(QMessageBox::Question,
-                               tr("Вы уверены?"),
+                               tr("Продолжить?"),
                                tr("Изменить формулировку можно будет только в режиме редактирования."),
                                QMessageBox::Yes | QMessageBox::No,
                                this);
@@ -67,9 +67,10 @@ void testwindow::on_button_add_variant_clicked()
         emit sendQuery(query);
         ui->stackedWidget->setCurrentIndex(1);
     }
+
     else
     {
-        QMessageBox::warning(this, "Куда торопимся?", "Не все поля заполнены.");
+        QMessageBox::warning(this, "Недостаточно данных", "Не все поля заполнены.");
     }
 }
 
@@ -79,3 +80,7 @@ void testwindow::on_button_back_to_edie_test_clicked()
     ui->stackedWidget->setCurrentIndex(0);
 }
 
+void testwindow::setRedactorMode(bool isRedactor)
+{
+    this->isRedactor = isRedactor;
+}

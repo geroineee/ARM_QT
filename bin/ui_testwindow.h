@@ -65,14 +65,16 @@ public:
         label_2 = new QLabel(page_task);
         label_2->setObjectName(QString::fromUtf8("label_2"));
         QFont font;
-        font.setPointSize(12);
+        font.setPointSize(10);
         label_2->setFont(font);
 
         gridLayout->addWidget(label_2, 1, 0, 1, 1);
 
         TextEdit_lab_desc = new QPlainTextEdit(page_task);
         TextEdit_lab_desc->setObjectName(QString::fromUtf8("TextEdit_lab_desc"));
-        TextEdit_lab_desc->setFont(font);
+        QFont font1;
+        font1.setPointSize(12);
+        TextEdit_lab_desc->setFont(font1);
 
         gridLayout->addWidget(TextEdit_lab_desc, 2, 0, 1, 4);
 
@@ -87,7 +89,7 @@ public:
         lineEdit_lab_name = new QLineEdit(page_task);
         lineEdit_lab_name->setObjectName(QString::fromUtf8("lineEdit_lab_name"));
         lineEdit_lab_name->setMinimumSize(QSize(0, 30));
-        lineEdit_lab_name->setFont(font);
+        lineEdit_lab_name->setFont(font1);
 
         horizontalLayout->addWidget(lineEdit_lab_name);
 
