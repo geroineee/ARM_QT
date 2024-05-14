@@ -20,21 +20,24 @@ testwindow::~testwindow()
 
 void testwindow::closeEvent(QCloseEvent *evnt)
 {
-    QMessageBox messageBox(QMessageBox::Question,
-                           tr("Вы уверены?"),
-                           tr("Совершенные изменения не сохранятся."),
-                           QMessageBox::Yes | QMessageBox::No,
-                           this);
-    messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
-    messageBox.setButtonText(QMessageBox::No, tr("Нет"));
+    if (evnt->spontaneous())
+    {
+        QMessageBox messageBox(QMessageBox::Question,
+                               tr("Вы уверены?"),
+                               tr("Совершенные изменения не сохранятся."),
+                               QMessageBox::Yes | QMessageBox::No,
+                               this);
+        messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
+        messageBox.setButtonText(QMessageBox::No, tr("Нет"));
 
-    if (messageBox.exec() == QMessageBox::Yes)
-    {
-        evnt->accept(); // Закрыть окно
-    }
-    else
-    {
-        evnt->ignore(); // Отменить закрытие окна
+        if (messageBox.exec() == QMessageBox::Yes)
+        {
+            evnt->accept(); // Закрыть окно
+        }
+        else
+        {
+            evnt->ignore(); // Отменить закрытие окна
+        }
     }
 }
 
