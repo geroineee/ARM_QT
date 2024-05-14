@@ -102,7 +102,7 @@ QString getFIleName(QString path)
 }
 
 // заполнение окна с выбранными файлами
-void fillSelecteFilesTable(QStringList& paths, Ui::MainWindow* ui)
+void fillSelecteFilesTable(QStringList& paths, QListWidget* list)
 {
     QStringList temp_list_path;
     for (const QString& file_path : qAsConst(paths))
@@ -122,9 +122,7 @@ void fillSelecteFilesTable(QStringList& paths, Ui::MainWindow* ui)
                 image_path = ":/img/image/h_file.png";
             }
             QListWidgetItem *item = new QListWidgetItem(QIcon(image_path), file_name);
-            QListWidgetItem *item2 = new QListWidgetItem(QIcon(image_path), file_name);
-            ui->list_files->addItem(item);
-            ui->list_selected_files->addItem(item2);
+            list->addItem(item);
         }
     }
     paths = temp_list_path; // чтобы не было лишних путей
@@ -195,4 +193,31 @@ void setToQuote(QStringList& data)
     {
        data[i] = "'" + data[i] + "'";
     }
+}
+
+// Компилирует код | directory_path передается с "/" |
+void compile_code(QProcess& process, QString directory_path, QStringList file_names)
+{
+    QString compiled_files = "";
+    for (const QString& file : qAsConst(file_names))
+        {
+            compiled_files.append('"' + file + '"');
+            compiled_files.append(' ');
+        }
+        compiled_files.chop(1);
+
+    // открытие и запись в start_compile.bat
+    QString command = "@echo off\n"
+                      "chcp 65001 > null.txt\n"
+                      "cd /D " + directory_path + "\n"
+                      "g++ -Wall " + compiled_files + " -o user_main_code.exe\n"
+                      "user_main_code.exe < user_input.txt\n"
+                      "del user_main_code.exe\n"
+                      "del null.txt\n"
+                      "del start_compile.bat\n"
+                      "exit";
+    writeToFile(directory_path + "start_compile.bat", command);
+
+    // запуск start_compile.bat
+    process.start(directory_path + "start_compile.bat");
 }

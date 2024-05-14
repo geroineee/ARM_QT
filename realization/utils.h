@@ -30,7 +30,7 @@ QString getFIleName(QString path);
 void delete_file(QString current_path, QStringList file_names);\
 
 // заполнение окна с выбранными файлами
-void fillSelecteFilesTable(QStringList& paths, Ui::MainWindow* ui);
+void fillSelecteFilesTable(QStringList& paths, QListWidget* list);
 
 // проверка на установленную кодировку файла
 bool is_ANSI(QByteArray data);
@@ -49,5 +49,8 @@ QStringList get_name_from_path(QStringList paths);
 
 // заключение в одинарные кавычки всех элементов списка
 void setToQuote(QStringList& data);
+
+// Компилирует код | directory_path передается с "/" |
+void compile_code(QProcess& process, QString directory_path, QStringList file_names);
 
 #endif // UTILS_H

@@ -27,7 +27,8 @@ void MainWindow::choose_files()
     ui->list_files->clear();
 
     // заполнение списка
-    fillSelecteFilesTable(files_path, ui);
+    fillSelecteFilesTable(files_path, ui->list_files);
+    fillSelecteFilesTable(files_path, ui->list_selected_files);
 }
 
 // вывод текста выбранного файла в новом окне

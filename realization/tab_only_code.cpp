@@ -2,33 +2,6 @@
 #include "realization/utils.h"
 
 
-// Компилирует код | directory_path передается с "/" |
-void compile_code(QProcess& process, QString directory_path, QStringList file_names)
-{
-    QString compiled_files = "";
-    for (const QString& file : qAsConst(file_names))
-        {
-            compiled_files.append('"' + file + '"');
-            compiled_files.append(' ');
-        }
-        compiled_files.chop(1);
-
-    // открытие и запись в start_compile.bat
-    QString command = "@echo off\n"
-                      "chcp 65001 > null.txt\n"
-                      "cd /D " + directory_path + "\n"
-                      "g++ -Wall " + compiled_files + " -o user_main_code.exe\n"
-                      "user_main_code.exe < user_input.txt\n"
-                      "del user_main_code.exe\n"
-                      "del null.txt\n"
-                      "del start_compile.bat\n"
-                      "exit";
-    writeToFile(directory_path + "start_compile.bat", command);
-
-    // запуск start_compile.bat
-    process.start(directory_path + "start_compile.bat");
-}
-
 // запускает компиляцию и выводит на пользовательские окна
 void MainWindow::for_button_compile(bool isWorkWithFile)
 {
@@ -38,7 +11,7 @@ void MainWindow::for_button_compile(bool isWorkWithFile)
     QString current_path; // путь до рабочей папки
     QTextStream writeStream; // поток для записи в файл
     QStringList names;
-    QStringList list_del_names = { "user_input.txt" }; // список для удаления файлов
+    QStringList list_del_names = { "user_input.txt", "user_output.txt" }; // список для удаления файлов
 
     if (isWorkWithFile)
     {
@@ -53,7 +26,6 @@ void MainWindow::for_button_compile(bool isWorkWithFile)
         for (index = path.size()-1; index > 0 && path[index] != "/"; index--);
         current_path = path.remove(index+1, path.size()-index);
     }
-
     else
     {
         names.append("user_main_code.cpp");
@@ -113,7 +85,7 @@ void MainWindow::for_button_compile(bool isWorkWithFile)
 // запуск компиляции c кодом в соответствующем поле
 void MainWindow::on_upload_user_code_button_clicked()
 {
-    for_button_compile(0);
+    for_button_compile(false);
 }
 
 // запуск компиляции c кодом из файлов
@@ -124,5 +96,5 @@ void MainWindow::on_button_compile_file_clicked()
         ui->statusbar->showMessage("Ошибка! В имени файла или в пути к директории файла присутствует кириллица");
         return;
     }
-    for_button_compile(1);
+    for_button_compile(true);
 }
