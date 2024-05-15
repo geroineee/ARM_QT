@@ -2,6 +2,7 @@
 #include "realization/utils.h"
 
 #include "mainwindow.h"
+#include "testwindow.h"
 
 
 // открытие базы данных
@@ -25,7 +26,7 @@ bool tryToOpenDB(QSqlDatabase database, QString db_name)
         if (!areListsEqual(database.tables(), QStringList{"Variants", "sqlite_sequence", "Tests", "LabWork"}))
         {
             qDebug() << database.tables() << "->" << QStringList{"sqlite_sequence", "Tests", "LabWork", "Variants"};
-            database.exec("CREATE TABLE LabWork (id INTEGER, PRIMARY KEY(id), name TEXT UNIQUE, description TEXT,)");
+            database.exec("CREATE TABLE LabWork (id INTEGER, PRIMARY KEY(id, AUTOINCREMENT), name TEXT UNIQUE, description TEXT,)");
             database.exec("CREATE TABLE Variants (id INTEGER PRIMARY KEY AUTOINCREMENT, labwork_id INTEGER, conditions TEXT, FOREIGN KEY (labwork_id) REFERENCES LabWork(id));");
             database.exec("CREATE TABLE Tests (id INTEGER PRIMARY KEY AUTOINCREMENT, variant_id INTEGER, input_data TEXT, output_data TEXT, FOREIGN KEY (variant_id) REFERENCES Variants(id));");
             qDebug() << "Таблицы созданы.";
@@ -34,11 +35,89 @@ bool tryToOpenDB(QSqlDatabase database, QString db_name)
     return true;
 }
 
+// Нахождение первого свободного id в таблице
+int getNextAvailableId(QSqlDatabase& db, QString table)
+{
+    QSqlQuery query(db);
+    query.prepare("SELECT id FROM " + table + " ORDER BY id DESC LIMIT 1");
+
+    if (!query.exec())
+    {
+        qDebug() << "Ошибка при выполнении запроса: " << query.lastError().text();
+        return -1; // Возвращаем -1 или другое значение, указывающее на ошибку
+    }
+
+    if (query.next())
+    {
+        int lastId = query.value(0).toInt();
+        for (int i = 1; i <= lastId; ++i)
+        {
+            query.prepare("SELECT id FROM " + table + " WHERE id = :id");
+            query.bindValue(":id", i);
+            if (!query.exec() || !query.next())
+            {
+                return i; // Возвращаем первый свободный id
+            }
+        }
+        return lastId + 1; // Если все id от 1 до lastId заняты, возвращаем следующий id
+    }
+    else
+    {
+        // Если нет записей, возвращаем следующий id, который был бы автоматически сгенерирован
+        return 1;
+    }
+}
+
 // создание готового запроса для БД
-QString makeInsertQuery(QString table, QStringList columns, QStringList data)
+QString makeInsertQuery(QString table, QStringList columns, QStringList data, QSqlDatabase& db)
 {
     setToQuote(data);
-    QString query = "INSERT INTO " + table + "(" + columns.join(", ") + ") "
-                    "VALUES (" + data.join(", ") + ");";
+    int id = getNextAvailableId(db, table);
+    QString query = "INSERT INTO " + table + "(id, " + columns.join(", ") + ") "
+                    "VALUES ('" + QString::number(id) + "', " + data.join(", ") + ");";
+    return query;
+}
+
+// Обновление данных в базе данных
+QString updateData(QString table, QStringList columns, QStringList data, QString condition)
+{
+    setToQuote(data);
+    QString query = "UPDATE " + table + " SET ";
+    for (int i = 0; i < columns.size(); ++i)
+    {
+        query += columns[i] + " = " + data[i];
+        if (i < columns.size() - 1)
+            query += ", ";
+    }
+    query += " WHERE " + condition + ";";
+    return query;
+}
+
+// Функция для определения существует ли запись с таким именем в базе данных
+bool existsRecord(QString table, QString column, QString value)
+{
+    QString q = "SELECT COUNT(*) FROM " + table + " WHERE " + column + " = '" + value + "';";
+
+    QSqlQuery query(q);
+    if (query.lastError().type() != QSqlError::NoError)
+    {
+        qDebug() << "Ошибка при выполнении запроса: " << query.lastError().text();
+        return false;
+    }
+
+    // Проверка результата запроса
+    if (query.next())
+    {
+        int count = query.value(0).toInt();
+        return count > 0;
+    }
+    return false;
+}
+
+// Функция для получения информации из поля
+QString getDBDataQuery(QString table, QString data, QString column, QString column_condition)
+{
+    QString query = "SELECT " + data + " FROM " + table + " WHERE "
+            + column + " = '" + column_condition + "';";
     return query;
 }

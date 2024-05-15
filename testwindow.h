@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QCloseEvent>
 #include <QListWidgetItem>
+#include <QSqlDatabase>
+#include <QSqlTableModel>
 
 #include "textwindow.h"
 
@@ -14,7 +16,7 @@ class testwindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit testwindow(QWidget *parent = nullptr);
+    explicit testwindow(QSqlDatabase& database, QWidget *parent = nullptr);
     ~testwindow();
 
 private slots:
@@ -25,11 +27,8 @@ private slots:
     void on_button_compile_file_clicked();
     void on_button_get_files_clicked();
     void on_list_files_itemDoubleClicked(QListWidgetItem *item);
-
     void on_button_test_append_clicked();
-
     void on_button_save_variant_clicked();
-
     void on_button_save_lab_clicked();
 
 signals:
@@ -42,8 +41,15 @@ private:
 
     QStringList files_path;
 
+    int current_lab_id = 0;
+    int current_var_id = 0;
+    int current_test_id = 0;
+
     Ui::testwindow *ui;
     usercodewindow *code_window;
+
+    QSqlDatabase& m_database;
+    QSqlTableModel* db_model;
 
 protected:
     void closeEvent(QCloseEvent *evnt);

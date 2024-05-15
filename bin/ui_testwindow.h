@@ -14,6 +14,7 @@
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QLineEdit>
 #include <QtWidgets/QListWidget>
@@ -21,6 +22,7 @@
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStackedWidget>
+#include <QtWidgets/QTableView>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 
@@ -47,9 +49,9 @@ public:
     QPushButton *button_delete_variant;
     QSpacerItem *horizontalSpacer_2;
     QPushButton *button_add_variant;
-    QListWidget *listWidget;
     QSpacerItem *verticalSpacer_2;
     QLabel *label_3;
+    QTableView *list_variants;
     QWidget *page_variant;
     QGridLayout *gridLayout_5;
     QGridLayout *gridLayout_2;
@@ -184,11 +186,6 @@ public:
 
         gridLayout->addLayout(verticalLayout, 4, 1, 1, 1);
 
-        listWidget = new QListWidget(page_task);
-        listWidget->setObjectName(QString::fromUtf8("listWidget"));
-
-        gridLayout->addWidget(listWidget, 4, 0, 1, 1);
-
         verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         gridLayout->addItem(verticalSpacer_2, 3, 1, 1, 1);
@@ -198,6 +195,11 @@ public:
         label_3->setFont(font);
 
         gridLayout->addWidget(label_3, 3, 0, 1, 1);
+
+        list_variants = new QTableView(page_task);
+        list_variants->setObjectName(QString::fromUtf8("list_variants"));
+
+        gridLayout->addWidget(list_variants, 4, 0, 1, 1);
 
 
         gridLayout_3->addLayout(gridLayout, 0, 0, 1, 1);
@@ -458,7 +460,7 @@ public:
         button_add_variant->setText(QApplication::translate("testwindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \320\262\320\260\321\200\320\270\320\260\320\275\321\202", nullptr));
         label_3->setText(QApplication::translate("testwindow", "\320\222\320\260\321\200\320\270\320\260\320\275\321\202\321\213", nullptr));
         label_4->setText(QApplication::translate("testwindow", "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 \342\204\226", nullptr));
-        label_number_variant->setText(QApplication::translate("testwindow", "1", nullptr));
+        label_number_variant->setText(QApplication::translate("testwindow", "10", nullptr));
         button_edit_tests->setText(QApplication::translate("testwindow", "\320\240\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\321\202\321\214", nullptr));
         button_delete_tests->setText(QApplication::translate("testwindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", nullptr));
         button_add_tests->setText(QApplication::translate("testwindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\202\320\265\321\201\321\202", nullptr));

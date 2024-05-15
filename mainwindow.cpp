@@ -6,7 +6,9 @@
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+
     ui->statusbar->showMessage("Обратите внимание, что путь к файлам и их название не должны содержать кириллицу!");
+
     database = QSqlDatabase::addDatabase("QSQLITE");
     if (tryToOpenDB(database, "Lab_works"))
     {
@@ -44,7 +46,7 @@ void MainWindow::on_tabWidget_currentChanged()
 // добавление теста по нажатию кнопки
 void MainWindow::on_button_add_test_clicked()
 {
-    testWindow = new testwindow(this);
+    testWindow = new testwindow(this->database, this);
 
     connect(testWindow, &testwindow::sendQuery, this, &MainWindow::receiveQuery);
 
@@ -78,10 +80,17 @@ void MainWindow::on_button_switch_mode_clicked()
     }
 }
 
-void MainWindow::receiveQuery(QString text_query)
+bool MainWindow::receiveQuery(QString text_query)
 {
     qDebug() << "Запрос: " << text_query;
     database.exec(text_query);
+
+    if (database.lastError().type() != QSqlError::NoError)
+    {
+        qDebug() << "Ошибка при выполнении запроса: " << database.lastError().text();
+        return false;
+    }
+    return true;
 }
 
 // удаление записи из списка с тестами и базы данных

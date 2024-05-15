@@ -30,7 +30,7 @@ public:
     ~MainWindow();
 
 public slots:
-    void receiveQuery(QString query);
+    bool receiveQuery(QString query);
 
 private slots:
     void on_upload_user_code_button_clicked();
@@ -60,5 +60,6 @@ private:
     // для работы с базой данных
     QSqlDatabase database;
     QSqlTableModel *db_model;
+
 };
 #endif // MAINWINDOW_H

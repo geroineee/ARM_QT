@@ -8,9 +8,21 @@
 #include "realization/utils.h"
 #include "realization/database_operations.h"
 
-testwindow::testwindow(QWidget *parent) : QDialog(parent), ui(new Ui::testwindow)
+testwindow::testwindow(QSqlDatabase& database, QWidget *parent)
+    : QDialog(parent), ui(new Ui::testwindow), m_database(database)
 {
     ui->setupUi(this);
+
+    db_model = new QSqlTableModel(this, m_database);
+    db_model->setTable("Variants");
+
+    ui->list_variants->resizeColumnsToContents();
+
+    db_model->select();
+    db_model->setHeaderData(0, Qt::Horizontal, tr("Номер варианта"));
+    ui->list_variants->setModel(db_model);
+    ui->list_variants->setColumnHidden(1, true);
+    ui->list_variants->setColumnHidden(2, true);
 }
 
 testwindow::~testwindow()
@@ -46,7 +58,34 @@ void testwindow::on_button_add_variant_clicked()
 {
     if (ui->lineEdit_lab_name->text() != "" && ui->TextEdit_lab_desc->toPlainText() != "")
     {
+        QString query;
         ui->stackedWidget->setCurrentIndex(1);
+
+        ui->label_number_variant->setText(QString::number(current_var_id+1));
+        current_var_id = 0;
+
+        ui->TextEdit_variant->clear();
+
+        QStringList tables = {"name", "description"};
+        QStringList data;
+        data << ui->lineEdit_lab_name->text() << ui->TextEdit_lab_desc->toPlainText();
+        if (current_lab_id)
+        {
+            query = updateData("LabWork", tables, data, "id = " + QString::number(current_lab_id));
+            emit sendQuery(query);
+        }
+        else
+        {
+            query = makeInsertQuery("LabWork", tables, data, this->m_database);
+            emit sendQuery(query);
+
+            query = getDBDataQuery("LabWork", "id", "name", data[0]);
+            QSqlQuery q(query);
+            if (q.next())
+            {
+                current_lab_id = q.value(0).toInt();
+            }
+        }
     }
     else
     {
@@ -57,6 +96,36 @@ void testwindow::on_button_add_variant_clicked()
 void testwindow::on_button_add_tests_clicked()
 {
     ui->stackedWidget->setCurrentIndex(2);
+    QString variant = ui->TextEdit_variant->toPlainText();
+    if (variant.size())
+    {
+        QStringList tables = {"labwork_id", "conditions"};
+        QStringList data;
+        data << QString::number(current_lab_id) << variant;
+        QString query;
+
+        if (current_var_id)
+        {
+            query = updateData("Variants", tables, data, "id = " + QString::number(current_var_id));
+            emit sendQuery(query);
+        }
+        else
+        {
+            query = makeInsertQuery("Variants", tables, data, this->m_database);
+            emit sendQuery(query);
+
+            query = getDBDataQuery("Variants", "id", "conditions", data[1]);
+            QSqlQuery q(query);
+            if (q.next())
+            {
+                current_var_id = q.value(0).toInt();
+            }
+        }
+    }
+    else
+    {
+        QMessageBox::warning(this, "Куда торопимся?", "Не все поля заполнены.");
+    }
 }
 
 // вывод текста выбранного файла в новом окне
@@ -262,7 +331,28 @@ void testwindow::on_button_save_variant_clicked()
 
     if (variant_data.size())
     {
-        // Добавить варик в бд
+        QStringList tables = {"labwork_id", "conditions"};
+        QStringList data;
+        data << QString::number(current_lab_id) << variant_data;
+        QString query;
+
+        if (current_var_id)
+        {
+            query = updateData("Variants", tables, data, "id = " + QString::number(current_var_id));
+            emit sendQuery(query);
+        }
+        else
+        {
+            query = makeInsertQuery("Variants", tables, data, this->m_database);
+            emit sendQuery(query);
+
+            query = getDBDataQuery("Variants", "id", "conditions", data[1]);
+            QSqlQuery q(query);
+            if (q.next())
+            {
+                current_var_id = q.value(0).toInt();
+            }
+        }
 
         ui->stackedWidget->setCurrentIndex(0);
     }
@@ -270,7 +360,6 @@ void testwindow::on_button_save_variant_clicked()
     {
         QMessageBox::warning(this, "Куда торопимся?", "Не все поля заполнены.");
     }
-
 }
 
 
@@ -280,10 +369,15 @@ void testwindow::on_button_save_lab_clicked()
     {
         QStringList tables = {"name", "description"};
         QStringList data;
-        data.append(ui->lineEdit_lab_name->text());
-        data.append(ui->TextEdit_lab_desc->toPlainText());
-        QString query = makeInsertQuery("LabWork", tables, data);
+        QString query;
+        data << ui->lineEdit_lab_name->text() << ui->TextEdit_lab_desc->toPlainText();
+
+        if (current_lab_id)
+            query = updateData("LabWork", tables, data, "id = " + QString::number(current_lab_id));
+        else
+            query = makeInsertQuery("LabWork", tables, data, this->m_database);
         emit sendQuery(query);
+        current_lab_id = 0;
         close();
     }
     else
