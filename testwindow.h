@@ -31,6 +31,10 @@ private slots:
     void on_button_save_variant_clicked();
     void on_button_save_lab_clicked();
 
+    void on_button_delete_variant_clicked();
+
+    void on_button_delete_tests_clicked();
+
 signals:
     void sendQuery(QString);
 
@@ -43,6 +47,7 @@ private:
 
     int current_lab_id = 0;
     int current_var_id = 0;
+    int current_var_number = 1;
     int current_test_id = 0;
 
     Ui::testwindow *ui;
@@ -50,6 +55,7 @@ private:
 
     QSqlDatabase& m_database;
     QSqlTableModel* db_model;
+    QSqlTableModel* db_model_tests;
 
 protected:
     void closeEvent(QCloseEvent *evnt);

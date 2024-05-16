@@ -27,7 +27,7 @@ bool tryToOpenDB(QSqlDatabase database, QString db_name)
         {
             qDebug() << database.tables() << "->" << QStringList{"sqlite_sequence", "Tests", "LabWork", "Variants"};
             database.exec("CREATE TABLE LabWork (id INTEGER, PRIMARY KEY(id, AUTOINCREMENT), name TEXT UNIQUE, description TEXT,)");
-            database.exec("CREATE TABLE Variants (id INTEGER PRIMARY KEY AUTOINCREMENT, labwork_id INTEGER, conditions TEXT, FOREIGN KEY (labwork_id) REFERENCES LabWork(id));");
+            database.exec("CREATE TABLE Variants (id INTEGER PRIMARY KEY AUTOINCREMENT, labwork_id INTEGER, conditions TEXT, number_var INTEGER, FOREIGN KEY (labwork_id) REFERENCES LabWork(id));");
             database.exec("CREATE TABLE Tests (id INTEGER PRIMARY KEY AUTOINCREMENT, variant_id INTEGER, input_data TEXT, output_data TEXT, FOREIGN KEY (variant_id) REFERENCES Variants(id));");
             qDebug() << "Таблицы созданы.";
         }
@@ -35,11 +35,46 @@ bool tryToOpenDB(QSqlDatabase database, QString db_name)
     return true;
 }
 
-// Нахождение первого свободного id в таблице
-int getNextAvailableId(QSqlDatabase& db, QString table)
+// получение рузультата запроса
+QVariant getResult(QString query)
+{
+    QSqlQuery q(query);
+    if (q.next())
+    {
+        return q.value(0);
+    }
+    return -1;
+}
+
+// нахождение первого свободного варианта
+int getNextFreeNumberVar(QSqlDatabase& db, int labworkId)
 {
     QSqlQuery query(db);
-    query.prepare("SELECT id FROM " + table + " ORDER BY id DESC LIMIT 1");
+    query.prepare("SELECT MAX(number_var) + 1 FROM Variants WHERE labwork_id = :labwork_id");
+    query.bindValue(":labwork_id", labworkId);
+
+    if (!query.exec())
+    {
+        qWarning() << "Ошибка при выполнении запроса:" << query.lastError().text();
+        return -1;
+    }
+
+    if (query.next())
+    {
+        return query.value(0).toInt();
+    }
+    else
+    {
+        // Если нет вариантов для заданного labwork_id, возвращаем 1
+        return 1;
+    }
+}
+
+// Нахождение первого свободного id в таблице
+int getNextAvailableId(QSqlDatabase& db, QString table, QString field)
+{
+    QSqlQuery query(db);
+    query.prepare("SELECT " + field + " FROM " + table + " ORDER BY " + field + " DESC LIMIT 1");
 
     if (!query.exec())
     {
@@ -52,7 +87,7 @@ int getNextAvailableId(QSqlDatabase& db, QString table)
         int lastId = query.value(0).toInt();
         for (int i = 1; i <= lastId; ++i)
         {
-            query.prepare("SELECT id FROM " + table + " WHERE id = :id");
+            query.prepare("SELECT " + field + " FROM " + table + " WHERE " + field + " = :id");
             query.bindValue(":id", i);
             if (!query.exec() || !query.next())
             {
@@ -72,7 +107,7 @@ int getNextAvailableId(QSqlDatabase& db, QString table)
 QString makeInsertQuery(QString table, QStringList columns, QStringList data, QSqlDatabase& db)
 {
     setToQuote(data);
-    int id = getNextAvailableId(db, table);
+    int id = getNextAvailableId(db, table, "id");
     QString query = "INSERT INTO " + table + "(id, " + columns.join(", ") + ") "
                     "VALUES ('" + QString::number(id) + "', " + data.join(", ") + ");";
     return query;

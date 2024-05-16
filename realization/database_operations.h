@@ -8,11 +8,17 @@
 // открытие базы данных
 bool tryToOpenDB(QSqlDatabase, QString);
 
+// получение рузультата запроса
+QVariant getResult(QString query);
+
+// нахождение первого своббодного варианта
+int getNextFreeNumberVar(QSqlDatabase& db, int labworkId);
+
 // Нахождение первого свободного id в таблице
-int getNextAvailableId(QSqlDatabase& db, QString table);
+int getNextAvailableId(QSqlDatabase& db, QString table, QString field);
 
 // создание готового запроса для БД
-QString makeInsertQuery(QString, QStringList, QStringList, QSqlDatabase&);
+QString makeInsertQuery(QString table, QStringList columns, QStringList data, QSqlDatabase& db);
 
 // Обновление данных в базе данных
 QString updateData(QString table, QStringList columns, QStringList data, QString condition);

@@ -67,11 +67,11 @@ public:
     QPushButton *button_add_tests;
     QLabel *label_6;
     QPushButton *button_save_variant;
-    QListWidget *listWidget_2;
     QLabel *label_5;
     QPlainTextEdit *TextEdit_variant;
     QSpacerItem *verticalSpacer_4;
     QSpacerItem *horizontalSpacer_3;
+    QTableView *list_of_tests;
     QWidget *page_tests;
     QGridLayout *gridLayout_10;
     QGridLayout *gridLayout_6;
@@ -277,11 +277,6 @@ public:
 
         gridLayout_2->addWidget(button_save_variant, 10, 3, 1, 2);
 
-        listWidget_2 = new QListWidget(page_variant);
-        listWidget_2->setObjectName(QString::fromUtf8("listWidget_2"));
-
-        gridLayout_2->addWidget(listWidget_2, 5, 0, 1, 1);
-
         label_5 = new QLabel(page_variant);
         label_5->setObjectName(QString::fromUtf8("label_5"));
         label_5->setFont(font);
@@ -302,6 +297,11 @@ public:
         horizontalSpacer_3 = new QSpacerItem(300, 20, QSizePolicy::Preferred, QSizePolicy::Minimum);
 
         gridLayout_2->addItem(horizontalSpacer_3, 10, 2, 1, 1);
+
+        list_of_tests = new QTableView(page_variant);
+        list_of_tests->setObjectName(QString::fromUtf8("list_of_tests"));
+
+        gridLayout_2->addWidget(list_of_tests, 5, 0, 1, 1);
 
 
         gridLayout_5->addLayout(gridLayout_2, 0, 0, 1, 1);

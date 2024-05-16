@@ -13,14 +13,27 @@ testwindow::testwindow(QSqlDatabase& database, QWidget *parent)
 {
     ui->setupUi(this);
 
+    db_model_tests = new QSqlTableModel(this, m_database);
+    db_model_tests->setTable("Tests");
+
+    ui->list_of_tests->resizeColumnsToContents();
+
+    db_model_tests->setHeaderData(2, Qt::Horizontal, tr("Входные"));
+    db_model_tests->setHeaderData(3, Qt::Horizontal, tr("Выходные"));
+    ui->list_of_tests->setModel(db_model_tests);
+
+    ui->list_of_tests->setColumnHidden(0, true);
+    ui->list_of_tests->setColumnHidden(1, true);
+
     db_model = new QSqlTableModel(this, m_database);
     db_model->setTable("Variants");
 
     ui->list_variants->resizeColumnsToContents();
 
-    db_model->select();
-    db_model->setHeaderData(0, Qt::Horizontal, tr("Номер варианта"));
+    db_model->setHeaderData(3, Qt::Horizontal, tr("Номер варианта"));
     ui->list_variants->setModel(db_model);
+
+    ui->list_variants->setColumnHidden(0, true);
     ui->list_variants->setColumnHidden(1, true);
     ui->list_variants->setColumnHidden(2, true);
 }
@@ -61,18 +74,23 @@ void testwindow::on_button_add_variant_clicked()
         QString query;
         ui->stackedWidget->setCurrentIndex(1);
 
-        ui->label_number_variant->setText(QString::number(current_var_id+1));
-        current_var_id = 0;
+        ui->label_number_variant->setText(QString::number(current_var_number));
 
         ui->TextEdit_variant->clear();
 
         QStringList tables = {"name", "description"};
         QStringList data;
         data << ui->lineEdit_lab_name->text() << ui->TextEdit_lab_desc->toPlainText();
+
         if (current_lab_id)
         {
-            query = updateData("LabWork", tables, data, "id = " + QString::number(current_lab_id));
-            emit sendQuery(query);
+            QString query_name = getResult(getDBDataQuery("LabWork", "name", "id", QString::number(current_lab_id))).toString();
+            QString query_desc = getResult(getDBDataQuery("LabWork", "description", "id", QString::number(current_lab_id))).toString();
+            if (query_name != data[0] || query_desc != data[1])
+            {
+                query = updateData("LabWork", tables, data, "id = " + QString::number(current_lab_id));
+                emit sendQuery(query);
+            }
         }
         else
         {
@@ -80,11 +98,7 @@ void testwindow::on_button_add_variant_clicked()
             emit sendQuery(query);
 
             query = getDBDataQuery("LabWork", "id", "name", data[0]);
-            QSqlQuery q(query);
-            if (q.next())
-            {
-                current_lab_id = q.value(0).toInt();
-            }
+            current_lab_id = getResult(query).toInt();
         }
     }
     else
@@ -99,9 +113,9 @@ void testwindow::on_button_add_tests_clicked()
     QString variant = ui->TextEdit_variant->toPlainText();
     if (variant.size())
     {
-        QStringList tables = {"labwork_id", "conditions"};
+        QStringList tables = {"labwork_id", "conditions" , "number_var"};
         QStringList data;
-        data << QString::number(current_lab_id) << variant;
+        data << QString::number(current_lab_id) << variant << QString::number(current_var_number);
         QString query;
 
         if (current_var_id)
@@ -115,11 +129,7 @@ void testwindow::on_button_add_tests_clicked()
             emit sendQuery(query);
 
             query = getDBDataQuery("Variants", "id", "conditions", data[1]);
-            QSqlQuery q(query);
-            if (q.next())
-            {
-                current_var_id = q.value(0).toInt();
-            }
+            current_var_id = getResult(query).toInt();
         }
     }
     else
@@ -300,9 +310,11 @@ void testwindow::on_button_test_append_clicked()
 
     if (input_data.size() || output_data.size())
     {
-        /*
-     * добавить в бд тесты
-        */
+        QStringList tables = {"variant_id", "input_data", "output_data"};
+        QStringList data;
+        data << QString::number(current_var_id) << input_data << output_data;
+        QString query = makeInsertQuery("Tests", tables, data, this->m_database);
+        emit sendQuery(query);
 
         QMessageBox messageBox(QMessageBox::Question,
                                tr("Успешно!"),
@@ -315,6 +327,8 @@ void testwindow::on_button_test_append_clicked()
         if (messageBox.exec() == QMessageBox::No)
         {
             ui->stackedWidget->setCurrentIndex(1);
+            db_model_tests->setFilter(QString("variant_id = %1").arg(current_var_id));
+            db_model_tests->select();
         }
     }
     else
@@ -331,9 +345,9 @@ void testwindow::on_button_save_variant_clicked()
 
     if (variant_data.size())
     {
-        QStringList tables = {"labwork_id", "conditions"};
+        QStringList tables = {"labwork_id", "conditions", "number_var"};
         QStringList data;
-        data << QString::number(current_lab_id) << variant_data;
+        data << QString::number(current_lab_id) << variant_data << QString::number(current_var_number);
         QString query;
 
         if (current_var_id)
@@ -354,6 +368,11 @@ void testwindow::on_button_save_variant_clicked()
             }
         }
 
+        db_model->setFilter(QString("labwork_id = %1").arg(current_lab_id));
+        db_model->select();
+
+        current_var_number = getNextFreeNumberVar(this->m_database, current_lab_id);
+        current_var_id = 0;
         ui->stackedWidget->setCurrentIndex(0);
     }
     else
@@ -369,15 +388,28 @@ void testwindow::on_button_save_lab_clicked()
     {
         QStringList tables = {"name", "description"};
         QStringList data;
-        QString query;
+        QString query = "";
         data << ui->lineEdit_lab_name->text() << ui->TextEdit_lab_desc->toPlainText();
 
         if (current_lab_id)
-            query = updateData("LabWork", tables, data, "id = " + QString::number(current_lab_id));
+        {
+            QString query_name = getResult(getDBDataQuery("LabWork", "name", "id", QString::number(current_lab_id))).toString();
+            QString query_desc = getResult(getDBDataQuery("LabWork", "description", "id", QString::number(current_lab_id))).toString();
+            if (query_name != data[0] || query_desc != data[1])
+            {
+                query = updateData("LabWork", tables, data, "id = " + QString::number(current_lab_id));
+            }
+        }
         else
+        {
             query = makeInsertQuery("LabWork", tables, data, this->m_database);
-        emit sendQuery(query);
+        }
+
+        if (query.size())
+            emit sendQuery(query);
+
         current_lab_id = 0;
+        current_var_number = 1;
         close();
     }
     else
@@ -385,3 +417,28 @@ void testwindow::on_button_save_lab_clicked()
         QMessageBox::warning(this, "Куда торопимся?", "Не все поля заполнены.");
     }
 }
+
+void testwindow::on_button_delete_variant_clicked()
+{
+    int current_row = ui->list_variants->currentIndex().row();
+    int variant_id = db_model->index(current_row, 0).data().toInt();
+
+    // Удаление зависимостей из таблицы Tests
+    QSqlQuery query;
+    query.prepare("DELETE FROM Tests WHERE variant_id = :variant_id");
+    query.bindValue(":variant_id", variant_id);
+    query.exec();
+
+    // Удаление записи из таблицы LabWork
+    db_model->removeRow(current_row);
+    db_model->select();
+}
+
+
+void testwindow::on_button_delete_tests_clicked()
+{
+    int current_row = ui->list_of_tests->currentIndex().row();
+    db_model_tests->removeRow(current_row);
+    db_model_tests->select();
+}
+

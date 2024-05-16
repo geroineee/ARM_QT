@@ -97,6 +97,21 @@ bool MainWindow::receiveQuery(QString text_query)
 void MainWindow::on_button_delete_test_clicked()
 {
     int current_row = ui->list_tests->currentIndex().row();
+    int labwork_id = db_model->index(current_row, 0).data().toInt();
+
+    // Удаление зависимостей из таблицы Tests
+    QSqlQuery query;
+    query.prepare("DELETE FROM Tests WHERE variant_id IN (SELECT id FROM Variants WHERE labwork_id = :labwork_id)");
+    query.bindValue(":labwork_id", labwork_id);
+    query.exec();
+
+    // Удаление зависимостей из таблицы Variants
+    query.prepare("DELETE FROM Variants WHERE labwork_id = :labwork_id");
+    query.bindValue(":labwork_id", labwork_id);
+    query.exec();
+
+
+    // Удаление записи из таблицы LabWork
     db_model->removeRow(current_row);
     db_model->select();
 }
