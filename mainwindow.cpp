@@ -47,6 +47,7 @@ void MainWindow::on_tabWidget_currentChanged()
 void MainWindow::on_button_add_test_clicked()
 {
     testWindow = new testwindow(this->database, this);
+    testWindow->setWindowTitle("Добавление");
 
     connect(testWindow, &testwindow::sendQuery, this, &MainWindow::receiveQuery);
 
@@ -98,22 +99,29 @@ void MainWindow::on_button_delete_test_clicked()
 {
     int current_row = ui->list_tests->currentIndex().row();
     int labwork_id = db_model->index(current_row, 0).data().toInt();
+    if (current_row != -1)
+    {
+        // Удаление зависимостей из таблицы Tests
+        QSqlQuery query;
+        query.prepare("DELETE FROM Tests WHERE variant_id IN (SELECT id FROM Variants WHERE labwork_id = :labwork_id)");
+        query.bindValue(":labwork_id", labwork_id);
+        query.exec();
 
-    // Удаление зависимостей из таблицы Tests
-    QSqlQuery query;
-    query.prepare("DELETE FROM Tests WHERE variant_id IN (SELECT id FROM Variants WHERE labwork_id = :labwork_id)");
-    query.bindValue(":labwork_id", labwork_id);
-    query.exec();
-
-    // Удаление зависимостей из таблицы Variants
-    query.prepare("DELETE FROM Variants WHERE labwork_id = :labwork_id");
-    query.bindValue(":labwork_id", labwork_id);
-    query.exec();
+        // Удаление зависимостей из таблицы Variants
+        query.prepare("DELETE FROM Variants WHERE labwork_id = :labwork_id");
+        query.bindValue(":labwork_id", labwork_id);
+        query.exec();
 
 
-    // Удаление записи из таблицы LabWork
-    db_model->removeRow(current_row);
-    db_model->select();
+        // Удаление записи из таблицы LabWork
+        db_model->removeRow(current_row);
+        db_model->select();
+    }
+    else
+    {
+        QMessageBox::warning(this, "Ошибка", "Не выбран ни 1 элемент.");
+        return;
+    }
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event)
@@ -121,3 +129,27 @@ void MainWindow::resizeEvent(QResizeEvent *event)
     ui->list_tests->setColumnWidth(1, ui->list_tests->width() + 138);
     event->accept();
 }
+
+void MainWindow::on_button_edit_test_clicked()
+{
+    int current_lab_id = ui->list_tests->currentIndex().row() + 1;
+    if (current_lab_id != 0)
+    {
+        testWindow = new testwindow(this->database, this, current_lab_id);
+        testWindow->setWindowTitle("Редактирование");
+
+        connect(testWindow, &testwindow::sendQuery, this, &MainWindow::receiveQuery);
+
+        testWindow->setModal(true);
+        testWindow->exec();
+
+        db_model->select();
+    }
+    else
+    {
+        QMessageBox::warning(this, "Ошибка", "Не выбран ни 1 элемент.");
+        return;
+    }
+
+}
+

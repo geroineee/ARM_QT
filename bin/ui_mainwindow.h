@@ -360,7 +360,7 @@ public:
 #ifndef QT_NO_ACCESSIBILITY
         tab_edit_task->setAccessibleName(QString());
 #endif // QT_NO_ACCESSIBILITY
-        button_add_test->setText(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\202\320\265\321\201\321\202", nullptr));
+        button_add_test->setText(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\200\320\260\320\261\320\276\321\202\321\203", nullptr));
         button_edit_test->setText(QApplication::translate("MainWindow", "\320\240\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\321\202\321\214", nullptr));
         button_delete_test->setText(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_edit_task), QApplication::translate("MainWindow", "\320\240\320\265\320\266\320\270\320\274 \321\200\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\320\275\320\270\321\217", nullptr));

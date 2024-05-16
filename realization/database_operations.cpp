@@ -50,24 +50,41 @@ QVariant getResult(QString query)
 int getNextFreeNumberVar(QSqlDatabase& db, int labworkId)
 {
     QSqlQuery query(db);
-    query.prepare("SELECT MAX(number_var) + 1 FROM Variants WHERE labwork_id = :labwork_id");
-    query.bindValue(":labwork_id", labworkId);
 
-    if (!query.exec())
+    // Найти максимальный number_var для заданного labwork_id
+    query.prepare("SELECT COALESCE(MAX(number_var), 0) FROM Variants WHERE labwork_id = :labworkId");
+    query.bindValue(":labworkId", labworkId);
+
+    if (!query.exec() || !query.next())
     {
         qWarning() << "Ошибка при выполнении запроса:" << query.lastError().text();
         return -1;
     }
 
-    if (query.next())
+    int lastVar = query.value(0).toInt();
+
+    // Проверить каждый number_var от 1 до lastVar
+    for (int i = 1; i <= lastVar + 1; ++i)
     {
-        return query.value(0).toInt();
+        query.prepare("SELECT COUNT(*) FROM Variants WHERE labwork_id = :labworkId AND number_var = :numberVar");
+        query.bindValue(":labworkId", labworkId);
+        query.bindValue(":numberVar", i);
+
+        if (!query.exec() || !query.next())
+        {
+            qWarning() << "Ошибка при выполнении запроса:" << query.lastError().text();
+            return -1;
+        }
+
+        int count = query.value(0).toInt();
+        if (count == 0)
+        {
+            return i; // возвращается первый свободный number_var
+        }
     }
-    else
-    {
-        // Если нет вариантов для заданного labwork_id, возвращаем 1
-        return 1;
-    }
+
+    // Если все number_var от 1 до lastVar заняты, возвращается следующий number_var
+    return lastVar + 1;
 }
 
 // Нахождение первого свободного id в таблице
@@ -152,7 +169,20 @@ bool existsRecord(QString table, QString column, QString value)
 // Функция для получения информации из поля
 QString getDBDataQuery(QString table, QString data, QString column, QString column_condition)
 {
-    QString query = "SELECT " + data + " FROM " + table + " WHERE "
-            + column + " = '" + column_condition + "';";
+    return getDBDataQuery(table, data, QStringList (column), QStringList(column_condition));
+}
+
+// Функция для получения информации из поля (несколько условий)
+QString getDBDataQuery(QString table, QString data, QStringList column, QStringList column_condition)
+{
+    QString condition;
+    for (int i = 0; i < column.size(); i++)
+    {
+        condition += " AND " + column[i] + " = '" + column_condition[i] + "'";
+    }
+    condition.remove(0, 5);
+
+    QString query = "SELECT " + data + " FROM " + table + " WHERE ("
+            + condition + ");";
     return query;
 }

@@ -66,30 +66,18 @@
            </item>
           </layout>
          </item>
-         <item row="2" column="0" colspan="5">
-          <widget class="QPlainTextEdit" name="TextEdit_lab_desc">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
+         <item row="3" column="1">
+          <spacer name="verticalSpacer_2">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
            </property>
-           <property name="frameShape">
-            <enum>QFrame::Box</enum>
-           </property>
-          </widget>
-         </item>
-         <item row="9" column="4">
-          <widget class="QPushButton" name="button_save_lab">
-           <property name="minimumSize">
+           <property name="sizeHint" stdset="0">
             <size>
-             <width>130</width>
+             <width>20</width>
              <height>40</height>
             </size>
            </property>
-           <property name="text">
-            <string>Сохранить</string>
-           </property>
-          </widget>
+          </spacer>
          </item>
          <item row="1" column="0">
           <widget class="QLabel" name="label_2">
@@ -103,37 +91,21 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="4">
-          <spacer name="verticalSpacer">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Preferred</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>200</height>
-            </size>
-           </property>
-          </spacer>
+         <item row="4" column="0">
+          <widget class="QTableView" name="list_variants"/>
          </item>
-         <item row="9" column="2">
-          <spacer name="horizontalSpacer">
-           <property name="orientation">
-            <enum>Qt::Horizontal</enum>
-           </property>
-           <property name="sizeType">
-            <enum>QSizePolicy::Preferred</enum>
-           </property>
-           <property name="sizeHint" stdset="0">
+         <item row="9" column="4">
+          <widget class="QPushButton" name="button_save_lab">
+           <property name="minimumSize">
             <size>
-             <width>300</width>
-             <height>20</height>
+             <width>130</width>
+             <height>40</height>
             </size>
            </property>
-          </spacer>
+           <property name="text">
+            <string>Сохранить</string>
+           </property>
+          </widget>
          </item>
          <item row="4" column="1">
           <layout class="QVBoxLayout" name="verticalLayout">
@@ -194,18 +166,17 @@
            </item>
           </layout>
          </item>
-         <item row="3" column="1">
-          <spacer name="verticalSpacer_2">
-           <property name="orientation">
-            <enum>Qt::Vertical</enum>
+         <item row="2" column="0" colspan="5">
+          <widget class="QPlainTextEdit" name="TextEdit_lab_desc">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
            </property>
-           <property name="sizeHint" stdset="0">
-            <size>
-             <width>20</width>
-             <height>40</height>
-            </size>
+           <property name="frameShape">
+            <enum>QFrame::Box</enum>
            </property>
-          </spacer>
+          </widget>
          </item>
          <item row="3" column="0">
           <widget class="QLabel" name="label_3">
@@ -219,8 +190,47 @@
            </property>
           </widget>
          </item>
-         <item row="4" column="0">
-          <widget class="QTableView" name="list_variants"/>
+         <item row="4" column="4">
+          <spacer name="verticalSpacer">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+           <property name="sizeType">
+            <enum>QSizePolicy::Preferred</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>20</width>
+             <height>200</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="4" column="2">
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item row="9" column="3">
+          <widget class="QPushButton" name="button_cancel_lab">
+           <property name="minimumSize">
+            <size>
+             <width>130</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Отмена</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
@@ -255,7 +265,7 @@
               </font>
              </property>
              <property name="text">
-              <string>10</string>
+              <string>-1</string>
              </property>
             </widget>
            </item>
@@ -273,6 +283,43 @@
             </spacer>
            </item>
           </layout>
+         </item>
+         <item row="2" column="0">
+          <widget class="QLabel" name="label_5">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="text">
+            <string>Задание варианта</string>
+           </property>
+          </widget>
+         </item>
+         <item row="10" column="2">
+          <widget class="QPushButton" name="button_cancel_variants">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>40</height>
+            </size>
+           </property>
+           <property name="text">
+            <string>Отмена</string>
+           </property>
+          </widget>
+         </item>
+         <item row="3" column="0" colspan="5">
+          <widget class="QPlainTextEdit" name="TextEdit_variant">
+           <property name="font">
+            <font>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+           <property name="frameShape">
+            <enum>QFrame::Box</enum>
+           </property>
+          </widget>
          </item>
          <item row="5" column="4">
           <spacer name="verticalSpacer_3">
@@ -349,18 +396,6 @@
            </item>
           </layout>
          </item>
-         <item row="4" column="0">
-          <widget class="QLabel" name="label_6">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="text">
-            <string>Тесты</string>
-           </property>
-          </widget>
-         </item>
          <item row="10" column="3" colspan="2">
           <widget class="QPushButton" name="button_save_variant">
            <property name="minimumSize">
@@ -374,27 +409,15 @@
            </property>
           </widget>
          </item>
-         <item row="2" column="0">
-          <widget class="QLabel" name="label_5">
+         <item row="4" column="0">
+          <widget class="QLabel" name="label_6">
            <property name="font">
             <font>
              <pointsize>12</pointsize>
             </font>
            </property>
            <property name="text">
-            <string>Задание варианта</string>
-           </property>
-          </widget>
-         </item>
-         <item row="3" column="0" colspan="5">
-          <widget class="QPlainTextEdit" name="TextEdit_variant">
-           <property name="font">
-            <font>
-             <pointsize>12</pointsize>
-            </font>
-           </property>
-           <property name="frameShape">
-            <enum>QFrame::Box</enum>
+            <string>Тесты</string>
            </property>
           </widget>
          </item>
@@ -411,7 +434,17 @@
            </property>
           </spacer>
          </item>
-         <item row="10" column="2">
+         <item row="5" column="0">
+          <widget class="QTableView" name="list_of_tests">
+           <property name="minimumSize">
+            <size>
+             <width>350</width>
+             <height>0</height>
+            </size>
+           </property>
+          </widget>
+         </item>
+         <item row="5" column="2">
           <spacer name="horizontalSpacer_3">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
@@ -426,9 +459,6 @@
             </size>
            </property>
           </spacer>
-         </item>
-         <item row="5" column="0">
-          <widget class="QTableView" name="list_of_tests"/>
          </item>
         </layout>
        </item>
@@ -596,6 +626,32 @@ int main()
              </property>
             </widget>
            </item>
+           <item row="3" column="0">
+            <widget class="QPlainTextEdit" name="to_user_output_data">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Sunken</enum>
+             </property>
+             <property name="lineWidth">
+              <number>1</number>
+             </property>
+             <property name="midLineWidth">
+              <number>0</number>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QPlainTextEdit" name="user_input_data">
+             <property name="frameShape">
+              <enum>QFrame::Box</enum>
+             </property>
+             <property name="lineWrapMode">
+              <enum>QPlainTextEdit::NoWrap</enum>
+             </property>
+            </widget>
+           </item>
            <item row="4" column="0">
             <widget class="QPushButton" name="button_switch_mode">
              <property name="minimumSize">
@@ -611,16 +667,6 @@ int main()
              </property>
              <property name="text">
               <string>Работа с файлами</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QPlainTextEdit" name="user_input_data">
-             <property name="frameShape">
-              <enum>QFrame::Box</enum>
-             </property>
-             <property name="lineWrapMode">
-              <enum>QPlainTextEdit::NoWrap</enum>
              </property>
             </widget>
            </item>
@@ -650,23 +696,25 @@ int main()
               </font>
              </property>
              <property name="text">
-              <string>Добавить тест</string>
+              <string>Сохранить тест</string>
              </property>
             </widget>
            </item>
-           <item row="3" column="0">
-            <widget class="QPlainTextEdit" name="to_user_output_data">
-             <property name="frameShape">
-              <enum>QFrame::Box</enum>
+           <item row="6" column="0">
+            <widget class="QPushButton" name="button_cancel">
+             <property name="minimumSize">
+              <size>
+               <width>0</width>
+               <height>30</height>
+              </size>
              </property>
-             <property name="frameShadow">
-              <enum>QFrame::Sunken</enum>
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+              </font>
              </property>
-             <property name="lineWidth">
-              <number>1</number>
-             </property>
-             <property name="midLineWidth">
-              <number>0</number>
+             <property name="text">
+              <string>Отмена</string>
              </property>
             </widget>
            </item>

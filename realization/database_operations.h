@@ -29,6 +29,9 @@ bool existsRecord(QString table, QString column, QString value);
 // Функция для получения информации из поля
 QString getDBDataQuery(QString table, QString data, QString column, QString column_condition);
 
+// Функция для получения информации из поля (несколько условий)
+QString getDBDataQuery(QString table, QString data, QStringList column, QStringList column_condition);
+
 // заключение в одинарные кавычки всех элементов списка
 void setToQuote(QStringList&);
 

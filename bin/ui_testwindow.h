@@ -39,19 +39,20 @@ public:
     QHBoxLayout *horizontalLayout;
     QLabel *label;
     QLineEdit *lineEdit_lab_name;
-    QPlainTextEdit *TextEdit_lab_desc;
-    QPushButton *button_save_lab;
+    QSpacerItem *verticalSpacer_2;
     QLabel *label_2;
-    QSpacerItem *verticalSpacer;
-    QSpacerItem *horizontalSpacer;
+    QTableView *list_variants;
+    QPushButton *button_save_lab;
     QVBoxLayout *verticalLayout;
     QPushButton *button_edit_variant;
     QPushButton *button_delete_variant;
     QSpacerItem *horizontalSpacer_2;
     QPushButton *button_add_variant;
-    QSpacerItem *verticalSpacer_2;
+    QPlainTextEdit *TextEdit_lab_desc;
     QLabel *label_3;
-    QTableView *list_variants;
+    QSpacerItem *verticalSpacer;
+    QSpacerItem *horizontalSpacer_6;
+    QPushButton *button_cancel_lab;
     QWidget *page_variant;
     QGridLayout *gridLayout_5;
     QGridLayout *gridLayout_2;
@@ -59,19 +60,20 @@ public:
     QLabel *label_4;
     QLabel *label_number_variant;
     QSpacerItem *horizontalSpacer_5;
+    QLabel *label_5;
+    QPushButton *button_cancel_variants;
+    QPlainTextEdit *TextEdit_variant;
     QSpacerItem *verticalSpacer_3;
     QVBoxLayout *verticalLayout_3;
     QPushButton *button_edit_tests;
     QPushButton *button_delete_tests;
     QSpacerItem *horizontalSpacer_4;
     QPushButton *button_add_tests;
-    QLabel *label_6;
     QPushButton *button_save_variant;
-    QLabel *label_5;
-    QPlainTextEdit *TextEdit_variant;
+    QLabel *label_6;
     QSpacerItem *verticalSpacer_4;
-    QSpacerItem *horizontalSpacer_3;
     QTableView *list_of_tests;
+    QSpacerItem *horizontalSpacer_3;
     QWidget *page_tests;
     QGridLayout *gridLayout_10;
     QGridLayout *gridLayout_6;
@@ -88,11 +90,12 @@ public:
     QPushButton *button_compile_file;
     QGridLayout *gridLayout_9;
     QLabel *label_input_data;
-    QPushButton *button_switch_mode;
+    QPlainTextEdit *to_user_output_data;
     QPlainTextEdit *user_input_data;
+    QPushButton *button_switch_mode;
     QLabel *label_output_data;
     QPushButton *button_test_append;
-    QPlainTextEdit *to_user_output_data;
+    QPushButton *button_cancel;
 
     void setupUi(QDialog *testwindow)
     {
@@ -131,18 +134,9 @@ public:
 
         gridLayout->addLayout(horizontalLayout, 0, 0, 1, 5);
 
-        TextEdit_lab_desc = new QPlainTextEdit(page_task);
-        TextEdit_lab_desc->setObjectName(QString::fromUtf8("TextEdit_lab_desc"));
-        TextEdit_lab_desc->setFont(font);
-        TextEdit_lab_desc->setFrameShape(QFrame::Box);
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout->addWidget(TextEdit_lab_desc, 2, 0, 1, 5);
-
-        button_save_lab = new QPushButton(page_task);
-        button_save_lab->setObjectName(QString::fromUtf8("button_save_lab"));
-        button_save_lab->setMinimumSize(QSize(130, 40));
-
-        gridLayout->addWidget(button_save_lab, 9, 4, 1, 1);
+        gridLayout->addItem(verticalSpacer_2, 3, 1, 1, 1);
 
         label_2 = new QLabel(page_task);
         label_2->setObjectName(QString::fromUtf8("label_2"));
@@ -150,13 +144,16 @@ public:
 
         gridLayout->addWidget(label_2, 1, 0, 1, 1);
 
-        verticalSpacer = new QSpacerItem(20, 200, QSizePolicy::Minimum, QSizePolicy::Preferred);
+        list_variants = new QTableView(page_task);
+        list_variants->setObjectName(QString::fromUtf8("list_variants"));
 
-        gridLayout->addItem(verticalSpacer, 4, 4, 1, 1);
+        gridLayout->addWidget(list_variants, 4, 0, 1, 1);
 
-        horizontalSpacer = new QSpacerItem(300, 20, QSizePolicy::Preferred, QSizePolicy::Minimum);
+        button_save_lab = new QPushButton(page_task);
+        button_save_lab->setObjectName(QString::fromUtf8("button_save_lab"));
+        button_save_lab->setMinimumSize(QSize(130, 40));
 
-        gridLayout->addItem(horizontalSpacer, 9, 2, 1, 1);
+        gridLayout->addWidget(button_save_lab, 9, 4, 1, 1);
 
         verticalLayout = new QVBoxLayout();
         verticalLayout->setSpacing(10);
@@ -186,9 +183,12 @@ public:
 
         gridLayout->addLayout(verticalLayout, 4, 1, 1, 1);
 
-        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        TextEdit_lab_desc = new QPlainTextEdit(page_task);
+        TextEdit_lab_desc->setObjectName(QString::fromUtf8("TextEdit_lab_desc"));
+        TextEdit_lab_desc->setFont(font);
+        TextEdit_lab_desc->setFrameShape(QFrame::Box);
 
-        gridLayout->addItem(verticalSpacer_2, 3, 1, 1, 1);
+        gridLayout->addWidget(TextEdit_lab_desc, 2, 0, 1, 5);
 
         label_3 = new QLabel(page_task);
         label_3->setObjectName(QString::fromUtf8("label_3"));
@@ -196,10 +196,19 @@ public:
 
         gridLayout->addWidget(label_3, 3, 0, 1, 1);
 
-        list_variants = new QTableView(page_task);
-        list_variants->setObjectName(QString::fromUtf8("list_variants"));
+        verticalSpacer = new QSpacerItem(20, 200, QSizePolicy::Minimum, QSizePolicy::Preferred);
 
-        gridLayout->addWidget(list_variants, 4, 0, 1, 1);
+        gridLayout->addItem(verticalSpacer, 4, 4, 1, 1);
+
+        horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout->addItem(horizontalSpacer_6, 4, 2, 1, 1);
+
+        button_cancel_lab = new QPushButton(page_task);
+        button_cancel_lab->setObjectName(QString::fromUtf8("button_cancel_lab"));
+        button_cancel_lab->setMinimumSize(QSize(130, 40));
+
+        gridLayout->addWidget(button_cancel_lab, 9, 3, 1, 1);
 
 
         gridLayout_3->addLayout(gridLayout, 0, 0, 1, 1);
@@ -233,6 +242,25 @@ public:
 
         gridLayout_2->addLayout(horizontalLayout_2, 0, 0, 1, 5);
 
+        label_5 = new QLabel(page_variant);
+        label_5->setObjectName(QString::fromUtf8("label_5"));
+        label_5->setFont(font);
+
+        gridLayout_2->addWidget(label_5, 2, 0, 1, 1);
+
+        button_cancel_variants = new QPushButton(page_variant);
+        button_cancel_variants->setObjectName(QString::fromUtf8("button_cancel_variants"));
+        button_cancel_variants->setMinimumSize(QSize(0, 40));
+
+        gridLayout_2->addWidget(button_cancel_variants, 10, 2, 1, 1);
+
+        TextEdit_variant = new QPlainTextEdit(page_variant);
+        TextEdit_variant->setObjectName(QString::fromUtf8("TextEdit_variant"));
+        TextEdit_variant->setFont(font);
+        TextEdit_variant->setFrameShape(QFrame::Box);
+
+        gridLayout_2->addWidget(TextEdit_variant, 3, 0, 1, 5);
+
         verticalSpacer_3 = new QSpacerItem(20, 200, QSizePolicy::Minimum, QSizePolicy::Preferred);
 
         gridLayout_2->addItem(verticalSpacer_3, 5, 4, 1, 1);
@@ -265,43 +293,31 @@ public:
 
         gridLayout_2->addLayout(verticalLayout_3, 5, 1, 1, 1);
 
-        label_6 = new QLabel(page_variant);
-        label_6->setObjectName(QString::fromUtf8("label_6"));
-        label_6->setFont(font);
-
-        gridLayout_2->addWidget(label_6, 4, 0, 1, 1);
-
         button_save_variant = new QPushButton(page_variant);
         button_save_variant->setObjectName(QString::fromUtf8("button_save_variant"));
         button_save_variant->setMinimumSize(QSize(130, 40));
 
         gridLayout_2->addWidget(button_save_variant, 10, 3, 1, 2);
 
-        label_5 = new QLabel(page_variant);
-        label_5->setObjectName(QString::fromUtf8("label_5"));
-        label_5->setFont(font);
+        label_6 = new QLabel(page_variant);
+        label_6->setObjectName(QString::fromUtf8("label_6"));
+        label_6->setFont(font);
 
-        gridLayout_2->addWidget(label_5, 2, 0, 1, 1);
-
-        TextEdit_variant = new QPlainTextEdit(page_variant);
-        TextEdit_variant->setObjectName(QString::fromUtf8("TextEdit_variant"));
-        TextEdit_variant->setFont(font);
-        TextEdit_variant->setFrameShape(QFrame::Box);
-
-        gridLayout_2->addWidget(TextEdit_variant, 3, 0, 1, 5);
+        gridLayout_2->addWidget(label_6, 4, 0, 1, 1);
 
         verticalSpacer_4 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
         gridLayout_2->addItem(verticalSpacer_4, 4, 1, 1, 1);
 
-        horizontalSpacer_3 = new QSpacerItem(300, 20, QSizePolicy::Preferred, QSizePolicy::Minimum);
-
-        gridLayout_2->addItem(horizontalSpacer_3, 10, 2, 1, 1);
-
         list_of_tests = new QTableView(page_variant);
         list_of_tests->setObjectName(QString::fromUtf8("list_of_tests"));
+        list_of_tests->setMinimumSize(QSize(350, 0));
 
         gridLayout_2->addWidget(list_of_tests, 5, 0, 1, 1);
+
+        horizontalSpacer_3 = new QSpacerItem(300, 20, QSizePolicy::Preferred, QSizePolicy::Minimum);
+
+        gridLayout_2->addItem(horizontalSpacer_3, 5, 2, 1, 1);
 
 
         gridLayout_5->addLayout(gridLayout_2, 0, 0, 1, 1);
@@ -391,12 +407,14 @@ public:
 
         gridLayout_9->addWidget(label_input_data, 0, 0, 1, 1);
 
-        button_switch_mode = new QPushButton(page_tests);
-        button_switch_mode->setObjectName(QString::fromUtf8("button_switch_mode"));
-        button_switch_mode->setMinimumSize(QSize(0, 30));
-        button_switch_mode->setFont(font2);
+        to_user_output_data = new QPlainTextEdit(page_tests);
+        to_user_output_data->setObjectName(QString::fromUtf8("to_user_output_data"));
+        to_user_output_data->setFrameShape(QFrame::Box);
+        to_user_output_data->setFrameShadow(QFrame::Sunken);
+        to_user_output_data->setLineWidth(1);
+        to_user_output_data->setMidLineWidth(0);
 
-        gridLayout_9->addWidget(button_switch_mode, 4, 0, 1, 1);
+        gridLayout_9->addWidget(to_user_output_data, 3, 0, 1, 1);
 
         user_input_data = new QPlainTextEdit(page_tests);
         user_input_data->setObjectName(QString::fromUtf8("user_input_data"));
@@ -404,6 +422,13 @@ public:
         user_input_data->setLineWrapMode(QPlainTextEdit::NoWrap);
 
         gridLayout_9->addWidget(user_input_data, 1, 0, 1, 1);
+
+        button_switch_mode = new QPushButton(page_tests);
+        button_switch_mode->setObjectName(QString::fromUtf8("button_switch_mode"));
+        button_switch_mode->setMinimumSize(QSize(0, 30));
+        button_switch_mode->setFont(font2);
+
+        gridLayout_9->addWidget(button_switch_mode, 4, 0, 1, 1);
 
         label_output_data = new QLabel(page_tests);
         label_output_data->setObjectName(QString::fromUtf8("label_output_data"));
@@ -418,14 +443,12 @@ public:
 
         gridLayout_9->addWidget(button_test_append, 5, 0, 1, 1);
 
-        to_user_output_data = new QPlainTextEdit(page_tests);
-        to_user_output_data->setObjectName(QString::fromUtf8("to_user_output_data"));
-        to_user_output_data->setFrameShape(QFrame::Box);
-        to_user_output_data->setFrameShadow(QFrame::Sunken);
-        to_user_output_data->setLineWidth(1);
-        to_user_output_data->setMidLineWidth(0);
+        button_cancel = new QPushButton(page_tests);
+        button_cancel->setObjectName(QString::fromUtf8("button_cancel"));
+        button_cancel->setMinimumSize(QSize(0, 30));
+        button_cancel->setFont(font2);
 
-        gridLayout_9->addWidget(to_user_output_data, 3, 0, 1, 1);
+        gridLayout_9->addWidget(button_cancel, 6, 0, 1, 1);
 
 
         gridLayout_6->addLayout(gridLayout_9, 0, 1, 1, 1);
@@ -453,20 +476,22 @@ public:
         testwindow->setWindowTitle(QApplication::translate("testwindow", "Dialog", nullptr));
         label->setText(QApplication::translate("testwindow", "\320\235\320\260\320\267\320\262\320\260\320\275\320\270\320\265 \321\200\320\260\320\261\320\276\321\202\321\213:", nullptr));
         lineEdit_lab_name->setText(QString());
-        button_save_lab->setText(QApplication::translate("testwindow", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214", nullptr));
         label_2->setText(QApplication::translate("testwindow", "\320\227\320\260\320\264\320\260\320\275\320\270\320\265", nullptr));
+        button_save_lab->setText(QApplication::translate("testwindow", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214", nullptr));
         button_edit_variant->setText(QApplication::translate("testwindow", "\320\240\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\321\202\321\214", nullptr));
         button_delete_variant->setText(QApplication::translate("testwindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", nullptr));
         button_add_variant->setText(QApplication::translate("testwindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \320\262\320\260\321\200\320\270\320\260\320\275\321\202", nullptr));
         label_3->setText(QApplication::translate("testwindow", "\320\222\320\260\321\200\320\270\320\260\320\275\321\202\321\213", nullptr));
+        button_cancel_lab->setText(QApplication::translate("testwindow", "\320\236\321\202\320\274\320\265\320\275\320\260", nullptr));
         label_4->setText(QApplication::translate("testwindow", "\320\222\320\260\321\200\320\270\320\260\320\275\321\202 \342\204\226", nullptr));
-        label_number_variant->setText(QApplication::translate("testwindow", "10", nullptr));
+        label_number_variant->setText(QApplication::translate("testwindow", "-1", nullptr));
+        label_5->setText(QApplication::translate("testwindow", "\320\227\320\260\320\264\320\260\320\275\320\270\320\265 \320\262\320\260\321\200\320\270\320\260\320\275\321\202\320\260", nullptr));
+        button_cancel_variants->setText(QApplication::translate("testwindow", "\320\236\321\202\320\274\320\265\320\275\320\260", nullptr));
         button_edit_tests->setText(QApplication::translate("testwindow", "\320\240\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\321\202\321\214", nullptr));
         button_delete_tests->setText(QApplication::translate("testwindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", nullptr));
         button_add_tests->setText(QApplication::translate("testwindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\202\320\265\321\201\321\202", nullptr));
-        label_6->setText(QApplication::translate("testwindow", "\320\242\320\265\321\201\321\202\321\213", nullptr));
         button_save_variant->setText(QApplication::translate("testwindow", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214", nullptr));
-        label_5->setText(QApplication::translate("testwindow", "\320\227\320\260\320\264\320\260\320\275\320\270\320\265 \320\262\320\260\321\200\320\270\320\260\320\275\321\202\320\260", nullptr));
+        label_6->setText(QApplication::translate("testwindow", "\320\242\320\265\321\201\321\202\321\213", nullptr));
         user_code_text_edit->setPlainText(QApplication::translate("testwindow", "#include <iostream>\n"
 "\n"
 "using namespace std;\n"
@@ -490,7 +515,8 @@ public:
         label_input_data->setText(QApplication::translate("testwindow", "\320\222\321\205\320\276\320\264\320\275\321\213\320\265 \320\264\320\260\320\275\320\275\321\213\320\265:", nullptr));
         button_switch_mode->setText(QApplication::translate("testwindow", "\320\240\320\260\320\261\320\276\321\202\320\260 \321\201 \321\204\320\260\320\271\320\273\320\260\320\274\320\270", nullptr));
         label_output_data->setText(QApplication::translate("testwindow", "\320\222\321\213\321\205\320\276\320\264\320\275\321\213\320\265 \320\264\320\260\320\275\320\275\321\213\320\265:", nullptr));
-        button_test_append->setText(QApplication::translate("testwindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\202\320\265\321\201\321\202", nullptr));
+        button_test_append->setText(QApplication::translate("testwindow", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \321\202\320\265\321\201\321\202", nullptr));
+        button_cancel->setText(QApplication::translate("testwindow", "\320\236\321\202\320\274\320\265\320\275\320\260", nullptr));
     } // retranslateUi
 
 };

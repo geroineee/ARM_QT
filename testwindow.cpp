@@ -8,7 +8,7 @@
 #include "realization/utils.h"
 #include "realization/database_operations.h"
 
-testwindow::testwindow(QSqlDatabase& database, QWidget *parent)
+testwindow::testwindow(QSqlDatabase& database, QWidget *parent, int current_lab)
     : QDialog(parent), ui(new Ui::testwindow), m_database(database)
 {
     ui->setupUi(this);
@@ -18,12 +18,15 @@ testwindow::testwindow(QSqlDatabase& database, QWidget *parent)
 
     ui->list_of_tests->resizeColumnsToContents();
 
-    db_model_tests->setHeaderData(2, Qt::Horizontal, tr("Входные"));
-    db_model_tests->setHeaderData(3, Qt::Horizontal, tr("Выходные"));
+    db_model_tests->setHeaderData(2, Qt::Horizontal, tr("Входные данные"));
+    db_model_tests->setHeaderData(3, Qt::Horizontal, tr("Выходные данные"));
     ui->list_of_tests->setModel(db_model_tests);
 
     ui->list_of_tests->setColumnHidden(0, true);
     ui->list_of_tests->setColumnHidden(1, true);
+
+    ui->list_of_tests->setColumnWidth(2, ui->list_of_tests->width()/2);
+    ui->list_of_tests->setColumnWidth(3, ui->list_of_tests->width()/2);
 
     db_model = new QSqlTableModel(this, m_database);
     db_model->setTable("Variants");
@@ -36,6 +39,20 @@ testwindow::testwindow(QSqlDatabase& database, QWidget *parent)
     ui->list_variants->setColumnHidden(0, true);
     ui->list_variants->setColumnHidden(1, true);
     ui->list_variants->setColumnHidden(2, true);
+
+    ui->list_variants->setColumnWidth(3, ui->list_variants->width());
+
+    if (current_lab)
+    {
+        isEdit = true;
+        current_lab_id = current_lab;
+        QString query_name = getResult(getDBDataQuery("LabWork", "name", "id", QString::number(current_lab_id))).toString();
+        QString query_desc = getResult(getDBDataQuery("LabWork", "description", "id", QString::number(current_lab_id))).toString();
+        ui->lineEdit_lab_name->setText(query_name);
+        ui->TextEdit_lab_desc->setPlainText(query_desc);
+        db_model->setFilter(QString("labwork_id = %1").arg(current_lab_id));
+        db_model->select();
+    }
 }
 
 testwindow::~testwindow()
@@ -49,7 +66,7 @@ void testwindow::closeEvent(QCloseEvent *evnt)
     {
         QMessageBox messageBox(QMessageBox::Question,
                                tr("Вы уверены?"),
-                               tr("Совершенные изменения не сохранятся."),
+                               tr("Несохраненные изменения будут утеряны."),
                                QMessageBox::Yes | QMessageBox::No,
                                this);
         messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
@@ -71,9 +88,14 @@ void testwindow::on_button_add_variant_clicked()
 {
     if (ui->lineEdit_lab_name->text() != "" && ui->TextEdit_lab_desc->toPlainText() != "")
     {
+        isEdit = false;
         QString query;
         ui->stackedWidget->setCurrentIndex(1);
 
+        db_model_tests->setFilter(QString("variant_id = %1").arg(current_var_id));
+        db_model_tests->select();
+
+        current_var_number = getNextFreeNumberVar(this->m_database, current_lab_id);
         ui->label_number_variant->setText(QString::number(current_var_number));
 
         ui->TextEdit_variant->clear();
@@ -109,10 +131,15 @@ void testwindow::on_button_add_variant_clicked()
 
 void testwindow::on_button_add_tests_clicked()
 {
-    ui->stackedWidget->setCurrentIndex(2);
     QString variant = ui->TextEdit_variant->toPlainText();
     if (variant.size())
     {
+        isEdit = false;
+        ui->stackedWidget->setCurrentIndex(2);
+
+        ui->user_input_data->clear();
+        ui->to_user_output_data->clear();
+
         QStringList tables = {"labwork_id", "conditions" , "number_var"};
         QStringList data;
         data << QString::number(current_lab_id) << variant << QString::number(current_var_number);
@@ -120,8 +147,12 @@ void testwindow::on_button_add_tests_clicked()
 
         if (current_var_id)
         {
-            query = updateData("Variants", tables, data, "id = " + QString::number(current_var_id));
-            emit sendQuery(query);
+            QString conditions = getResult(getDBDataQuery("Variants", "conditions", "id", QString::number(current_var_id))).toString();
+            if (conditions != data[1])
+            {
+                query = updateData("Variants", tables, data, "id = " + QString::number(current_var_id));
+                emit sendQuery(query);
+            }
         }
         else
         {
@@ -313,19 +344,41 @@ void testwindow::on_button_test_append_clicked()
         QStringList tables = {"variant_id", "input_data", "output_data"};
         QStringList data;
         data << QString::number(current_var_id) << input_data << output_data;
-        QString query = makeInsertQuery("Tests", tables, data, this->m_database);
+        QString query;
+
+        if (current_test_id)
+        {
+            query = updateData("Tests", tables, data, "id = " + QString::number(current_test_id));
+        }
+        else
+        {
+            query = makeInsertQuery("Tests", tables, data, this->m_database);
+        }
+
         emit sendQuery(query);
 
-        QMessageBox messageBox(QMessageBox::Question,
-                               tr("Успешно!"),
-                               tr("Тест успешно добавлен,\nхотите добавить еще?"),
-                               QMessageBox::Yes | QMessageBox::No,
-                               this);
-        messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
-        messageBox.setButtonText(QMessageBox::No, tr("Нет"));
+        current_test_id = 0;
 
-        if (messageBox.exec() == QMessageBox::No)
+        if (!isEdit)
         {
+            QMessageBox messageBox(QMessageBox::Question,
+                                   tr("Успешно!"),
+                                   tr("Тест успешно добавлен,\nхотите добавить еще?"),
+                                   QMessageBox::Yes | QMessageBox::No,
+                                   this);
+            messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
+            messageBox.setButtonText(QMessageBox::No, tr("Нет"));
+
+            if (messageBox.exec() == QMessageBox::No)
+            {
+                ui->stackedWidget->setCurrentIndex(1);
+                db_model_tests->setFilter(QString("variant_id = %1").arg(current_var_id));
+                db_model_tests->select();
+            }
+        }
+        else
+        {
+            QMessageBox::information(this, tr("Успешно!"), tr("Тест успешно изменен."));
             ui->stackedWidget->setCurrentIndex(1);
             db_model_tests->setFilter(QString("variant_id = %1").arg(current_var_id));
             db_model_tests->select();
@@ -352,8 +405,12 @@ void testwindow::on_button_save_variant_clicked()
 
         if (current_var_id)
         {
-            query = updateData("Variants", tables, data, "id = " + QString::number(current_var_id));
-            emit sendQuery(query);
+            QString conditions = getResult(getDBDataQuery("Variants", "conditions", "id", QString::number(current_var_id))).toString();
+            if (conditions != data[1])
+            {
+                query = updateData("Variants", tables, data, "id = " + QString::number(current_var_id));
+                emit sendQuery(query);
+            }
         }
         else
         {
@@ -361,17 +418,13 @@ void testwindow::on_button_save_variant_clicked()
             emit sendQuery(query);
 
             query = getDBDataQuery("Variants", "id", "conditions", data[1]);
-            QSqlQuery q(query);
-            if (q.next())
-            {
-                current_var_id = q.value(0).toInt();
-            }
+            current_var_id = getResult(query).toInt();
         }
 
         db_model->setFilter(QString("labwork_id = %1").arg(current_lab_id));
         db_model->select();
 
-        current_var_number = getNextFreeNumberVar(this->m_database, current_lab_id);
+//        current_var_number = getNextFreeNumberVar(this->m_database, current_lab_id);
         current_var_id = 0;
         ui->stackedWidget->setCurrentIndex(0);
     }
@@ -422,16 +475,23 @@ void testwindow::on_button_delete_variant_clicked()
 {
     int current_row = ui->list_variants->currentIndex().row();
     int variant_id = db_model->index(current_row, 0).data().toInt();
+    if (current_row != -1)
+    {
+        // Удаление зависимостей из таблицы Tests
+        QSqlQuery query;
+        query.prepare("DELETE FROM Tests WHERE variant_id = :variant_id");
+        query.bindValue(":variant_id", variant_id);
+        query.exec();
 
-    // Удаление зависимостей из таблицы Tests
-    QSqlQuery query;
-    query.prepare("DELETE FROM Tests WHERE variant_id = :variant_id");
-    query.bindValue(":variant_id", variant_id);
-    query.exec();
-
-    // Удаление записи из таблицы LabWork
-    db_model->removeRow(current_row);
-    db_model->select();
+        // Удаление записи из таблицы LabWork
+        db_model->removeRow(current_row);
+        db_model->select();
+    }
+    else
+    {
+        QMessageBox::warning(this, "Ошибка", "Не выбран ни 1 элемент.");
+        return;
+    }
 }
 
 
@@ -440,5 +500,176 @@ void testwindow::on_button_delete_tests_clicked()
     int current_row = ui->list_of_tests->currentIndex().row();
     db_model_tests->removeRow(current_row);
     db_model_tests->select();
+}
+
+
+void testwindow::on_button_cancel_clicked()
+{
+    QString input_data, output_data;
+    input_data = ui->user_input_data->toPlainText();
+    output_data = ui->to_user_output_data->toPlainText();
+
+    QString input_data_db = "", output_data_db = "";
+
+    if (isEdit)
+    {
+        input_data_db = getResult(getDBDataQuery("Tests", "input_data", "id", QString::number(current_test_id))).toString();
+        output_data_db = getResult(getDBDataQuery("Tests", "output_data", "id", QString::number(current_test_id))).toString();
+    }
+
+    if (input_data != input_data_db || output_data != output_data_db)
+    {
+        QMessageBox messageBox(QMessageBox::Question,
+                               tr("Вы уверены?"),
+                               tr("Совершенные изменения не сохранятся."),
+                               QMessageBox::Yes | QMessageBox::No,
+                               this);
+        messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
+        messageBox.setButtonText(QMessageBox::No, tr("Нет"));
+
+        if (messageBox.exec() == QMessageBox::Yes)
+        {
+            ui->stackedWidget->setCurrentIndex(1);
+        }
+    }
+    else
+    {
+        ui->stackedWidget->setCurrentIndex(1);
+    }
+}
+
+
+void testwindow::on_button_edit_tests_clicked()
+{
+    isEdit = true;
+
+    int current_row = ui->list_of_tests->currentIndex().row();
+
+    if (current_row != -1)
+    {
+        QModelIndex index = ui->list_of_tests->model()->index(current_row, 0);
+        current_test_id = index.data().toInt();
+
+        QString input_data, output_data;
+        input_data = getResult(getDBDataQuery("Tests", "input_data", "id", QString::number(current_test_id))).toString();
+        output_data = getResult(getDBDataQuery("Tests", "output_data", "id", QString::number(current_test_id))).toString();
+
+        ui->user_input_data->setPlainText(input_data);
+        ui->to_user_output_data->setPlainText(output_data);
+
+        ui->stackedWidget->setCurrentIndex(2);
+    }
+    else
+    {
+        QMessageBox::warning(this, "Ошибка", "Не выбран ни 1 элемент.");
+        return;
+    }
+}
+
+
+void testwindow::on_button_edit_variant_clicked()
+{
+    isEdit = true;
+    int var_number = ui->list_variants->currentIndex().row() + 1;
+    if (var_number != 0)
+    {
+        current_var_number = var_number;
+        QString query = getDBDataQuery("Variants", "id", {"labwork_id", "number_var"},
+                                       {QString::number(current_lab_id), QString::number(current_var_number)});
+        current_var_id = getResult(query).toInt();
+
+        query = getDBDataQuery("Variants", "conditions", "id", QString::number(current_var_id));
+        ui->TextEdit_variant->setPlainText(getResult(query).toString());
+        ui->label_number_variant->setText(QString::number(current_var_number));
+
+        ui->stackedWidget->setCurrentIndex(1);
+
+        db_model_tests->setFilter(QString("variant_id = %1").arg(current_var_id));
+        db_model_tests->select();
+    }
+    else
+    {
+        QMessageBox::warning(this, "Ошибка", "Не выбран ни 1 элемент.");
+        return;
+    }
+}
+
+
+void testwindow::resizeEvent(QResizeEvent *event)
+{
+    ui->list_variants->setColumnWidth(3, ui->list_variants->width());
+
+    ui->list_of_tests->setColumnWidth(2, ui->list_of_tests->width()/2);
+    ui->list_of_tests->setColumnWidth(3, ui->list_of_tests->width()/2);
+    event->accept();
+}
+
+void testwindow::on_button_cancel_variants_clicked()
+{
+    QString var_data;
+    var_data = ui->TextEdit_variant->toPlainText();
+
+    QString var_data_db = "";
+
+    if (isEdit)
+    {
+        var_data_db = getResult(getDBDataQuery("Variants", "conditions", "id", QString::number(current_var_id))).toString();
+    }
+
+    if (var_data != var_data_db)
+    {
+        QMessageBox messageBox(QMessageBox::Question,
+                               tr("Вы уверены?"),
+                               tr("Совершенные изменения не сохранятся."),
+                               QMessageBox::Yes | QMessageBox::No,
+                               this);
+        messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
+        messageBox.setButtonText(QMessageBox::No, tr("Нет"));
+
+        if (messageBox.exec() == QMessageBox::Yes)
+        {
+            ui->stackedWidget->setCurrentIndex(0);
+        }
+    }
+    else
+    {
+        ui->stackedWidget->setCurrentIndex(0);
+    }
+}
+
+
+void testwindow::on_button_cancel_lab_clicked()
+{
+    QString name_data, desc_data;
+    name_data = ui->lineEdit_lab_name->text();
+    desc_data = ui->TextEdit_lab_desc->toPlainText();
+
+    QString name_data_db = "", desc_data_db = "";
+
+    if (isEdit)
+    {
+        name_data_db = getResult(getDBDataQuery("LabWork", "name", "id", QString::number(current_lab_id))).toString();
+        desc_data_db = getResult(getDBDataQuery("LabWork", "description", "id", QString::number(current_lab_id))).toString();
+    }
+
+    if (name_data != name_data_db || desc_data != desc_data_db)
+    {
+        QMessageBox messageBox(QMessageBox::Question,
+                               tr("Вы уверены?"),
+                               tr("Совершенные изменения не сохранятся."),
+                               QMessageBox::Yes | QMessageBox::No,
+                               this);
+        messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
+        messageBox.setButtonText(QMessageBox::No, tr("Нет"));
+
+        if (messageBox.exec() == QMessageBox::Yes)
+        {
+            close();
+        }
+    }
+    else
+    {
+        close();
+    }
 }
 

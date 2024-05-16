@@ -6,6 +6,7 @@
 #include <QListWidgetItem>
 #include <QSqlDatabase>
 #include <QSqlTableModel>
+#include <QResizeEvent>
 
 #include "textwindow.h"
 
@@ -16,7 +17,7 @@ class testwindow : public QDialog
     Q_OBJECT
 
 public:
-    explicit testwindow(QSqlDatabase& database, QWidget *parent = nullptr);
+    explicit testwindow(QSqlDatabase& database, QWidget *parent = nullptr, int current_lab = 0);
     ~testwindow();
 
 private slots:
@@ -35,6 +36,16 @@ private slots:
 
     void on_button_delete_tests_clicked();
 
+    void on_button_cancel_clicked();
+
+    void on_button_edit_tests_clicked();
+
+    void on_button_edit_variant_clicked();
+
+    void on_button_cancel_variants_clicked();
+
+    void on_button_cancel_lab_clicked();
+
 signals:
     void sendQuery(QString);
 
@@ -42,6 +53,7 @@ private:
     void button_compile(bool isWorkWithFile);
     void choose_files();
     void showUserCode(QListWidget* widget, QListWidgetItem *item);
+    void resizeEvent(QResizeEvent *event);
 
     QStringList files_path;
 
@@ -49,6 +61,7 @@ private:
     int current_var_id = 0;
     int current_var_number = 1;
     int current_test_id = 0;
+    bool isEdit = false;
 
     Ui::testwindow *ui;
     usercodewindow *code_window;
