@@ -186,3 +186,40 @@ QString getDBDataQuery(QString table, QString data, QStringList column, QStringL
             + condition + ");";
     return query;
 }
+
+// получение всех данных, с нужным полем
+QVector<QVariantList> getAllInTableWhere(QSqlDatabase db, QString table, QString field, QString condition, bool NotEqual)
+{
+    QSqlQuery query(db);
+    QVector<QVariantList> result;
+
+    // Формирование SQL запроса
+    if (!NotEqual)
+        query.prepare("SELECT * FROM " + table + " WHERE " + field + " = :cond");
+    else
+        query.prepare("SELECT * FROM " + table + " WHERE " + field + " != :cond");
+
+    query.bindValue(":cond", condition);
+
+    // Выполнение запроса
+    if (query.exec())
+    {
+        // Считка результата
+        while (query.next())
+        {
+            QVariantList row;
+            for (int i = 0; i < query.record().count(); ++i)
+            {
+                row.append(query.value(i));
+            }
+            result.append(row);
+        }
+    }
+    else
+    {
+        // Обработка ошибки выполнения запроса
+        qDebug() << "Ошибка при выполнении запроса:" << query.lastError().text();
+    }
+
+    return result;
+}

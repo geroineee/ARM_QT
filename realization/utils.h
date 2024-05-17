@@ -51,6 +51,9 @@ QStringList get_name_from_path(QStringList paths);
 void setToQuote(QStringList& data);
 
 // Компилирует код | directory_path передается с "/" |
-void compile_code(QProcess& process, QString directory_path, QStringList file_names);
+void compile_code(QString directory_path, QStringList file_names, bool isTest = false);
+
+// Создает батник для проверки тестов
+void bat_for_check_test(QString directory_path);
 
 #endif // UTILS_H

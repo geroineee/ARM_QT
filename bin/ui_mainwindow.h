@@ -10,7 +10,6 @@
 #define UI_MAINWINDOW_H
 
 #include <QtCore/QVariant>
-#include <QtWidgets/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QGridLayout>
@@ -18,7 +17,6 @@
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
-#include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPlainTextEdit>
 #include <QtWidgets/QPushButton>
@@ -80,7 +78,6 @@ public:
     QPlainTextEdit *user_input_data;
     QStatusBar *statusbar;
     QMenuBar *menubar;
-    QMenu *menu;
 
     void setupUi(QMainWindow *MainWindow)
     {
@@ -159,6 +156,9 @@ public:
         gridLayout_7->addWidget(button_get_path_files, 5, 1, 1, 1);
 
         combo_box_example = new QComboBox(tab_files);
+        combo_box_example->addItem(QString());
+        combo_box_example->addItem(QString());
+        combo_box_example->addItem(QString());
         combo_box_example->addItem(QString());
         combo_box_example->setObjectName(QString::fromUtf8("combo_box_example"));
         combo_box_example->setMinimumSize(QSize(0, 30));
@@ -333,11 +333,7 @@ public:
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
         menubar->setGeometry(QRect(0, 0, 800, 25));
-        menu = new QMenu(menubar);
-        menu->setObjectName(QString::fromUtf8("menu"));
         MainWindow->setMenuBar(menubar);
-
-        menubar->addAction(menu->menuAction());
 
         retranslateUi(MainWindow);
 
@@ -354,7 +350,10 @@ public:
         button_get_task->setText(QApplication::translate("MainWindow", "\320\222\321\213\320\261\321\200\320\260\321\202\321\214 \320\267\320\260\320\264\320\260\320\275\320\270\320\265", nullptr));
         button_start_test->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\277\321\203\321\201\321\202\320\270\321\202\321\214 \321\202\320\265\321\201\321\202", nullptr));
         button_get_path_files->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\204\320\260\320\271\320\273\321\213", nullptr));
-        combo_box_example->setItemText(0, QApplication::translate("MainWindow", "\320\222\321\213\320\261\321\200\320\260\321\202\321\214 \320\277\321\200\320\270\320\274\320\265\321\200", nullptr));
+        combo_box_example->setItemText(0, QApplication::translate("MainWindow", "\320\222\321\213\320\261\320\265\321\200\320\270\321\202\320\265 \320\277\321\200\320\270\320\274\320\265\321\200", nullptr));
+        combo_box_example->setItemText(1, QApplication::translate("MainWindow", "\320\237\321\200\320\270\320\274\320\265\321\200 1", nullptr));
+        combo_box_example->setItemText(2, QApplication::translate("MainWindow", "\320\237\321\200\320\270\320\274\320\265\321\200 2", nullptr));
+        combo_box_example->setItemText(3, QApplication::translate("MainWindow", "\320\237\321\200\320\270\320\274\320\265\321\200 3", nullptr));
 
         tabWidget->setTabText(tabWidget->indexOf(tab_files), QApplication::translate("MainWindow", "\320\242\320\265\321\201\321\202\320\270\321\200\320\276\320\262\320\276\321\207\320\275\320\260\321\217 \321\201\320\270\321\201\321\202\320\265\320\274\320\260", nullptr));
 #ifndef QT_NO_ACCESSIBILITY
@@ -388,7 +387,6 @@ public:
         label_output_data->setText(QApplication::translate("MainWindow", "\320\222\321\213\321\205\320\276\320\264\320\275\321\213\320\265 \320\264\320\260\320\275\320\275\321\213\320\265:", nullptr));
         label_input_data->setText(QApplication::translate("MainWindow", "\320\222\321\205\320\276\320\264\320\275\321\213\320\265 \320\264\320\260\320\275\320\275\321\213\320\265:", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_only_code), QApplication::translate("MainWindow", "\320\242\320\265\321\201\321\202\320\270\321\200\320\276\320\262\320\260\320\275\320\270\320\265 \320\272\320\276\320\264\320\260", nullptr));
-        menu->setTitle(QApplication::translate("MainWindow", "\320\234\320\265\320\275\321\216", nullptr));
     } // retranslateUi
 
 };

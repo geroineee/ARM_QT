@@ -25,7 +25,10 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
         ui->list_tests->setColumnHidden(0, true);
         ui->list_tests->setColumnHidden(2, true);
     }
+    ui->text_input_example->setPlainText("Выберите работу");
+    ui->text_output_example->setPlainText("Выберите работу");
 }
+
 
 MainWindow::~MainWindow()
 {
@@ -35,6 +38,10 @@ MainWindow::~MainWindow()
 // очистка интерфейса при смене вкладки
 void MainWindow::on_tabWidget_currentChanged()
 {
+    ui->combo_box_example->setCurrentIndex(0);
+    ui->text_info_task->clear();
+    tests.clear();
+
     ui->list_tests->setColumnWidth(1, ui->list_tests->width() + 138);
     ui->statusbar->showMessage("");
     ui->to_user_output_data->setText("");
@@ -43,7 +50,7 @@ void MainWindow::on_tabWidget_currentChanged()
         ui->statusbar->showMessage("Обратите внимание, что путь к файлам и их название не должны содержать кириллицу!");
 }
 
-// добавление теста по нажатию кнопки
+// добавление работы по нажатию кнопки
 void MainWindow::on_button_add_test_clicked()
 {
     testWindow = new testwindow(this->database, this);
@@ -57,12 +64,9 @@ void MainWindow::on_button_add_test_clicked()
     db_model->select();
 }
 
+
 void MainWindow::on_button_switch_mode_clicked()
 {
-    ui->statusbar->showMessage("");
-    ui->to_user_output_data->setPlainText("");
-    ui->user_input_data->setPlainText("");
-
     // очистка статус бара \ виджетов ввода/вывода программы
     ui->statusbar->showMessage("");
     ui->to_user_output_data->setPlainText("");
@@ -80,6 +84,7 @@ void MainWindow::on_button_switch_mode_clicked()
         ui->statusbar->showMessage("Обратите внимание, что путь к файлам и их название не должны содержать кириллицу!");
     }
 }
+
 
 bool MainWindow::receiveQuery(QString text_query)
 {
@@ -124,11 +129,13 @@ void MainWindow::on_button_delete_test_clicked()
     }
 }
 
+
 void MainWindow::resizeEvent(QResizeEvent *event)
 {
     ui->list_tests->setColumnWidth(1, ui->list_tests->width() + 138);
     event->accept();
 }
+
 
 void MainWindow::on_button_edit_test_clicked()
 {
@@ -150,6 +157,64 @@ void MainWindow::on_button_edit_test_clicked()
         QMessageBox::warning(this, "Ошибка", "Не выбран ни 1 элемент.");
         return;
     }
-
 }
 
+
+void MainWindow::on_button_get_task_clicked()
+{
+    ui->text_input_example->setPlainText("Выберите пример");
+    ui->text_output_example->setPlainText("Выберите пример");
+    ui->text_info_task->clear();
+    tests.clear();
+    ui->combo_box_example->setCurrentIndex(0);
+
+    choose_window = new choosework(this->database);
+    choose_window->setWindowTitle("Выбор работы");
+    choose_window->setModal(true);
+
+    connect(choose_window, &choosework::send_id, this, &MainWindow::write_task);
+
+    choose_window->exec();
+}
+
+
+void MainWindow::write_task(int id_lab, int id_var)
+{
+    QString lab_task, var_task;
+    lab_task = getResult(getDBDataQuery("LabWork", "name", "id", QString::number(id_lab))).toString() + "\n";
+    lab_task += getResult(getDBDataQuery("LabWork", "description", "id", QString::number(id_lab))).toString() + "\n\n\n";
+
+    var_task = "Вариант №" + getResult(getDBDataQuery("Variants", "number_var", "id", QString::number(id_var))).toString() + "\n";
+    var_task += getResult(getDBDataQuery("Variants", "conditions", "id", QString::number(id_var))).toString();
+
+    QString task = lab_task + var_task;
+    ui->text_info_task->setPlainText(task);
+
+    tests = getAllInTableWhere(this->database, "Tests", "variant_id", QString::number(id_var));
+}
+
+
+void MainWindow::on_combo_box_example_currentIndexChanged(int index)
+{
+    QString input_text = "Входные данные:\n", output_text = "Выходные данные:\n";
+    if (index == 0)
+    {
+        input_text = "Выберите пример";
+        output_text = "Выберите пример";
+    }
+    else
+    {
+        if (index - 1 < tests.size())
+        {
+            input_text += tests[index-1][2].toString();
+            output_text += tests[index-1][3].toString();
+        }
+        else
+        {
+            input_text = "Примера пока нет";
+            output_text = "Примера пока нет";
+        }
+    }
+    ui->text_input_example->setPlainText(input_text);
+    ui->text_output_example->setPlainText(output_text);
+}

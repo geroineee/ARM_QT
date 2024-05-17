@@ -259,7 +259,10 @@ void testwindow::button_compile(bool isWorkWithFile)
     writeToFile(file_input_path, user_input_data);
 
     QProcess process;
-    compile_code(process, current_path, names);
+    compile_code(current_path, names);
+
+    // запуск start_compile.bat
+    process.start(current_path + "start_compile.bat");
 
     // проверка на ошибки и вывод
     process.waitForReadyRead();
@@ -672,4 +675,3 @@ void testwindow::on_button_cancel_lab_clicked()
         close();
     }
 }
-

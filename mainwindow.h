@@ -5,8 +5,8 @@
 #include <QListWidgetItem>
 
 #include "textwindow.h"
-
 #include "testwindow.h"
+#include "choosework.h"
 
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -34,30 +34,53 @@ public slots:
 
 private slots:
     void on_upload_user_code_button_clicked();
+
     void on_tabWidget_currentChanged();
+
     void on_button_get_path_files_clicked();
+
     void on_list_selected_files_itemDoubleClicked(QListWidgetItem *item);
+
     void on_button_add_test_clicked();
+
     void on_button_switch_mode_clicked();
+
     void on_button_get_files_clicked();
+
     void on_list_files_itemDoubleClicked(QListWidgetItem *item);
+
     void on_button_compile_file_clicked();
+
     void on_button_delete_test_clicked();
 
     void on_button_edit_test_clicked();
 
+    void on_button_get_task_clicked();
+
+    void write_task(int id_lab, int id_var);
+
+    void on_combo_box_example_currentIndexChanged(int index);
+
+    void on_button_start_test_clicked();
+
 private:
     void choose_files();
     void for_button_compile(bool isWorkWithFile);
+    void for_button_compile();
     void showUserCode(QListWidget*, QListWidgetItem*);
     void resizeEvent(QResizeEvent *event);
+    int check_test(QString input_data, QString waiting_output_data);
 
     testwindow *testWindow;
     usercodewindow *code_window;
+    choosework *choose_window;
     Ui::MainWindow *ui;
 
     // пути до выбранных файлов
     QStringList files_path;
+
+    // список всех тестов для текущей работы
+    QVector<QVariantList> tests;
 
     // для работы с базой данных
     QSqlDatabase database;

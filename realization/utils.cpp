@@ -156,7 +156,7 @@ void delete_file(QString current_path, QStringList file_names)
     {
         del_command.append("del " + file_name + "\n");
     }
-    del_command.append("del null.txt\ndel delete_bat.bat\nexit");
+    del_command.append("\n del start_compile.bat\ndel null.txt\ndel delete_bat.bat\nexit");
 
     writeToFile(current_path + "delete_bat.bat", del_command);
     QProcess process_del;
@@ -196,28 +196,39 @@ void setToQuote(QStringList& data)
 }
 
 // Компилирует код | directory_path передается с "/" |
-void compile_code(QProcess& process, QString directory_path, QStringList file_names)
+void compile_code(QString directory_path, QStringList file_names, bool isTest)
 {
     QString compiled_files = "";
     for (const QString& file : qAsConst(file_names))
-        {
-            compiled_files.append('"' + file + '"');
-            compiled_files.append(' ');
-        }
-        compiled_files.chop(1);
+    {
+        compiled_files.append('"' + file + '"');
+        compiled_files.append(' ');
+    }
+    compiled_files.chop(1);
+
+    QString str = "";
+    if (!isTest)
+        str = "user_main_code.exe < user_input.txt\n"
+              "del user_main_code.exe\n";
 
     // открытие и запись в start_compile.bat
     QString command = "@echo off\n"
-                      "chcp 65001 > null.txt\n"
+                      "chcp 65001 > null\n"
                       "cd /D " + directory_path + "\n"
                       "g++ -Wall " + compiled_files + " -o user_main_code.exe\n"
-                      "user_main_code.exe < user_input.txt\n"
-                      "del user_main_code.exe\n"
-                      "del null.txt\n"
-                      "del start_compile.bat\n"
+                      + str +
                       "exit";
     writeToFile(directory_path + "start_compile.bat", command);
+}
 
-    // запуск start_compile.bat
-    process.start(directory_path + "start_compile.bat");
+// Создает батник для проверки тестов
+void bat_for_check_test(QString directory_path)
+{
+    // открытие и запись в start_check_test.bat
+    QString command = "@echo off\n"
+                      "chcp 65001 > null\n"
+                      "cd /D " + directory_path + "\n"
+                      "user_main_code.exe < user_input.txt\n"
+                      "exit";
+    writeToFile(directory_path + "start_check_test.bat", command);
 }

@@ -4,6 +4,10 @@
 #include <QDir>
 #include <QDebug>
 #include <QSqlQuery>
+#include <QSqlRecord>
+#include <QSqlDatabase>
+#include <QVariant>
+#include <QVector>
 
 // открытие базы данных
 bool tryToOpenDB(QSqlDatabase, QString);
@@ -31,6 +35,9 @@ QString getDBDataQuery(QString table, QString data, QString column, QString colu
 
 // Функция для получения информации из поля (несколько условий)
 QString getDBDataQuery(QString table, QString data, QStringList column, QStringList column_condition);
+
+// получение всех данных, с нужным полем
+QVector<QVariantList> getAllInTableWhere(QSqlDatabase db, QString table, QString field, QString condition, bool NotEqual = false);
 
 // заключение в одинарные кавычки всех элементов списка
 void setToQuote(QStringList&);

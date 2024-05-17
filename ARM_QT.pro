@@ -9,6 +9,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    choosework.cpp \
     main.cpp \
     mainwindow.cpp \
     realization/database_operations.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
     textwindow.cpp
 
 HEADERS += \
+    choosework.h \
     mainwindow.h \
     realization/database_operations.h \
     realization/utils.h \
@@ -26,6 +28,7 @@ HEADERS += \
     textwindow.h
 
 FORMS += \
+    choosework.ui \
     mainwindow.ui \
     testwindow.ui \
     textwindow.ui
