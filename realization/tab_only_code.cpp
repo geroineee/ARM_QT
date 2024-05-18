@@ -36,7 +36,7 @@ void MainWindow::for_button_compile(bool isWorkWithFile)
         QString user_code = ui->user_code_text_edit->toPlainText(); // код из тектового поля ввода
 
         // открытие user_main_code.cpp и запись в него код из пользовательского окна
-        writeToFile(file_cpp_path, user_code);
+        writeToFile(file_cpp_path, user_code, false);
     }
 
     QString user_input_data = ui->user_input_data->toPlainText(); // входные данные из поля ввода
@@ -145,7 +145,7 @@ int MainWindow::check_test(QString input_data, QString waiting_output_data)
     ui->statusbar->showMessage("");
 
     // запись в user_input.txt входных данных теста
-    writeToFile(file_input_path, input_data);
+    writeToFile(file_input_path, input_data, true);
 
     QProcess process;
 
@@ -179,12 +179,10 @@ int MainWindow::check_test(QString input_data, QString waiting_output_data)
 
     if (output_data == waiting_output_data)
     {
-        qDebug() << input_data << " = " << output_data;
         return 1;
     }
 
     delete_file(current_path, list_del_names);
-    qDebug() << input_data << " = " << output_data;
     return 2;
 }
 
@@ -207,7 +205,6 @@ void MainWindow::on_button_compile_file_clicked()
 
 void MainWindow::on_button_start_test_clicked()
 {
-    qDebug() << tests;
     if (files_path.size() == 0)
     {
         ui->statusbar->showMessage("Файлы не выбраны!");
@@ -216,38 +213,50 @@ void MainWindow::on_button_start_test_clicked()
 
     for_button_compile();
 
-    int i;
-    for (i = 0; i < tests.size(); i++)
+    QString test_result;
+
+    int test_index;
+    bool isLatestTestAccepted = true;
+    for (test_index = 0; test_index < tests.size() && isLatestTestAccepted; test_index++)
     {
-        int result = check_test(tests[i][2].toString(), tests[i][3].toString());
-        if (result != 1)
+        int result = check_test(tests[test_index][2].toString(), tests[test_index][3].toString());
+        switch (result)
         {
-            if (result == -1)
-            {
-                qDebug() << "Ошибка при выполнении кода";
-            }
-            if (result == 0)
-            {
-                qDebug() << "Runtime Error";
-            }
-            if (result == 2)
-            {
-                qDebug() << "Неверный ответ";
-            }
-            return;
-        }
-        else
-        {
-            qDebug() << "Правильный ответ";
+        case -1:
+            test_result = "Ошибка при выполнении кода";
+            isLatestTestAccepted = false;
+            break;
+        case 0:
+            test_result = "Превышено время выполнения кода";
+            isLatestTestAccepted = false;
+            break;
+        case 2:
+            test_result = "Неверный ответ";
+            isLatestTestAccepted = false;
+            break;
+        case 1:
+            break;
+        default:
+            break;
         }
     }
 
-    QString current_path = files_path[0];
-    int index;
-    for (index = current_path.size()-1; index > 0 && current_path[index] != "/"; index--);
-    current_path.remove(index+1, current_path.size()-index);
+    if (isLatestTestAccepted)
+    {
+        test_result = "Зачтено";
 
-    QStringList list_del_names = { "user_input.txt", "user_output.txt", "user_main_code.exe", "start_check_test.bat" };
+        QString current_path = files_path[0];
+        int index;
+        for (index = current_path.size()-1; index > 0 && current_path[index] != "/"; index--);
+        current_path.remove(index+1, current_path.size()-index);
 
-    delete_file(current_path, list_del_names);
+        QStringList list_del_names = { "user_input.txt", "user_output.txt", "user_main_code.exe", "start_check_test.bat" };
+
+        delete_file(current_path, list_del_names);
+    }
+    else
+    {
+
+    }
+
 }

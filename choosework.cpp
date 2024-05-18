@@ -110,3 +110,8 @@ void choosework::on_button_accept_work_clicked()
     }
 }
 
+void choosework::resizeEvent(QResizeEvent *event)
+{
+    ui->list_of_variants->setColumnWidth(3, this->width()-31);
+    event->accept();
+}

@@ -36,6 +36,7 @@ private:
     QSqlTableModel* db_model_var;
 
     void closeEvent(QCloseEvent *evnt);
+    void resizeEvent(QResizeEvent *event);
 
     QVector<QVariantList> labs;
 

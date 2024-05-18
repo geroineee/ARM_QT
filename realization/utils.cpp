@@ -42,12 +42,22 @@ bool is_ANSI(QByteArray data)
 }
 
 // попытка отрыть файл, если такого нет, то он создается по пути file_path
-QFile* tryToOpenFile(QString file_path)
+QFile* tryToOpenFile(QString file_path, bool isTranc)
 {
     QFile *file = new QFile;
     file->setFileName(file_path);
-    if (!file->open(QIODevice::ReadWrite))
+    if (isTranc)
     {
+        if (!file->open(QIODevice::WriteOnly | QIODevice::Truncate))
+        {
+            delete file;
+            QMessageBox::critical(nullptr, "Ошибка", "Ошибка при открытии файла по пути:\n" + file_path);
+            return nullptr;
+        }
+    }
+    else if (!file->open(QIODevice::ReadWrite))
+    {
+        delete file;
         QMessageBox::critical(nullptr, "Ошибка", "Ошибка при открытии файла по пути:\n" + file_path);
         return nullptr;
     }
@@ -56,16 +66,17 @@ QFile* tryToOpenFile(QString file_path)
 
 
 // запись в файл, находящегося по пути path_to_file, данных data_to_write
-void writeToFile(QString path_to_file, QString data_to_write)
+void writeToFile(QString path_to_file, QString data_to_write, bool isTrunc)
 {
     QTextStream writeStream;
     QFile *file;
-    file = tryToOpenFile(path_to_file);
+    file = tryToOpenFile(path_to_file, isTrunc);
     if (file == nullptr)
         return;
     writeStream.setDevice(file);
     writeStream << data_to_write;
     file->close();
+    delete file;
 }
 
 

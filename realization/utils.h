@@ -18,7 +18,7 @@
 bool areListsEqual(const QStringList& list1, const QStringList& list2);
 
 // попытка отрыть файл, если такого нет, то он создается по пути file_path
-QFile* tryToOpenFile(QString file_path);
+QFile* tryToOpenFile(QString file_path, bool isTrunc = false);
 
 // считывание данных из файла, находящегося по пути path_to_file, и запись их в where_to_read
 void readFromFile(QString current_path, QString& text_code);
@@ -42,7 +42,7 @@ int isCppOrHeader(QString fileName);
 bool isCyrillic (QStringList files_path);
 
 // запись в файл, находящегося по пути path_to_file, данных data_to_write
-void writeToFile(QString path_to_file, QString data_to_write);
+void writeToFile(QString path_to_file, QString data_to_write, bool isTrunc = false);
 
 // получает список путей до файлов, и возвращает список имен файлов .cpp по этим путям
 QStringList get_name_from_path(QStringList paths);

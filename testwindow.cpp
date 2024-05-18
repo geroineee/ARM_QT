@@ -344,6 +344,9 @@ void testwindow::on_button_test_append_clicked()
 
     if (input_data.size() || output_data.size())
     {
+        ui->user_input_data->clear();
+        ui->to_user_output_data->clear();
+
         QStringList tables = {"variant_id", "input_data", "output_data"};
         QStringList data;
         data << QString::number(current_var_id) << input_data << output_data;
@@ -364,20 +367,9 @@ void testwindow::on_button_test_append_clicked()
 
         if (!isEdit)
         {
-            QMessageBox messageBox(QMessageBox::Question,
-                                   tr("Успешно!"),
-                                   tr("Тест успешно добавлен,\nхотите добавить еще?"),
-                                   QMessageBox::Yes | QMessageBox::No,
-                                   this);
-            messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
-            messageBox.setButtonText(QMessageBox::No, tr("Нет"));
-
-            if (messageBox.exec() == QMessageBox::No)
-            {
-                ui->stackedWidget->setCurrentIndex(1);
-                db_model_tests->setFilter(QString("variant_id = %1").arg(current_var_id));
-                db_model_tests->select();
-            }
+            QMessageBox::information(this, tr("Успешно!"), tr("Тест успешно добавлен."));
+            db_model_tests->setFilter(QString("variant_id = %1").arg(current_var_id));
+            db_model_tests->select();
         }
         else
         {
@@ -427,7 +419,6 @@ void testwindow::on_button_save_variant_clicked()
         db_model->setFilter(QString("labwork_id = %1").arg(current_lab_id));
         db_model->select();
 
-//        current_var_number = getNextFreeNumberVar(this->m_database, current_lab_id);
         current_var_id = 0;
         ui->stackedWidget->setCurrentIndex(0);
     }
@@ -501,8 +492,17 @@ void testwindow::on_button_delete_variant_clicked()
 void testwindow::on_button_delete_tests_clicked()
 {
     int current_row = ui->list_of_tests->currentIndex().row();
-    db_model_tests->removeRow(current_row);
-    db_model_tests->select();
+
+    if (current_row != -1)
+    {
+        db_model_tests->removeRow(current_row);
+        db_model_tests->select();
+    }
+    else
+    {
+        QMessageBox::warning(this, "Ошибка", "Не выбран ни 1 элемент.");
+        return;
+    }
 }
 
 
@@ -539,6 +539,7 @@ void testwindow::on_button_cancel_clicked()
     {
         ui->stackedWidget->setCurrentIndex(1);
     }
+    current_test_id = 0;
 }
 
 
@@ -604,6 +605,7 @@ void testwindow::resizeEvent(QResizeEvent *event)
 
     ui->list_of_tests->setColumnWidth(2, ui->list_of_tests->width()/2);
     ui->list_of_tests->setColumnWidth(3, ui->list_of_tests->width()/2);
+
     event->accept();
 }
 
@@ -638,6 +640,7 @@ void testwindow::on_button_cancel_variants_clicked()
     {
         ui->stackedWidget->setCurrentIndex(0);
     }
+    current_var_id = 0;
 }
 
 
