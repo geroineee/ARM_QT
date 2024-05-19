@@ -5,11 +5,6 @@
 // запускает компиляцию и выводит на пользовательские окна
 void MainWindow::for_button_compile(bool isWorkWithFile)
 {
-    if (!ui->user_code_text_edit->toPlainText().size())
-    {
-        QMessageBox::warning(this, "Ошибка", "Нельзя скомпилировать пустой код.");
-        return;
-    }
     QString file_bat_path; // путь до файла .bat
     QString file_cpp_path; // путь до файла .cpp
     QString file_input_path; // путь до файла .txt
@@ -33,6 +28,11 @@ void MainWindow::for_button_compile(bool isWorkWithFile)
     }
     else
     {
+        if (!ui->user_code_text_edit->toPlainText().size())
+        {
+            QMessageBox::warning(this, "Ошибка", "Нельзя скомпилировать пустой код.");
+            return;
+        }
         names.append("user_main_code.cpp");
         list_del_names.append("user_main_code.cpp");
         current_path = QDir::currentPath().remove(QDir::currentPath().size()-3, 3);
@@ -137,7 +137,6 @@ int MainWindow::check_test(QString input_data, QString waiting_output_data)
     QString file_input_path; // путь до файла .txt
     QString current_path; // путь до рабочей папки
     QTextStream writeStream; // поток для записи в файл
-    QStringList list_del_names = { "user_input.txt", "user_output.txt", "user_main_code.exe", "start_check_test.bat" }; // список для удаления файлов
 
     QString path = files_path[0];
     int index;
@@ -152,36 +151,36 @@ int MainWindow::check_test(QString input_data, QString waiting_output_data)
     // запись в user_input.txt входных данных теста
     writeToFile(file_input_path, input_data, true);
 
-    QProcess process;
 
     QFile temp_file(current_path + "start_check_test.bat");
 
     if (!temp_file.exists())
         bat_for_check_test(current_path);
 
+    std::unique_ptr<QProcess> process(new QProcess(this));
+
     // запуск start_check_test.bat
-    process.start(current_path + "start_check_test.bat");
+    process->start(current_path + "start_check_test.bat");
 
     // проверка на ошибки и вывод
-    process.waitForReadyRead();
-    QByteArray errors = process.readAllStandardError();
+    process->waitForReadyRead();
+    QByteArray errors = process->readAllStandardError();
 
     if (errors.size() != 0)
     {
-        delete_file(current_path, list_del_names);
         return -1;
     }
 
-    if (!process.waitForFinished(10000))
+    if (!process->waitForFinished(4000))
     {
         WinExec("taskkill /im user_main_code.exe /f", SW_HIDE);
-        delete_file(current_path, list_del_names);
         return 0;
     }
 
-    QString output_data = QString::fromLocal8Bit(process.readAll());
+    QString output_data = QString::fromLocal8Bit(process->readAll());
     writeToFile(current_path + "user_output.txt", output_data);
 
+    output_data.replace("\r\n", "\n");
     if (output_data == waiting_output_data)
     {
         return 1;
@@ -221,7 +220,7 @@ void MainWindow::on_button_start_test_clicked()
     for (index = current_path.size()-1; index > 0 && current_path[index] != "/"; index--);
     current_path.remove(index+1, current_path.size()-index);
 
-    QStringList list_del_names = { "user_input.txt", "user_output.txt", "user_main_code.exe", "start_check_test.bat" };
+    QStringList list_del_names = { "user_input.txt", "user_output.txt", "user_main_code.exe" };
 
     QString test_result, input_data = "", output_data = "", expected_output = "";
 
@@ -233,19 +232,18 @@ void MainWindow::on_button_start_test_clicked()
         switch (result)
         {
         case -1:
-            test_result = "Ошибка при выполнении кода";
+            test_result = "Ошибка при выполнении кода (Тест " + QString::number(test_index+1) + ")";
             output_data = "Ошибка в коде";
             isLatestTestAccepted = false;
             break;
         case 0:
-            test_result = "Превышено время выполнения кода";
+            test_result = "Превышено время выполнения кода (Тест " + QString::number(test_index+1) + ")";
             output_data = "Runtime Error";
             isLatestTestAccepted = false;
             break;
         case 2:
-            test_result = "Неверный ответ";
+            test_result = "Неверный ответ (Тест " + QString::number(test_index+1) + ")";
             readFromFile(current_path + "user_output.txt", output_data);
-            delete_file(current_path, list_del_names);
             isLatestTestAccepted = false;
             break;
         case 1:
@@ -254,6 +252,9 @@ void MainWindow::on_button_start_test_clicked()
             break;
         }
     }
+
+    delete_file(current_path, {"start_check_test.bat"});
+    delete_file(current_path, list_del_names);
 
     QString date = getCurrentDateTime();
     QString query;
@@ -281,7 +282,6 @@ void MainWindow::on_button_start_test_clicked()
     if (isLatestTestAccepted)
     {
         test_result = "Зачтено";
-        delete_file(current_path, list_del_names);
     }
     else
     {

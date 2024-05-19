@@ -172,7 +172,7 @@ void MainWindow::on_button_delete_test_clicked()
     {
         QMessageBox messageBox(QMessageBox::Question,
                                        tr("Вы уверены?"),
-                                       tr("Вы уверены что хотите удалить\nнавсегда и безвозвратно?"),
+                                       tr("Вы уверены, что хотите удалить\nнавсегда и безвозвратно?"),
                                        QMessageBox::Yes | QMessageBox::No,
                                        this);
                 messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
@@ -438,7 +438,7 @@ void MainWindow::on_user_code_text_edit_textChanged()
     int cursorPosition = cursor.position();
 
     // если введен tab
-    if (text.at(cursorPosition - 1) == '\t')
+    if (cursorPosition > 0 && text.at(cursorPosition - 1) == '\t')
     {
         // удалить Tab
         cursor.deletePreviousChar();

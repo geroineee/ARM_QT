@@ -15,6 +15,7 @@
 #include <QSqlTableModel>
 #include <QDebug>
 #include <QResizeEvent>
+#include <memory>
 
 #include "realization/database_operations.h"
 

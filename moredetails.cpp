@@ -26,7 +26,7 @@ moredetails::moredetails(QSqlDatabase& database, QWidget *parent, int test_id) :
     }
     else
     {
-        QString text = "Все тесты выполнены идеально!";
+        QString text = "Все тесты пройдены!";
         ui->textBrowser_input_data->setText(text);
         ui->textBrowser_expected_output->setText(text);
         ui->textBrowser_output_data->setText(text);

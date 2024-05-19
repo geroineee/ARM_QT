@@ -211,11 +211,6 @@ void testwindow::choose_files()
 // запускает компиляцию и выводит на пользовательские окна
 void testwindow::button_compile(bool isWorkWithFile)
 {
-    if (!ui->user_code_text_edit->toPlainText().size())
-    {
-        QMessageBox::warning(this, "Ошибка", "Нельзя скомпилировать пустой код.");
-        return;
-    }
     QString file_bat_path; // путь до файла .bat
     QString file_cpp_path; // путь до файла .cpp
     QString file_input_path; // путь до файла .txt
@@ -239,6 +234,11 @@ void testwindow::button_compile(bool isWorkWithFile)
     }
     else
     {
+        if (!ui->user_code_text_edit->toPlainText().size())
+        {
+            QMessageBox::warning(this, "Ошибка", "Нельзя скомпилировать пустой код.");
+            return;
+        }
         names.append("user_main_code.cpp");
         list_del_names.append("user_main_code.cpp");
         current_path = QDir::currentPath().remove(QDir::currentPath().size()-3, 3);
@@ -477,7 +477,7 @@ void testwindow::on_button_delete_variant_clicked()
     {
         QMessageBox messageBox(QMessageBox::Question,
                                tr("Вы уверены?"),
-                               tr("Вы уверены что хотите удалить\nнавсегда и безвозвратно?"),
+                               tr("Вы уверены, что хотите удалить\nнавсегда и безвозвратно?"),
                                QMessageBox::Yes | QMessageBox::No,
                                this);
         messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
@@ -513,7 +513,7 @@ void testwindow::on_button_delete_tests_clicked()
     {
         QMessageBox messageBox(QMessageBox::Question,
                                tr("Вы уверены?"),
-                               tr("Вы уверены что хотите удалить\nнавсегда и безвозвратно?"),
+                               tr("Вы уверены, что хотите удалить\nнавсегда и безвозвратно?"),
                                QMessageBox::Yes | QMessageBox::No,
                                this);
         messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
@@ -713,7 +713,7 @@ void testwindow::on_user_code_text_edit_textChanged()
     int cursorPosition = cursor.position();
 
     // если введен tab
-    if (text.at(cursorPosition - 1) == '\t')
+    if (cursorPosition > 0 && text.at(cursorPosition - 1) == '\t')
     {
         // удалить Tab
         cursor.deletePreviousChar();

@@ -80,16 +80,16 @@ public:
     QPlainTextEdit *user_input_data;
     QWidget *tab_result;
     QGridLayout *gridLayout_8;
-    QTableView *list_of_all_solves;
     QPushButton *button_back_to_names;
+    QTableView *list_of_all_solves;
+    QSpacerItem *horizontalSpacer_3;
+    QCheckBox *checkBox_only_good_task;
     QHBoxLayout *horizontalLayout;
     QLabel *label_name;
     QLabel *label_name_change;
     QSpacerItem *horizontalSpacer;
     QLineEdit *lineEdit_name_for_search;
     QSpacerItem *horizontalSpacer_2;
-    QCheckBox *checkBox_only_good_task;
-    QSpacerItem *horizontalSpacer_3;
     QStatusBar *statusbar;
     QMenuBar *menubar;
 
@@ -345,17 +345,29 @@ public:
         tab_result->setFont(font1);
         gridLayout_8 = new QGridLayout(tab_result);
         gridLayout_8->setObjectName(QString::fromUtf8("gridLayout_8"));
-        list_of_all_solves = new QTableView(tab_result);
-        list_of_all_solves->setObjectName(QString::fromUtf8("list_of_all_solves"));
-        list_of_all_solves->setFont(font1);
-
-        gridLayout_8->addWidget(list_of_all_solves, 1, 0, 1, 3);
-
         button_back_to_names = new QPushButton(tab_result);
         button_back_to_names->setObjectName(QString::fromUtf8("button_back_to_names"));
         button_back_to_names->setMinimumSize(QSize(140, 40));
 
         gridLayout_8->addWidget(button_back_to_names, 2, 2, 1, 1);
+
+        list_of_all_solves = new QTableView(tab_result);
+        list_of_all_solves->setObjectName(QString::fromUtf8("list_of_all_solves"));
+        list_of_all_solves->setFont(font1);
+        list_of_all_solves->setContextMenuPolicy(Qt::DefaultContextMenu);
+
+        gridLayout_8->addWidget(list_of_all_solves, 1, 0, 1, 3);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout_8->addItem(horizontalSpacer_3, 2, 1, 1, 1);
+
+        checkBox_only_good_task = new QCheckBox(tab_result);
+        checkBox_only_good_task->setObjectName(QString::fromUtf8("checkBox_only_good_task"));
+        checkBox_only_good_task->setMinimumSize(QSize(0, 30));
+        checkBox_only_good_task->setFont(font1);
+
+        gridLayout_8->addWidget(checkBox_only_good_task, 2, 0, 1, 1);
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
@@ -391,19 +403,9 @@ public:
 
         horizontalLayout->addItem(horizontalSpacer_2);
 
+        horizontalLayout->setStretch(3, 1);
 
         gridLayout_8->addLayout(horizontalLayout, 0, 0, 1, 3);
-
-        checkBox_only_good_task = new QCheckBox(tab_result);
-        checkBox_only_good_task->setObjectName(QString::fromUtf8("checkBox_only_good_task"));
-        checkBox_only_good_task->setMinimumSize(QSize(0, 30));
-        checkBox_only_good_task->setFont(font1);
-
-        gridLayout_8->addWidget(checkBox_only_good_task, 2, 0, 1, 1);
-
-        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        gridLayout_8->addItem(horizontalSpacer_3, 2, 1, 1, 1);
 
         tabWidget->addTab(tab_result, QString());
 
@@ -456,9 +458,9 @@ public:
         label_input_data->setText(QApplication::translate("MainWindow", "\320\222\321\205\320\276\320\264\320\275\321\213\320\265 \320\264\320\260\320\275\320\275\321\213\320\265:", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_only_code), QApplication::translate("MainWindow", "\320\242\320\265\321\201\321\202\320\270\321\200\320\276\320\262\320\260\320\275\320\270\320\265 \320\272\320\276\320\264\320\260", nullptr));
         button_back_to_names->setText(QApplication::translate("MainWindow", "\320\235\320\260\320\267\320\260\320\264", nullptr));
+        checkBox_only_good_task->setText(QApplication::translate("MainWindow", "\320\237\320\276\320\272\320\260\320\267\320\260\321\202\321\214 \321\202\320\276\320\273\321\214\320\272\320\276 \320\277\321\200\320\260\320\262\320\270\320\273\321\214\320\275\321\213\320\265 \321\200\320\265\321\210\320\265\320\275\320\270\321\217", nullptr));
         label_name->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\320\262\320\265\321\200\320\265\320\275\320\275\321\213\320\265 \321\200\320\260\320\261\320\276\321\202\321\213 \320\264\320\273\321\217:", nullptr));
         label_name_change->setText(QString());
-        checkBox_only_good_task->setText(QApplication::translate("MainWindow", "\320\237\320\276\320\272\320\260\320\267\320\260\321\202\321\214 \321\202\320\276\320\273\321\214\320\272\320\276 \320\277\321\200\320\260\320\262\320\270\320\273\321\214\320\275\321\213\320\265 \321\200\320\265\321\210\320\265\320\275\320\270\321\217", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_result), QApplication::translate("MainWindow", "\320\222\321\201\320\265 \320\277\321\200\320\276\320\262\320\265\321\200\320\272\320\270", nullptr));
     } // retranslateUi
 

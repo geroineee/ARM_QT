@@ -44,6 +44,8 @@ public:
         if (choosework->objectName().isEmpty())
             choosework->setObjectName(QString::fromUtf8("choosework"));
         choosework->resize(500, 372);
+        choosework->setSizeGripEnabled(false);
+        choosework->setModal(false);
         gridLayout = new QGridLayout(choosework);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         horizontalLayout = new QHBoxLayout();
