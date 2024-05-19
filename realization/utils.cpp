@@ -17,30 +17,6 @@ int isCppOrHeader(QString fileName)
         return 0;
 }
 
-// проверка на установленную кодировку файла
-bool is_ANSI(QByteArray data)
-{
-    if (data[0] == '\xEF') // utf-8 со спецефикацией (цифровая подпись)
-    {
-        return 0;
-    }
-
-    QByteArray alphs;
-    alphs.append(QString("АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнпорстуфхцчшщъыьэюя").toLocal8Bit());
-
-    for (QChar alph : qAsConst(data))
-    {
-        for (QChar alph_alph : alphs)
-        {
-            if (alph == alph_alph)
-            {
-                return 1;
-            }
-        }
-    }
-    return 0;
-}
-
 // попытка отрыть файл, если такого нет, то он создается по пути file_path
 QFile* tryToOpenFile(QString file_path, bool isTranc)
 {
@@ -64,7 +40,6 @@ QFile* tryToOpenFile(QString file_path, bool isTranc)
     return file;
 }
 
-
 // запись в файл, находящегося по пути path_to_file, данных data_to_write
 void writeToFile(QString path_to_file, QString data_to_write, bool isTrunc)
 {
@@ -79,25 +54,16 @@ void writeToFile(QString path_to_file, QString data_to_write, bool isTrunc)
     delete file;
 }
 
-
-
 // считывание данных из файла, находящегося по пути path_to_file, и запись их в where_to_read
-void readFromFile(QString current_path, QString& text_code)
+void readFromFile(QString path_to_file, QString& text_code)
 {
     QFile *file;
-    file = tryToOpenFile(current_path);
+    file = tryToOpenFile(path_to_file);
     if (file == nullptr)
         return;
 
     QByteArray data = file->readAll();
-    if (is_ANSI(data))
-    {
-        text_code = QString::fromLocal8Bit(data); // ANSI (1251)
-    }
-    else
-    {
-        text_code = QString::fromUtf8(data); // utf-8 и utf-8 со спецификацией
-    }
+    text_code = QString::fromUtf8(data); // utf-8 и utf-8 со спецификацией
     file->close();
 }
 
@@ -161,13 +127,13 @@ bool isCyrillic (QStringList files_path)
 void delete_file(QString current_path, QStringList file_names)
 {
     QString del_command = "@echo off\n"
-                          "chcp 1251 > null.txt\n"
+                          "chcp 1251 > null\n"
                           "cd /D " + current_path + "\n";
     for (const QString& file_name : qAsConst(file_names))
     {
         del_command.append("del " + file_name + "\n");
     }
-    del_command.append("\n del start_compile.bat\ndel null.txt\ndel delete_bat.bat\nexit");
+    del_command.append("\n del start_compile.bat\ndel null\ndel delete_bat.bat\nexit");
 
     writeToFile(current_path + "delete_bat.bat", del_command);
     QProcess process_del;
@@ -242,4 +208,12 @@ void bat_for_check_test(QString directory_path)
                       "user_main_code.exe < user_input.txt\n"
                       "exit";
     writeToFile(directory_path + "start_check_test.bat", command);
+}
+
+// Получение текущей даты и времени
+QString getCurrentDateTime()
+{
+    QDateTime currentDateTime = QDateTime::currentDateTime();
+    QString formattedDateTime = currentDateTime.toString("HH:mm dd.MM.yyyy");
+    return formattedDateTime;
 }

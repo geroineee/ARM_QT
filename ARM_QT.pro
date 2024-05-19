@@ -12,6 +12,7 @@ SOURCES += \
     choosework.cpp \
     main.cpp \
     mainwindow.cpp \
+    moredetails.cpp \
     realization/database_operations.cpp \
     realization/tab_files.cpp \
     realization/tab_only_code.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
 HEADERS += \
     choosework.h \
     mainwindow.h \
+    moredetails.h \
     realization/database_operations.h \
     realization/utils.h \
     testwindow.h \
@@ -30,6 +32,7 @@ HEADERS += \
 FORMS += \
     choosework.ui \
     mainwindow.ui \
+    moredetails.ui \
     testwindow.ui \
     textwindow.ui
 

@@ -11,10 +11,13 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QGridLayout>
+#include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QLineEdit>
 #include <QtWidgets/QListWidget>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
@@ -25,7 +28,6 @@
 #include <QtWidgets/QStatusBar>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QTableView>
-#include <QtWidgets/QTableWidget>
 #include <QtWidgets/QTextBrowser>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -41,7 +43,6 @@ public:
     QWidget *tab_files;
     QGridLayout *gridLayout_7;
     QTextBrowser *text_input_example;
-    QTableWidget *table_result_test;
     QTextBrowser *text_info_task;
     QTextBrowser *text_output_example;
     QPushButton *button_get_task;
@@ -49,6 +50,7 @@ public:
     QPushButton *button_start_test;
     QPushButton *button_get_path_files;
     QComboBox *combo_box_example;
+    QTableView *table_result_test;
     QWidget *tab_edit_task;
     QGridLayout *gridLayout_2;
     QPushButton *button_add_test;
@@ -76,6 +78,18 @@ public:
     QLabel *label_input_data;
     QTextBrowser *to_user_output_data;
     QPlainTextEdit *user_input_data;
+    QWidget *tab_result;
+    QGridLayout *gridLayout_8;
+    QTableView *list_of_all_solves;
+    QPushButton *button_back_to_names;
+    QHBoxLayout *horizontalLayout;
+    QLabel *label_name;
+    QLabel *label_name_change;
+    QSpacerItem *horizontalSpacer;
+    QLineEdit *lineEdit_name_for_search;
+    QSpacerItem *horizontalSpacer_2;
+    QCheckBox *checkBox_only_good_task;
+    QSpacerItem *horizontalSpacer_3;
     QStatusBar *statusbar;
     QMenuBar *menubar;
 
@@ -96,6 +110,9 @@ public:
         tabWidget = new QTabWidget(centralwidget);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
         tabWidget->setMinimumSize(QSize(0, 0));
+        QFont font;
+        font.setPointSize(9);
+        tabWidget->setFont(font);
         tabWidget->setTabPosition(QTabWidget::North);
         tabWidget->setTabShape(QTabWidget::Rounded);
         tabWidget->setDocumentMode(false);
@@ -112,12 +129,6 @@ public:
         text_input_example->setFrameShape(QFrame::Box);
 
         gridLayout_7->addWidget(text_input_example, 1, 1, 1, 1);
-
-        table_result_test = new QTableWidget(tab_files);
-        table_result_test->setObjectName(QString::fromUtf8("table_result_test"));
-        table_result_test->setFrameShape(QFrame::Box);
-
-        gridLayout_7->addWidget(table_result_test, 4, 0, 1, 1);
 
         text_info_task = new QTextBrowser(tab_files);
         text_info_task->setObjectName(QString::fromUtf8("text_info_task"));
@@ -165,6 +176,12 @@ public:
 
         gridLayout_7->addWidget(combo_box_example, 3, 1, 1, 1);
 
+        table_result_test = new QTableView(tab_files);
+        table_result_test->setObjectName(QString::fromUtf8("table_result_test"));
+        table_result_test->setFrameShape(QFrame::Box);
+
+        gridLayout_7->addWidget(table_result_test, 4, 0, 1, 1);
+
         gridLayout_7->setColumnStretch(0, 70);
         tabWidget->addTab(tab_files, QString());
         tab_edit_task = new QWidget();
@@ -207,9 +224,9 @@ public:
         tab_only_code->setObjectName(QString::fromUtf8("tab_only_code"));
         tab_only_code->setEnabled(true);
         tab_only_code->setMinimumSize(QSize(0, 0));
-        QFont font;
-        font.setPointSize(10);
-        tab_only_code->setFont(font);
+        QFont font1;
+        font1.setPointSize(10);
+        tab_only_code->setFont(font1);
         tab_only_code->setLayoutDirection(Qt::LeftToRight);
         gridLayout_5 = new QGridLayout(tab_only_code);
         gridLayout_5->setObjectName(QString::fromUtf8("gridLayout_5"));
@@ -224,12 +241,12 @@ public:
         gridLayout_3->setObjectName(QString::fromUtf8("gridLayout_3"));
         user_code_text_edit = new QPlainTextEdit(page_code_mode);
         user_code_text_edit->setObjectName(QString::fromUtf8("user_code_text_edit"));
-        QFont font1;
-        font1.setPointSize(9);
-        font1.setBold(false);
-        font1.setWeight(50);
-        font1.setStrikeOut(false);
-        user_code_text_edit->setFont(font1);
+        QFont font2;
+        font2.setPointSize(9);
+        font2.setBold(false);
+        font2.setWeight(50);
+        font2.setStrikeOut(false);
+        user_code_text_edit->setFont(font2);
         user_code_text_edit->setFrameShape(QFrame::Box);
         user_code_text_edit->setLineWrapMode(QPlainTextEdit::NoWrap);
         user_code_text_edit->setTabStopWidth(10000);
@@ -238,13 +255,13 @@ public:
 
         label_insert_code = new QLabel(page_code_mode);
         label_insert_code->setObjectName(QString::fromUtf8("label_insert_code"));
-        label_insert_code->setFont(font);
+        label_insert_code->setFont(font1);
 
         gridLayout_3->addWidget(label_insert_code, 0, 0, 1, 1);
 
         upload_user_code_button = new QPushButton(page_code_mode);
         upload_user_code_button->setObjectName(QString::fromUtf8("upload_user_code_button"));
-        upload_user_code_button->setFont(font);
+        upload_user_code_button->setFont(font1);
 
         gridLayout_3->addWidget(upload_user_code_button, 2, 0, 1, 1);
 
@@ -256,9 +273,9 @@ public:
         gridLayout_6->setContentsMargins(-1, 39, -1, -1);
         list_files = new QListWidget(page_file_mode);
         list_files->setObjectName(QString::fromUtf8("list_files"));
-        QFont font2;
-        font2.setPointSize(13);
-        list_files->setFont(font2);
+        QFont font3;
+        font3.setPointSize(13);
+        list_files->setFont(font3);
 
         gridLayout_6->addWidget(list_files, 0, 0, 1, 1);
 
@@ -287,13 +304,13 @@ public:
 
         label_output_data = new QLabel(tab_only_code);
         label_output_data->setObjectName(QString::fromUtf8("label_output_data"));
-        label_output_data->setFont(font);
+        label_output_data->setFont(font1);
 
         gridLayout->addWidget(label_output_data, 2, 0, 1, 1);
 
         label_input_data = new QLabel(tab_only_code);
         label_input_data->setObjectName(QString::fromUtf8("label_input_data"));
-        label_input_data->setFont(font);
+        label_input_data->setFont(font1);
 
         gridLayout->addWidget(label_input_data, 0, 0, 1, 1);
 
@@ -323,6 +340,72 @@ public:
         gridLayout_5->addLayout(gridLayout_4, 0, 0, 1, 1);
 
         tabWidget->addTab(tab_only_code, QString());
+        tab_result = new QWidget();
+        tab_result->setObjectName(QString::fromUtf8("tab_result"));
+        tab_result->setFont(font1);
+        gridLayout_8 = new QGridLayout(tab_result);
+        gridLayout_8->setObjectName(QString::fromUtf8("gridLayout_8"));
+        list_of_all_solves = new QTableView(tab_result);
+        list_of_all_solves->setObjectName(QString::fromUtf8("list_of_all_solves"));
+        list_of_all_solves->setFont(font1);
+
+        gridLayout_8->addWidget(list_of_all_solves, 1, 0, 1, 3);
+
+        button_back_to_names = new QPushButton(tab_result);
+        button_back_to_names->setObjectName(QString::fromUtf8("button_back_to_names"));
+        button_back_to_names->setMinimumSize(QSize(140, 40));
+
+        gridLayout_8->addWidget(button_back_to_names, 2, 2, 1, 1);
+
+        horizontalLayout = new QHBoxLayout();
+        horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        label_name = new QLabel(tab_result);
+        label_name->setObjectName(QString::fromUtf8("label_name"));
+        label_name->setFont(font1);
+
+        horizontalLayout->addWidget(label_name);
+
+        label_name_change = new QLabel(tab_result);
+        label_name_change->setObjectName(QString::fromUtf8("label_name_change"));
+        label_name_change->setFont(font1);
+
+        horizontalLayout->addWidget(label_name_change);
+
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer);
+
+        lineEdit_name_for_search = new QLineEdit(tab_result);
+        lineEdit_name_for_search->setObjectName(QString::fromUtf8("lineEdit_name_for_search"));
+        QSizePolicy sizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(lineEdit_name_for_search->sizePolicy().hasHeightForWidth());
+        lineEdit_name_for_search->setSizePolicy(sizePolicy);
+        lineEdit_name_for_search->setMinimumSize(QSize(0, 30));
+        lineEdit_name_for_search->setFont(font1);
+
+        horizontalLayout->addWidget(lineEdit_name_for_search);
+
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout->addItem(horizontalSpacer_2);
+
+
+        gridLayout_8->addLayout(horizontalLayout, 0, 0, 1, 3);
+
+        checkBox_only_good_task = new QCheckBox(tab_result);
+        checkBox_only_good_task->setObjectName(QString::fromUtf8("checkBox_only_good_task"));
+        checkBox_only_good_task->setMinimumSize(QSize(0, 30));
+        checkBox_only_good_task->setFont(font1);
+
+        gridLayout_8->addWidget(checkBox_only_good_task, 2, 0, 1, 1);
+
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        gridLayout_8->addItem(horizontalSpacer_3, 2, 1, 1, 1);
+
+        tabWidget->addTab(tab_result, QString());
 
         verticalLayout->addWidget(tabWidget);
 
@@ -363,22 +446,7 @@ public:
         button_edit_test->setText(QApplication::translate("MainWindow", "\320\240\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\321\202\321\214", nullptr));
         button_delete_test->setText(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_edit_task), QApplication::translate("MainWindow", "\320\240\320\265\320\266\320\270\320\274 \321\200\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\320\275\320\270\321\217", nullptr));
-        user_code_text_edit->setPlainText(QApplication::translate("MainWindow", "#include <iostream>\n"
-"\n"
-"using namespace std;\n"
-"\n"
-"\n"
-"int main()\n"
-"{\n"
-"    string str;\n"
-"    cin >> str;\n"
-"    int a, b;\n"
-"    cin >> a >> b;\n"
-"    cout << a + b << endl;\n"
-"    cout << str;\n"
-"    cout << \"\321\210\320\260\320\273\320\260\320\273\320\260 \320\270\321\206\321\203\320\272\320\260\320\272\320\270\321\202\321\215\";\n"
-"    return 0;\n"
-"}", nullptr));
+        user_code_text_edit->setPlainText(QString());
         label_insert_code->setText(QApplication::translate("MainWindow", "\320\222\320\260\321\210 \320\272\320\276\320\264:", nullptr));
         upload_user_code_button->setText(QApplication::translate("MainWindow", "\320\236\321\202\320\277\321\200\320\260\320\262\320\270\321\202\321\214", nullptr));
         button_get_files->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\204\320\260\320\271\320\273\321\213", nullptr));
@@ -387,6 +455,11 @@ public:
         label_output_data->setText(QApplication::translate("MainWindow", "\320\222\321\213\321\205\320\276\320\264\320\275\321\213\320\265 \320\264\320\260\320\275\320\275\321\213\320\265:", nullptr));
         label_input_data->setText(QApplication::translate("MainWindow", "\320\222\321\205\320\276\320\264\320\275\321\213\320\265 \320\264\320\260\320\275\320\275\321\213\320\265:", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_only_code), QApplication::translate("MainWindow", "\320\242\320\265\321\201\321\202\320\270\321\200\320\276\320\262\320\260\320\275\320\270\320\265 \320\272\320\276\320\264\320\260", nullptr));
+        button_back_to_names->setText(QApplication::translate("MainWindow", "\320\235\320\260\320\267\320\260\320\264", nullptr));
+        label_name->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\320\262\320\265\321\200\320\265\320\275\320\275\321\213\320\265 \321\200\320\260\320\261\320\276\321\202\321\213 \320\264\320\273\321\217:", nullptr));
+        label_name_change->setText(QString());
+        checkBox_only_good_task->setText(QApplication::translate("MainWindow", "\320\237\320\276\320\272\320\260\320\267\320\260\321\202\321\214 \321\202\320\276\320\273\321\214\320\272\320\276 \320\277\321\200\320\260\320\262\320\270\320\273\321\214\320\275\321\213\320\265 \321\200\320\265\321\210\320\265\320\275\320\270\321\217", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(tab_result), QApplication::translate("MainWindow", "\320\222\321\201\320\265 \320\277\321\200\320\276\320\262\320\265\321\200\320\272\320\270", nullptr));
     } // retranslateUi
 
 };

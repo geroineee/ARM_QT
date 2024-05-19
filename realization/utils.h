@@ -11,6 +11,8 @@
 #include <QString>
 #include <QDebug>
 #include <QMessageBox>
+#include <QDateTime>
+#include <QStandardItemModel>
 
 #include <Windows.h>
 
@@ -32,9 +34,6 @@ void delete_file(QString current_path, QStringList file_names);\
 // заполнение окна с выбранными файлами
 void fillSelecteFilesTable(QStringList& paths, QListWidget* list);
 
-// проверка на установленную кодировку файла
-bool is_ANSI(QByteArray data);
-
 // проверка расширения файла: 1 - .cpp \ 2 - .h \ 0 - другое
 int isCppOrHeader(QString fileName);
 
@@ -55,5 +54,8 @@ void compile_code(QString directory_path, QStringList file_names, bool isTest = 
 
 // Создает батник для проверки тестов
 void bat_for_check_test(QString directory_path);
+
+// Получение текущей даты и времени
+QString getCurrentDateTime();
 
 #endif // UTILS_H

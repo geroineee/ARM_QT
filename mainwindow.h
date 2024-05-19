@@ -7,6 +7,7 @@
 #include "textwindow.h"
 #include "testwindow.h"
 #include "choosework.h"
+#include "moredetails.h"
 
 #include <QSqlDatabase>
 #include <QSqlError>
@@ -57,11 +58,23 @@ private slots:
 
     void on_button_get_task_clicked();
 
-    void write_task(int id_lab, int id_var);
+    void write_task(int id_lab, int id_var, QString name);
 
     void on_combo_box_example_currentIndexChanged(int index);
 
     void on_button_start_test_clicked();
+
+    void on_lineEdit_name_for_search_textChanged(const QString &arg1);
+
+    void on_list_of_all_solves_doubleClicked(const QModelIndex &index);
+
+    void on_button_back_to_names_clicked();
+
+    void on_checkBox_only_good_task_stateChanged(int arg1);
+
+    void on_user_code_text_edit_textChanged();
+
+    void on_table_result_test_doubleClicked(const QModelIndex &index);
 
 private:
     void choose_files();
@@ -74,10 +87,16 @@ private:
     testwindow *testWindow;
     usercodewindow *code_window;
     choosework *choose_window;
+    moredetails *moredetails_window;
     Ui::MainWindow *ui;
 
     // пути до выбранных файлов
     QStringList files_path;
+
+    // имя в текущей проверке
+    QString current_name;
+    QString current_lab_name;
+    QString current_person_id;
 
     // список всех тестов для текущей работы
     QVector<QVariantList> tests;
@@ -85,6 +104,9 @@ private:
     // для работы с базой данных
     QSqlDatabase database;
     QSqlTableModel *db_model;
+    QSqlTableModel *db_model_Person;
+    QSqlTableModel *db_model_all_test_of_Person;
+    QSqlTableModel *db_model_current_test;
 
 };
 #endif // MAINWINDOW_H

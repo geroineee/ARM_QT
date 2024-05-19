@@ -5,6 +5,11 @@
 // запускает компиляцию и выводит на пользовательские окна
 void MainWindow::for_button_compile(bool isWorkWithFile)
 {
+    if (!ui->user_code_text_edit->toPlainText().size())
+    {
+        QMessageBox::warning(this, "Ошибка", "Нельзя скомпилировать пустой код.");
+        return;
+    }
     QString file_bat_path; // путь до файла .bat
     QString file_cpp_path; // путь до файла .cpp
     QString file_input_path; // путь до файла .txt
@@ -181,8 +186,6 @@ int MainWindow::check_test(QString input_data, QString waiting_output_data)
     {
         return 1;
     }
-
-    delete_file(current_path, list_del_names);
     return 2;
 }
 
@@ -213,7 +216,14 @@ void MainWindow::on_button_start_test_clicked()
 
     for_button_compile();
 
-    QString test_result;
+    QString current_path = files_path[0];
+    int index;
+    for (index = current_path.size()-1; index > 0 && current_path[index] != "/"; index--);
+    current_path.remove(index+1, current_path.size()-index);
+
+    QStringList list_del_names = { "user_input.txt", "user_output.txt", "user_main_code.exe", "start_check_test.bat" };
+
+    QString test_result, input_data = "", output_data = "", expected_output = "";
 
     int test_index;
     bool isLatestTestAccepted = true;
@@ -224,14 +234,18 @@ void MainWindow::on_button_start_test_clicked()
         {
         case -1:
             test_result = "Ошибка при выполнении кода";
+            output_data = "Ошибка в коде";
             isLatestTestAccepted = false;
             break;
         case 0:
             test_result = "Превышено время выполнения кода";
+            output_data = "Runtime Error";
             isLatestTestAccepted = false;
             break;
         case 2:
             test_result = "Неверный ответ";
+            readFromFile(current_path + "user_output.txt", output_data);
+            delete_file(current_path, list_del_names);
             isLatestTestAccepted = false;
             break;
         case 1:
@@ -241,22 +255,48 @@ void MainWindow::on_button_start_test_clicked()
         }
     }
 
+    QString date = getCurrentDateTime();
+    QString query;
+    QSqlQuery q(database);
+    QString person_id;
+
+    if (current_name == "")
+        current_name = "Неизвестный";
+
+    if (existsRecord("Person", "person_name", current_name))
+        query = updateData("Person", {"date"}, {date}, "person_name = '" + current_name + "'");
+    else
+        query = makeInsertQuery("Person", {"date", "person_name"}, {date, current_name}, database);
+
+
+    q.prepare(query);
+    q.exec();
+
+    q.clear();
+
+    db_model_Person->select();
+
+    person_id = getResult(getDBDataQuery("Person", "id", "person_name", current_name)).toString();
+
     if (isLatestTestAccepted)
     {
         test_result = "Зачтено";
-
-        QString current_path = files_path[0];
-        int index;
-        for (index = current_path.size()-1; index > 0 && current_path[index] != "/"; index--);
-        current_path.remove(index+1, current_path.size()-index);
-
-        QStringList list_del_names = { "user_input.txt", "user_output.txt", "user_main_code.exe", "start_check_test.bat" };
-
         delete_file(current_path, list_del_names);
     }
     else
     {
-
+        input_data = tests[test_index-1][2].toString();
+        expected_output = tests[test_index-1][3].toString();
     }
 
+    query = makeInsertQuery("CheckedWorks", {"person_id", "date", "work_name", "task", "status", "input_data", "expected_output", "output_data"},
+                            {person_id, date, current_lab_name, ui->text_info_task->toPlainText(), test_result, input_data, expected_output, output_data}, database);
+    q.prepare(query);
+    q.exec();
+
+    int test_id = getResult(getDBDataQuery("CheckedWorks", "id", {"person_id", "date", "work_name", "task", "status", "input_data", "expected_output", "output_data"},
+                                           {person_id, date, current_lab_name, ui->text_info_task->toPlainText(), test_result, input_data, expected_output, output_data})).toInt();
+
+    db_model_current_test->setFilter(QString("id = %1").arg(test_id));
+    db_model_current_test->select();
 }

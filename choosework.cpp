@@ -43,6 +43,7 @@ void choosework::on_comboBox_of_works_currentIndexChanged(int index)
         int current_lab_id = labs[index-1][0].toInt();
 
         db_model_var->setFilter(QString("labwork_id = %1").arg(current_lab_id));
+        db_model_var->setSort(3, Qt::SortOrder::AscendingOrder);
         db_model_var->select();
     }
     else
@@ -96,7 +97,9 @@ void choosework::on_button_accept_work_clicked()
         QModelIndex index = ui->list_of_variants->model()->index(current_index_var, 0);
         id_var = index.data().toInt();
 
-        emit send_id(id_lab, id_var);
+        current_name = ui->lineEdit_name->text();
+
+        emit send_id(id_lab, id_var, current_name);
 
         ui->comboBox_of_works->setCurrentIndex(0);
         ui->lineEdit_name->clear();

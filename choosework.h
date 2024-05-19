@@ -39,9 +39,10 @@ private:
     void resizeEvent(QResizeEvent *event);
 
     QVector<QVariantList> labs;
+    QString current_name;
 
 signals:
-    void send_id(int id_lab, int id_var);
+    void send_id(int id_lab, int id_var, QString current_name);
 };
 
 #endif // CHOOSEWORK_H

@@ -10,11 +10,7 @@ bool tryToOpenDB(QSqlDatabase database, QString db_name)
 {
     database.setDatabaseName(QDir::currentPath() + "/" + db_name + ".db");
 
-    if (database.open())
-    {
-        qDebug() << "База данных успешно открыта.";
-    }
-    else
+    if (!database.open())
     {
         qDebug() << "Ошибка открытия базы данных:\n" + database.lastError().text();
         return false;
@@ -23,11 +19,13 @@ bool tryToOpenDB(QSqlDatabase database, QString db_name)
     // проверка на наличие нужных таблиц
     if (db_name == "Lab_works")
     {
-        if (database.tables().size() != 4)
+        if (database.tables().size() != 6)
         {
             database.exec("CREATE TABLE LabWork (id	INTEGER, name TEXT UNIQUE, description TEXT,PRIMARY KEY(id AUTOINCREMENT))");
             database.exec("CREATE TABLE Variants (id INTEGER PRIMARY KEY AUTOINCREMENT, labwork_id INTEGER, conditions TEXT, number_var INTEGER, FOREIGN KEY (labwork_id) REFERENCES LabWork(id));");
             database.exec("CREATE TABLE Tests (id INTEGER PRIMARY KEY AUTOINCREMENT, variant_id INTEGER, input_data TEXT, output_data TEXT, FOREIGN KEY (variant_id) REFERENCES Variants(id));");
+            database.exec("CREATE TABLE Person (id INTEGER,date TEXT, person_name TEXT, PRIMARY KEY(id AUTOINCREMENT))");
+            database.exec("CREATE TABLE CheckedWorks (id INTEGER, person_id INTEGER, date TEXT, work_name TEXT, task TEXT, status TEXT, input_data TEXT, expected_output TEXT, output_data TEXT,PRIMARY KEY( id AUTOINCREMENT))");
         }
     }
     return true;
@@ -198,6 +196,39 @@ QVector<QVariantList> getAllInTableWhere(QSqlDatabase db, QString table, QString
         query.prepare("SELECT * FROM " + table + " WHERE " + field + " != :cond");
 
     query.bindValue(":cond", condition);
+
+    // Выполнение запроса
+    if (query.exec())
+    {
+        // Считка результата
+        while (query.next())
+        {
+            QVariantList row;
+            for (int i = 0; i < query.record().count(); ++i)
+            {
+                row.append(query.value(i));
+            }
+            result.append(row);
+        }
+    }
+    else
+    {
+        // Обработка ошибки выполнения запроса
+        qDebug() << "Ошибка при выполнении запроса:" << query.lastError().text();
+    }
+
+    return result;
+}
+
+// получение всех данных, с полемм, содержащем подстроку
+QVector<QVariantList> getAllLIKE(QSqlDatabase db, QString table, QString field, QString substr)
+{
+    QSqlQuery query(db);
+    QVector<QVariantList> result;
+
+    // Формирование SQL запроса
+    query.prepare("SELECT * FROM " + table + " WHERE " + field + " LIKE :substr");
+    query.bindValue(":substr", substr);
 
     // Выполнение запроса
     if (query.exec())

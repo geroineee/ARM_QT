@@ -495,22 +495,7 @@
                 <enum>QPlainTextEdit::NoWrap</enum>
                </property>
                <property name="plainText">
-                <string>#include &lt;iostream&gt;
-
-using namespace std;
-
-
-int main()
-{
-    string str;
-    cin &gt;&gt; str;
-    int a, b;
-    cin &gt;&gt; a &gt;&gt; b;
-    cout &lt;&lt; a + b &lt;&lt; endl;
-    cout &lt;&lt; str;
-    cout &lt;&lt; &quot;шалала ицукакитэ&quot;;
-    return 0;
-}</string>
+                <string/>
                </property>
                <property name="tabStopWidth">
                 <number>10000</number>
@@ -628,6 +613,11 @@ int main()
            </item>
            <item row="3" column="0">
             <widget class="QPlainTextEdit" name="to_user_output_data">
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+              </font>
+             </property>
              <property name="frameShape">
               <enum>QFrame::Box</enum>
              </property>
@@ -644,6 +634,11 @@ int main()
            </item>
            <item row="1" column="0">
             <widget class="QPlainTextEdit" name="user_input_data">
+             <property name="font">
+              <font>
+               <pointsize>10</pointsize>
+              </font>
+             </property>
              <property name="frameShape">
               <enum>QFrame::Box</enum>
              </property>

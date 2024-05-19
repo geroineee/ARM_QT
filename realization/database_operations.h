@@ -39,6 +39,9 @@ QString getDBDataQuery(QString table, QString data, QStringList column, QStringL
 // получение всех данных, с нужным полем
 QVector<QVariantList> getAllInTableWhere(QSqlDatabase db, QString table, QString field, QString condition, bool NotEqual = false);
 
+// получение всех данных, с полемм, содержащем подстроку
+QVector<QVariantList> getAllLIKE(QSqlDatabase db, QString table, QString field, QString substr);
+
 // заключение в одинарные кавычки всех элементов списка
 void setToQuote(QStringList&);
 

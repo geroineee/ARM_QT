@@ -21,12 +21,10 @@ testwindow::testwindow(QSqlDatabase& database, QWidget *parent, int current_lab)
     db_model_tests->setHeaderData(2, Qt::Horizontal, tr("Входные данные"));
     db_model_tests->setHeaderData(3, Qt::Horizontal, tr("Выходные данные"));
     ui->list_of_tests->setModel(db_model_tests);
+    ui->list_of_tests->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     ui->list_of_tests->setColumnHidden(0, true);
     ui->list_of_tests->setColumnHidden(1, true);
-
-    ui->list_of_tests->setColumnWidth(2, ui->list_of_tests->width()/2);
-    ui->list_of_tests->setColumnWidth(3, ui->list_of_tests->width()/2);
 
     db_model = new QSqlTableModel(this, m_database);
     db_model->setTable("Variants");
@@ -35,12 +33,11 @@ testwindow::testwindow(QSqlDatabase& database, QWidget *parent, int current_lab)
 
     db_model->setHeaderData(3, Qt::Horizontal, tr("Номер варианта"));
     ui->list_variants->setModel(db_model);
+    ui->list_variants->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
     ui->list_variants->setColumnHidden(0, true);
     ui->list_variants->setColumnHidden(1, true);
     ui->list_variants->setColumnHidden(2, true);
-
-    ui->list_variants->setColumnWidth(3, ui->list_variants->width());
 
     if (current_lab)
     {
@@ -51,6 +48,7 @@ testwindow::testwindow(QSqlDatabase& database, QWidget *parent, int current_lab)
         ui->lineEdit_lab_name->setText(query_name);
         ui->TextEdit_lab_desc->setPlainText(query_desc);
         db_model->setFilter(QString("labwork_id = %1").arg(current_lab_id));
+        db_model->setSort(3, Qt::SortOrder::AscendingOrder);
         db_model->select();
     }
 }
@@ -213,6 +211,11 @@ void testwindow::choose_files()
 // запускает компиляцию и выводит на пользовательские окна
 void testwindow::button_compile(bool isWorkWithFile)
 {
+    if (!ui->user_code_text_edit->toPlainText().size())
+    {
+        QMessageBox::warning(this, "Ошибка", "Нельзя скомпилировать пустой код.");
+        return;
+    }
     QString file_bat_path; // путь до файла .bat
     QString file_cpp_path; // путь до файла .cpp
     QString file_input_path; // путь до файла .txt
@@ -417,6 +420,7 @@ void testwindow::on_button_save_variant_clicked()
         }
 
         db_model->setFilter(QString("labwork_id = %1").arg(current_lab_id));
+        db_model->setSort(3, Qt::SortOrder::AscendingOrder);
         db_model->select();
 
         current_var_id = 0;
@@ -471,15 +475,27 @@ void testwindow::on_button_delete_variant_clicked()
     int variant_id = db_model->index(current_row, 0).data().toInt();
     if (current_row != -1)
     {
-        // Удаление зависимостей из таблицы Tests
-        QSqlQuery query;
-        query.prepare("DELETE FROM Tests WHERE variant_id = :variant_id");
-        query.bindValue(":variant_id", variant_id);
-        query.exec();
+        QMessageBox messageBox(QMessageBox::Question,
+                               tr("Вы уверены?"),
+                               tr("Вы уверены что хотите удалить\nнавсегда и безвозвратно?"),
+                               QMessageBox::Yes | QMessageBox::No,
+                               this);
+        messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
+        messageBox.setButtonText(QMessageBox::No, tr("Нет"));
 
-        // Удаление записи из таблицы LabWork
-        db_model->removeRow(current_row);
-        db_model->select();
+        if (messageBox.exec() == QMessageBox::Yes)
+        {
+            // Удаление зависимостей из таблицы Tests
+            QSqlQuery query;
+            query.prepare("DELETE FROM Tests WHERE variant_id = :variant_id");
+            query.bindValue(":variant_id", variant_id);
+            query.exec();
+
+            // Удаление записи из таблицы Variants
+            db_model->removeRow(current_row);
+            db_model->setSort(3, Qt::SortOrder::AscendingOrder);
+            db_model->select();
+        }
     }
     else
     {
@@ -495,8 +511,19 @@ void testwindow::on_button_delete_tests_clicked()
 
     if (current_row != -1)
     {
-        db_model_tests->removeRow(current_row);
-        db_model_tests->select();
+        QMessageBox messageBox(QMessageBox::Question,
+                               tr("Вы уверены?"),
+                               tr("Вы уверены что хотите удалить\nнавсегда и безвозвратно?"),
+                               QMessageBox::Yes | QMessageBox::No,
+                               this);
+        messageBox.setButtonText(QMessageBox::Yes, tr("Да"));
+        messageBox.setButtonText(QMessageBox::No, tr("Нет"));
+
+        if (messageBox.exec() == QMessageBox::Yes)
+        {
+            db_model_tests->removeRow(current_row);
+            db_model_tests->select();
+        }
     }
     else
     {
@@ -531,7 +558,7 @@ void testwindow::on_button_cancel_clicked()
         messageBox.setButtonText(QMessageBox::No, tr("Нет"));
 
         if (messageBox.exec() == QMessageBox::Yes)
-        {
+        {          
             ui->stackedWidget->setCurrentIndex(1);
         }
     }
@@ -603,8 +630,8 @@ void testwindow::resizeEvent(QResizeEvent *event)
 {
     ui->list_variants->setColumnWidth(3, ui->list_variants->width());
 
-    ui->list_of_tests->setColumnWidth(2, ui->list_of_tests->width()/2);
-    ui->list_of_tests->setColumnWidth(3, ui->list_of_tests->width()/2);
+    ui->list_of_tests->setColumnWidth(2, (ui->list_of_tests->width())/2);
+    ui->list_of_tests->setColumnWidth(3, (ui->list_of_tests->width())/2);
 
     event->accept();
 }
@@ -678,3 +705,22 @@ void testwindow::on_button_cancel_lab_clicked()
         close();
     }
 }
+
+void testwindow::on_user_code_text_edit_textChanged()
+{
+    QString text = ui->user_code_text_edit->toPlainText();
+    QTextCursor cursor = ui->user_code_text_edit->textCursor();
+    int cursorPosition = cursor.position();
+
+    // если введен tab
+    if (text.at(cursorPosition - 1) == '\t')
+    {
+        // удалить Tab
+        cursor.deletePreviousChar();
+        // вставить четыре пробела
+        cursor.insertText("    ");
+        // обновить курсор
+        ui->user_code_text_edit->setTextCursor(cursor);
+    }
+}
+

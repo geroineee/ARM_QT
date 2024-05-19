@@ -409,6 +409,7 @@ public:
 
         to_user_output_data = new QPlainTextEdit(page_tests);
         to_user_output_data->setObjectName(QString::fromUtf8("to_user_output_data"));
+        to_user_output_data->setFont(font2);
         to_user_output_data->setFrameShape(QFrame::Box);
         to_user_output_data->setFrameShadow(QFrame::Sunken);
         to_user_output_data->setLineWidth(1);
@@ -418,6 +419,7 @@ public:
 
         user_input_data = new QPlainTextEdit(page_tests);
         user_input_data->setObjectName(QString::fromUtf8("user_input_data"));
+        user_input_data->setFont(font2);
         user_input_data->setFrameShape(QFrame::Box);
         user_input_data->setLineWrapMode(QPlainTextEdit::NoWrap);
 
@@ -492,22 +494,7 @@ public:
         button_add_tests->setText(QApplication::translate("testwindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\202\320\265\321\201\321\202", nullptr));
         button_save_variant->setText(QApplication::translate("testwindow", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214", nullptr));
         label_6->setText(QApplication::translate("testwindow", "\320\242\320\265\321\201\321\202\321\213", nullptr));
-        user_code_text_edit->setPlainText(QApplication::translate("testwindow", "#include <iostream>\n"
-"\n"
-"using namespace std;\n"
-"\n"
-"\n"
-"int main()\n"
-"{\n"
-"    string str;\n"
-"    cin >> str;\n"
-"    int a, b;\n"
-"    cin >> a >> b;\n"
-"    cout << a + b << endl;\n"
-"    cout << str;\n"
-"    cout << \"\321\210\320\260\320\273\320\260\320\273\320\260 \320\270\321\206\321\203\320\272\320\260\320\272\320\270\321\202\321\215\";\n"
-"    return 0;\n"
-"}", nullptr));
+        user_code_text_edit->setPlainText(QString());
         label_insert_code->setText(QApplication::translate("testwindow", "\320\222\320\260\321\210 \320\272\320\276\320\264:", nullptr));
         upload_user_code_button->setText(QApplication::translate("testwindow", "\320\227\320\260\320\277\321\203\321\201\321\202\320\270\321\202\321\214", nullptr));
         button_get_files->setText(QApplication::translate("testwindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\204\320\260\320\271\320\273\321\213", nullptr));
