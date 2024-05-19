@@ -12,6 +12,7 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QFileDialog>
+#include <QMessageBox>
 #include <QSqlTableModel>
 #include <QDebug>
 #include <QResizeEvent>
